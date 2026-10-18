@@ -197,7 +197,7 @@ class Simulator:
             return  # Kurs ist schon unter den Stop gefallen: kein Einstieg
         equity = st.cash
         cap = equity * self.risk.max_exposure
-        if not self.risk.enabled:
+        if not self.risk.enabled or self.strategy.sizing == "all":
             notional = cap
         elif self.strategy.sizing == "risk":
             if stop is None:

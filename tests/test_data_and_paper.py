@@ -64,7 +64,7 @@ def sandbox(tmp_path, monkeypatch):
     """Paper-Lauf in einem leeren Ordner mit erfundenen Kursen (nur Test)."""
     clock = {"n": 0}
     base = {s: make_ohlc(3000, seed=i, freq="1h", drift=0.0002, vol=0.01)
-            for i, s in enumerate(["BTCUSDT", "ETHUSDT", "SOLUSDT", "PAXGUSDT"])}
+            for i, s in enumerate(["BTCUSDT", "ETHUSDT", "SOLUSDT", "PAXGUSDT", "BNBUSDT"])}
 
     def fake_klines(symbol, interval, bars):
         end = 2000 + clock["n"]           # "Jetzt" rückt pro Lauf vor
@@ -146,3 +146,13 @@ def test_paper_skipped_runs_equal_continuous_runs(sandbox):
             assert x["pnl"] == pytest.approx(y["pnl"], rel=1e-6, abs=1e-9)
         # EMA/ATR starten je nach Datenfenster minimal anders: Abweichung < 0,0001 %
         assert every[name]["equity"][-1][1] == pytest.approx(skipped[name]["equity"][-1][1], rel=1e-6), name
+
+
+def test_team_average_fills_start_cash_before_first_value():
+    from bots.dashboard import team_average
+    a = [("2024-01-01T00:00:00+00:00", 1000.0), ("2024-01-01T02:00:00+00:00", 1100.0)]
+    b = [("2024-01-01T01:00:00+00:00", 900.0)]
+    avg = dict(team_average([a, b], 1000.0))
+    assert avg["2024-01-01T00:00:00+00:00"] == 1000.0           # b noch nicht gestartet
+    assert avg["2024-01-01T01:00:00+00:00"] == 950.0            # (1000 + 900) / 2
+    assert avg["2024-01-01T02:00:00+00:00"] == 1000.0           # (1100 + 900) / 2

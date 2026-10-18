@@ -9,6 +9,8 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from pathlib import Path
 
+import pandas as pd
+
 from .metrics import equity_series, max_drawdown
 
 DOCS = Path(__file__).resolve().parent.parent / "docs"
@@ -87,36 +89,59 @@ def _position_text(r: dict) -> str:
     return "Absicherung aktiv" if st.get("active") else "wartet (Funding zu niedrig)"
 
 
+def team_average(curves: list[list], start_cash: float) -> list:
+    """Durchschnittliches Konto der Team-Bots, stündlich. Vor dem ersten
+    Wert eines Bots zählt sein Startkapital."""
+    series = [equity_series(e) for e in curves if e]
+    if not series:
+        return []
+    start = min(s.index[0] for s in series).floor("h")
+    end = max(s.index[-1] for s in series).ceil("h")
+    grid = pd.date_range(start, end, freq="1h")
+    aligned = [s.resample("1h").last().reindex(grid).ffill().fillna(start_cash) for s in series]
+    avg = sum(aligned) / len(aligned)
+    return [(ts.isoformat(), float(v)) for ts, v in avg.items()]
+
+
 def write_dashboard(reports: list[dict], errors: list[dict], cfg: dict) -> None:
     DOCS.mkdir(exist_ok=True)
     start_cash = cfg["start_cash"]
     now = datetime.now(timezone.utc).strftime("%d.%m.%Y %H:%M UTC")
-    rows, curves, all_trades = [], [], []
-    total = 0.0
+    rows, curves, all_trades, team_curves = [], [], [], []
+    total, n = 0.0, 0
     for r in reports:
         st, bot = r["state"], r["bot"]
         eq = st.get("equity") or []
         cur = eq[-1][1] if eq else start_cash
-        total += cur
+        if not bot.get("compare"):
+            total += cur
+            n += 1
+            team_curves.append(eq)
         mdd = max_drawdown(equity_series(eq)) * 100 if eq else 0.0
         trades = st.get("trades", [])
         wins = sum(1 for t in trades if t["pnl"] > 0)
         status = "⛔ Notbremse" if st.get("halted") else "✅ läuft"
-        rows.append(f"| {bot['id']} | {r['label']} | {bot.get('symbol', '/'.join(bot.get('universe', [])))} | "
+        name = f"{bot['id']} (Vergleich)" if bot.get("compare") else bot["id"]
+        rows.append(f"| {name} | {r['label']} | {bot.get('symbol', '/'.join(bot.get('universe', [])))} | "
                     f"{_fmt_eur(cur)} | {_pct((cur / start_cash - 1) * 100)} | {mdd:.1f} % | {len(trades)} | "
                     f"{(wins / len(trades) * 100 if trades else 0):.0f} % | {_position_text(r)} | {status} |")
         curves.append((bot["id"], eq))
         for t in trades:
             all_trades.append((t["exit_time"], bot["id"], t))
 
-    n = len(reports) or 1
-    (DOCS / "equity.svg").write_text(_svg(curves, start_cash))
+    n = n or 1
+    team = team_average(team_curves, start_cash)
+    team_dd = max_drawdown(equity_series(team)) * 100 if team else 0.0
+    (DOCS / "equity.svg").write_text(_svg([("TEAM (Durchschnitt)", team)] + curves, start_cash))
     lines = [
         "# 📈 Paper-Trading Dashboard",
         "",
         f"Stand: **{now}** · Spielgeld, keine echten Trades · Start je Bot: {_fmt_eur(start_cash)}",
         "",
-        f"**Gesamt: {_fmt_eur(total)}** ({_pct((total / (start_cash * n) - 1) * 100)} auf {n} Bots)",
+        f"**Team: {_fmt_eur(total)}** ({_pct((total / (start_cash * n) - 1) * 100)} auf {n} Bots) · "
+        f"größter Team-Einbruch: **{team_dd:.1f} %** · Risikostufe: **{cfg.get('level', '-')}**",
+        "",
+        "Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.",
         "",
         "![Kontoverlauf](equity.svg)",
         "",

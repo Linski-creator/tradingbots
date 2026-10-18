@@ -46,7 +46,9 @@ def _save(path: Path, obj) -> None:
     tmp.replace(path)  # atomar: nie eine halb geschriebene Datei
 
 
-def _risk(cfg: dict) -> RiskConfig:
+def _risk(cfg: dict, bot: dict | None = None) -> RiskConfig:
+    if bot is not None and bot.get("risk") == "ohne":
+        return RiskConfig(enabled=False)
     r = cfg.get("risk", {})
     return RiskConfig(enabled=True, risk_per_trade=r.get("risk_per_trade", 0.01),
                       target_vol=r.get("target_vol", 0.30), max_exposure=1.0,
@@ -69,7 +71,7 @@ def run_single_bot(bot: dict, cfg: dict) -> dict:
         st = SimState.from_dict(raw)
         if pd.Timestamp(st.last_ts) < df.index[0]:
             log.warning("%s: Datenlücke - letzte Kerze %s älter als geladene Daten", bot["id"], st.last_ts)
-    st = Simulator(strat, Costs(), _risk(cfg), state=st).run(prepared)
+    st = Simulator(strat, Costs(), _risk(cfg, bot), state=st).run(prepared)
     _save(path, st.to_dict())
     return {"bot": bot, "label": strat.label, "state": st.to_dict(), "price": float(df["close"].iloc[-1])}
 

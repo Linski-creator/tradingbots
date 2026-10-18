@@ -146,3 +146,19 @@ def test_funding_collects_positive_and_exits_on_negative():
     expected = 500 * 0.0001 * 27 - 500 * 0.0001 * 2
     assert t["funding"] == pytest.approx(expected)
     assert not st.active
+
+
+def test_ema_cross_video_rules_and_full_size():
+    from bots.strategies import EMACrossVideo
+    s = EMACrossVideo()
+    df = s.prepare(make_ohlc(3000, seed=8, freq="1h", vol=0.01), 8760)
+    st = Simulator(s, Costs(0, 0), RiskConfig(enabled=True)).run(df)
+    pos = {ts.isoformat(): i for i, ts in enumerate(df.index)}
+    assert st.trades
+    for t in st.trades:
+        sig = df.iloc[pos[t["entry_time"]] - 1]
+        assert sig["cross_up"] and sig["ema_f"] > sig["ema_s"]
+        assert df.iloc[pos[t["exit_time"]] - 1]["cross_down"]
+    # immer voller Einsatz, auch wenn die Risikoregeln aktiv sind
+    first = st.trades[0]
+    assert first["qty"] * first["entry_price"] == pytest.approx(1000)

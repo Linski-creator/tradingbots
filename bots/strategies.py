@@ -223,7 +223,37 @@ class EMAPullback(Strategy):
         return [Enter(stop=stop, rr=self.rr)]
 
 
+class EMACrossVideo(Strategy):
+    """Vergleichs-Strategie aus einem YouTube-Video: EMA 9 kreuzt EMA 21 nach
+    oben -> kaufen, nach unten -> verkaufen. Kein Stop, immer voller Einsatz."""
+    name, label, timeframe, sizing = "emacross", "EMA 9/21 (YouTube-Vergleich)", "1h", "all"
+
+    def __init__(self, fast: int = 9, slow: int = 21):
+        self.fast, self.slow = fast, slow
+        self.warmup = slow + 1
+
+    def prepare(self, df, bars_per_year):
+        out = df.copy()
+        out["ema_f"] = ind.ema(out["close"], self.fast)
+        out["ema_s"] = ind.ema(out["close"], self.slow)
+        valid = out["ema_f"].notna() & out["ema_s"].notna()
+        both = valid & valid.shift(1, fill_value=False)
+        above = out["ema_f"] > out["ema_s"]
+        prev = above.shift(1, fill_value=False)
+        out["cross_up"] = above & ~prev & both
+        out["cross_down"] = ~above & prev & both
+        return out
+
+    def on_bar(self, v):
+        r = v.row
+        if v.position is None and bool(r["cross_up"]):
+            return [Enter()]
+        if v.position is not None and bool(r["cross_down"]):
+            return [Exit("death_cross")]
+        return []
+
+
 SINGLE_MARKET = {
     s.name: s for s in (SMA200Filter, TimeSeriesMomentum, DonchianBreakout, ChandelierTrend,
-                        RSI2MeanReversion, EMAPullback)
+                        RSI2MeanReversion, EMAPullback, EMACrossVideo)
 }

@@ -115,6 +115,9 @@ def main() -> None:
         itv = cls.timeframe
         markets = list(MARKETS) + (["GOLD"] if itv == "1d" and ("GOLD", "1d") in datasets else [])
         levels = ["standard", "ohne"] if name in WEAK else list(RISK_LEVELS)
+        if name == "emacross":  # Video-Strategie: nur wie im Video, auf den großen Coins
+            levels = ["ohne"]
+            markets = [m for m in ("BTCUSDT", "ETHUSDT", "SOLUSDT") if m in MARKETS]
         for sym in markets:
             df = datasets[(sym, itv)]
             bpy = BPY_GOLD_FUTURES if sym == "GOLD" else BPY_CRYPTO[itv]
