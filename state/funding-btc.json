@@ -1,10 +1,22 @@
 {
- "cash": 1000,
+ "cash": 998.75,
  "peak": 1000,
- "active": false,
- "notional": 0.0,
- "last_ts": "2026-10-18T00:00:00+00:00",
+ "active": true,
+ "notional": 500.0,
+ "last_ts": "2026-10-18T08:00:00+00:00",
  "trades": [],
- "equity": [],
- "current": null
+ "equity": [
+  [
+   "2026-10-18T08:00:00+00:00",
+   997.5
+  ]
+ ],
+ "current": {
+  "entry_time": "2026-10-18T08:00:00+00:00",
+  "funding": 0.0,
+  "fees": 1.25,
+  "context": {
+   "avg_rate": 0.00010931349398148133
+  }
+ }
 }

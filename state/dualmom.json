@@ -5,6 +5,7 @@
  "qty": 0.0,
  "cost": 0.0,
  "entry_time": null,
+ "entry_context": null,
  "pending": null,
  "halted": false,
  "last_ts": "2026-10-17T00:00:00+00:00",
