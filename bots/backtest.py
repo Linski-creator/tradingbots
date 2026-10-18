@@ -19,7 +19,7 @@ import pandas as pd
 
 from . import data as D
 from .engine import Costs, RiskConfig, Simulator
-from .metrics import summarize
+from .metrics import equity_series, summarize
 from .portfolio import DualMomentum, FundingArbitrage, run_funding, run_rotation
 from .strategies import SINGLE_MARKET
 
@@ -63,59 +63,102 @@ def _split_metrics(state, start_cash: float) -> dict:
     }
 
 
-def run_single(name: str, symbol: str, df: pd.DataFrame, bpy: float, risk_on: bool) -> tuple:
+RISK_LEVELS = {
+    "vorsichtig": RiskConfig(risk_per_trade=0.01, target_vol=0.15),
+    "standard": RiskConfig(risk_per_trade=0.01, target_vol=0.30),
+    "mutig": RiskConfig(risk_per_trade=0.02, target_vol=0.40),
+    "ohne": RiskConfig(enabled=False),
+}
+# Diese beiden lagen im ersten Backtest klar im Minus: nur zur Dokumentation
+WEAK = {"rsi2", "pullback"}
+
+# Portfolio-Kandidaten: (Strategie, Markt)
+PORTFOLIO = [("donchian", "BTCUSDT"), ("donchian", "BNBUSDT"), ("chandelier", "BTCUSDT"),
+             ("tsmom", "BTCUSDT"), ("sma200", "PAXGUSDT"), ("dualmom", "ROT"), ("funding", "BTCUSDT")]
+
+
+def run_single(name: str, df: pd.DataFrame, bpy: float, risk: RiskConfig):
     strat = SINGLE_MARKET[name]()
-    prepared = strat.prepare(df, bpy)
-    risk = RiskConfig(enabled=risk_on)
-    st = Simulator(strat, Costs(), risk).run(prepared)
+    st = Simulator(strat, Costs(), risk).run(strat.prepare(df, bpy))
     return st, _split_metrics(st, 1000.0)
+
+
+def daily(equity: list) -> pd.Series:
+    return equity_series(equity).resample("1D").last().ffill()
+
+
+def portfolio(curves: dict[str, pd.Series], members: list[str], start_cash: float = 1000.0) -> list:
+    """Gleichgewichtet, täglich neu ausbalanciert, ab dem Tag, an dem alle
+    Mitglieder Daten haben."""
+    df = pd.concat({m: curves[m] for m in members}, axis=1).dropna()
+    rets = df.pct_change().dropna().mean(axis=1)
+    eq = start_cash * (1 + rets).cumprod()
+    return [(ts.isoformat(), float(v)) for ts, v in eq.items()]
 
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     OUT.mkdir(exist_ok=True)
     datasets = load_all()
-    results, curves = [], {}
+    results, curves, dailies = [], {}, {}
+
+    def record(strategy, label, symbol, itv, level, st, m):
+        key = f"{strategy}|{symbol}|{level}"
+        results.append({"strategy": strategy, "label": label, "symbol": symbol, "timeframe": itv,
+                        "level": level, "risk_rules": level != "ohne", **m})
+        curves[key] = st.equity[:: max(1, len(st.equity) // 1500)]
+        dailies[key] = daily(st.equity)
+        log.info("%-32s CAGR %6.1f %%  MaxDD %6.1f %%", key,
+                 m["all"].get("cagr_pct", 0), m["all"].get("max_drawdown_pct", 0))
 
     for name, cls in SINGLE_MARKET.items():
         itv = cls.timeframe
-        markets = [s for s in MARKETS] + (["GOLD"] if itv == "1d" and ("GOLD", "1d") in datasets else [])
+        markets = list(MARKETS) + (["GOLD"] if itv == "1d" and ("GOLD", "1d") in datasets else [])
+        levels = ["standard", "ohne"] if name in WEAK else list(RISK_LEVELS)
         for sym in markets:
             df = datasets[(sym, itv)]
             bpy = BPY_GOLD_FUTURES if sym == "GOLD" else BPY_CRYPTO[itv]
-            for risk_on in (True, False):
-                st, m = run_single(name, sym, df, bpy, risk_on)
-                key = f"{name}|{sym}|{'regeln' if risk_on else 'ohne'}"
-                results.append({"strategy": name, "label": cls.label, "symbol": sym, "timeframe": itv,
-                                "risk_rules": risk_on, **m})
-                curves[key] = st.equity[:: max(1, len(st.equity) // 1500)]
-                log.info("%-28s CAGR %6.1f %%  MaxDD %6.1f %%", key,
-                         m["all"].get("cagr_pct", 0), m["all"].get("max_drawdown_pct", 0))
+            for level in levels:
+                st, m = run_single(name, df, bpy, RISK_LEVELS[level])
+                record(name, cls.label, sym, itv, level, st, m)
 
     # Dual Momentum: BTC / ETH / Gold-Token / Cash
     dm = DualMomentum()
     universe = {s: datasets[(s, "1d")] for s in ("BTCUSDT", "ETHUSDT", "PAXGUSDT")}
     prepared = dm.prepare(universe, BPY_CRYPTO["1d"])
-    for risk_on in (True, False):
-        st = run_rotation(dm, prepared, Costs(), RiskConfig(enabled=risk_on))
-        m = _split_metrics(st, 1000.0)
-        results.append({"strategy": dm.name, "label": dm.label, "symbol": "BTC/ETH/PAXG",
-                        "timeframe": "1d", "risk_rules": risk_on, **m})
-        curves[f"dualmom|ROT|{'regeln' if risk_on else 'ohne'}"] = st.equity[:: max(1, len(st.equity) // 1500)]
+    for level, risk in RISK_LEVELS.items():
+        st = run_rotation(dm, prepared, Costs(), risk)
+        record(dm.name, dm.label, "ROT", "1d", level, st, _split_metrics(st, 1000.0))
 
-    # Funding-Arbitrage
+    # Funding-Arbitrage (marktneutral, Risikostufe ohne Einfluss)
     fa = FundingArbitrage()
     for sym in ("BTCUSDT", "ETHUSDT"):
-        rates = D.binance_funding_history(sym)
-        st = run_funding(fa, rates)
+        st = run_funding(fa, D.binance_funding_history(sym))
         m = _split_metrics(st, 1000.0)
-        results.append({"strategy": fa.name, "label": fa.label, "symbol": sym, "timeframe": "8h",
-                        "risk_rules": True, **m})
-        curves[f"funding|{sym}|regeln"] = st.equity[:: max(1, len(st.equity) // 1500)]
+        for level in ("vorsichtig", "standard", "mutig"):
+            record(fa.name, fa.label, sym, "8h", level, st, m)
+
+    # Portfolio aus den Kandidaten, je Risikostufe
+    for level in ("vorsichtig", "standard", "mutig"):
+        members = [f"{s}|{m}|{level}" for s, m in PORTFOLIO]
+        eq = portfolio(dailies, members)
+        results.append({"strategy": "portfolio", "label": "Portfolio (7 Bots)", "symbol": "MIX",
+                        "timeframe": "1d", "level": level, "risk_rules": True,
+                        "members": members, **_split_metrics_eq(eq)})
+        curves[f"portfolio|MIX|{level}"] = eq[:: max(1, len(eq) // 1500)]
+    corr = pd.concat({f"{s}|{m}": dailies[f"{s}|{m}|standard"] for s, m in PORTFOLIO}, axis=1) \
+        .dropna().pct_change().dropna().corr().round(2)
 
     (OUT / "results.json").write_text(json.dumps(results, indent=1, default=str))
     (OUT / "curves.json").write_text(json.dumps(curves))
+    (OUT / "correlation.json").write_text(corr.to_json())
     log.info("Fertig: %d Ergebnisse in %s", len(results), OUT)
+
+
+def _split_metrics_eq(eq: list) -> dict:
+    class _S:  # Equity ohne Einzeltrades
+        equity, trades = eq, []
+    return _split_metrics(_S, 1000.0)
 
 
 if __name__ == "__main__":

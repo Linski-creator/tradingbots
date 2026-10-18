@@ -23,6 +23,12 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
+      - name: Kursdaten-Cache
+        uses: actions/cache@v4
+        with:
+          path: data/cache
+          key: kurse-${{ github.run_id }}
+          restore-keys: kurse-
       - run: python -m pytest -q
       - name: Backtest
         run: python -m bots.backtest
