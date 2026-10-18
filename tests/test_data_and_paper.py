@@ -88,6 +88,8 @@ def sandbox(tmp_path, monkeypatch):
     monkeypatch.setattr(paper, "WARMUP_BARS", {"1h": 1000, "4h": 300, "1d": 60})
     import bots.dashboard as dash
     monkeypatch.setattr(dash, "DOCS", tmp_path / "docs")
+    import bots.journal as jour
+    monkeypatch.setattr(jour, "DOCS", tmp_path / "docs")
     cfg = json.loads((paper.ROOT / "bots.json").read_text())
     # Tagesstrategien brauchen lange Historie; im Test kurze Fenster
     from bots import strategies as S
@@ -115,6 +117,13 @@ def test_paper_runs_repeatedly_and_writes_dashboard(sandbox):
     md = (tmp / "docs" / "DASHBOARD.md").read_text()
     assert "Paper-Trading Dashboard" in md and "Fehler" not in md
     assert (tmp / "docs" / "equity.svg").read_text().startswith("<svg")
+    journal = (tmp / "docs" / "JOURNAL.md").read_text()
+    assert "Trading-Journal" in journal and "Tagesprotokoll" in journal
+    assert journal.count("- **Grund:**") == sum(n_trades.values())
+    # jeder Einstiegsgrund ist ein lesbarer Satz, kein Rohdaten-Fallback
+    for line in journal.splitlines():
+        if line.startswith("- **Grund:**"):
+            assert "ema_f " not in line and "upper " not in line and line.strip() != "- **Grund:** –", line
     for p in states:
         st = json.loads(p.read_text())
         eq = [e[1] for e in st["equity"]]
@@ -156,3 +165,16 @@ def test_team_average_fills_start_cash_before_first_value():
     assert avg["2024-01-01T00:00:00+00:00"] == 1000.0           # b noch nicht gestartet
     assert avg["2024-01-01T01:00:00+00:00"] == 950.0            # (1000 + 900) / 2
     assert avg["2024-01-01T02:00:00+00:00"] == 1000.0           # (1100 + 900) / 2
+
+
+def test_entry_reasons_readable_for_all_strategies():
+    from bots.journal import entry_reason
+    ctx = {"close": 100.0, "upper": 99.0, "lower": 90.0, "atr": 2.0, "ema_f": 101.0, "ema_s": 100.0,
+           "ema_t": 95.0, "ema_m": 99.0, "mom": 0.12, "sma": 97.0, "rsi": 5.0, "vol": 0.5,
+           "mom_BTCUSDT": 0.2, "mom_ETHUSDT": -0.1, "avg_rate": 0.0001}
+    for strat in ("donchian", "chandelier", "tsmom", "sma200", "rsi2", "pullback", "emacross",
+                  "dualmom", "funding"):
+        text = entry_reason(strat, ctx)
+        assert text and "{" not in text and "None" not in text, (strat, text)
+    assert "BTCUSDT 20,0 %" in entry_reason("dualmom", ctx)
+    assert entry_reason("donchian", {}) == "–"  # fehlender Kontext stürzt nicht ab

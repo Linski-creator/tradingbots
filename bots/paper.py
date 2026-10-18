@@ -23,6 +23,7 @@ import pandas as pd
 
 from . import data as D
 from .dashboard import write_dashboard
+from .journal import write_journal
 from .engine import Costs, RiskConfig, SimState, Simulator
 from .portfolio import (DualMomentum, FundingArbitrage, FundingState, RotationState,
                         run_funding, run_rotation)
@@ -124,6 +125,7 @@ def main() -> int:
             log.exception("Bot %s fehlgeschlagen", bot["id"])
             errors.append({"bot": bot["id"], "error": str(e)})
     write_dashboard(reports, errors, cfg)
+    write_journal(reports, cfg)
     return 1 if errors and not reports else 0
 
 

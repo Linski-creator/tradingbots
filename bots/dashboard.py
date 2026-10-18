@@ -143,6 +143,8 @@ def write_dashboard(reports: list[dict], errors: list[dict], cfg: dict) -> None:
         "",
         "Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.",
         "",
+        "📒 **[Trading-Journal](JOURNAL.md)** (Grund jedes Trades) · ✍️ **[Eigene Notizen](NOTIZEN.md)**",
+        "",
         "![Kontoverlauf](equity.svg)",
         "",
         "| Bot | Strategie | Markt | Konto | Ergebnis | Max. Einbruch | Trades | Treffer | Position | Status |",

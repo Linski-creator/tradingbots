@@ -70,6 +70,7 @@ class Position:
     initial_stop: Optional[float]
     highest: float
     bars_held: int = 0
+    context: dict = field(default_factory=dict)   # Indikatorwerte am Signal (Journal)
 
 
 @dataclass
@@ -101,6 +102,24 @@ class BarView:
     ts: pd.Timestamp
     row: pd.Series
     position: Optional[Position]
+
+
+OHLCV = {"open", "high", "low", "volume"}
+
+
+def signal_context(row: pd.Series) -> dict:
+    """Schluss und Indikatorwerte der Signal-Bar, JSON-tauglich."""
+    out = {}
+    for k, v in row.items():
+        if k in OHLCV:
+            continue
+        if isinstance(v, (bool,)) or type(v).__name__ == "bool_":
+            out[k] = bool(v)
+        elif isinstance(v, (int, float)) or hasattr(v, "dtype"):
+            f = float(v)
+            if math.isfinite(f):
+                out[k] = f
+    return out
 
 
 class Simulator:
@@ -181,6 +200,7 @@ class Simulator:
                     st.position.stop = sig.stop if old is None else max(old, sig.stop)
             elif isinstance(sig, Enter) and st.position is None and st.pending is None:
                 st.pending = {"type": "enter", "stop": sig.stop, "rr": sig.rr, "vol": sig.vol,
+                              "context": signal_context(row),
                               "signal_ts": ts.isoformat()}
 
     def _equity(self, price: float) -> float:
@@ -220,7 +240,8 @@ class Simulator:
         if p.get("rr") is not None and stop is not None:
             tp = fill + p["rr"] * (fill - stop)
         st.position = Position(entry_time=ts.isoformat(), entry_price=fill, qty=qty, cost=cost,
-                               stop=stop, tp=tp, initial_stop=stop, highest=open_price)
+                               stop=stop, tp=tp, initial_stop=stop, highest=open_price,
+                               context=p.get("context") or {})
 
     def _close(self, ts: pd.Timestamp, price: float, reason: str) -> None:
         st = self.state
@@ -242,5 +263,8 @@ class Simulator:
             "r_multiple": pnl / risk_amount if risk_amount else None,
             "bars_held": pos.bars_held,
             "reason": reason,
+            "initial_stop": pos.initial_stop,
+            "tp": pos.tp,
+            "context": pos.context,
         })
         st.position = None

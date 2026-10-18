@@ -21,6 +21,7 @@ class RotationState:
     qty: float = 0.0
     cost: float = 0.0
     entry_time: Optional[str] = None
+    entry_context: Optional[dict] = None
     pending: Optional[dict] = None
     halted: bool = False
     last_ts: Optional[str] = None
@@ -84,7 +85,9 @@ def run_rotation(strategy: DualMomentum, data: dict[str, pd.DataFrame], costs: C
                 proceeds = st.qty * price * (1 - costs.fee)
                 st.trades.append({"symbol": st.holding, "entry_time": st.entry_time,
                                   "exit_time": ts.isoformat(), "pnl": proceeds - st.cost,
-                                  "return_pct": (proceeds / st.cost - 1) * 100, "reason": p["reason"]})
+                                  "return_pct": (proceeds / st.cost - 1) * 100, "reason": p["reason"],
+                                  "entry_price": st.cost / st.qty, "exit_price": price,
+                                  "context": st.entry_context or {}})
                 st.cash += proceeds
                 st.holding, st.qty, st.cost = None, 0.0, 0.0
             if target is not None and st.holding is None and not st.halted:
@@ -103,6 +106,7 @@ def run_rotation(strategy: DualMomentum, data: dict[str, pd.DataFrame], costs: C
                     st.cost = st.qty * fill * (1 + costs.fee)
                     st.cash -= st.cost
                     st.holding, st.entry_time = target, ts.isoformat()
+                    st.entry_context = p.get("context")
 
         # 2. Bewertung
         equity = st.cash
@@ -126,7 +130,8 @@ def run_rotation(strategy: DualMomentum, data: dict[str, pd.DataFrame], costs: C
             target = strategy.target(rows)
             if target != st.holding:
                 vol = float(rows[target]["vol"]) if target else None
-                st.pending = {"target": target, "vol": vol, "reason": "rotation"}
+                ctx = {f"mom_{s}": float(r["mom"]) for s, r in rows.items() if math.isfinite(r["mom"])}
+                st.pending = {"target": target, "vol": vol, "reason": "rotation", "context": ctx}
     return st
 
 
@@ -197,7 +202,8 @@ def run_funding(strategy: FundingArbitrage, funding: pd.Series, start_cash: floa
                 fee = st.notional * leg_cost
                 st.cash -= fee
                 st.active = True
-                st.current = {"entry_time": ts.isoformat(), "funding": 0.0, "fees": fee}
+                st.current = {"entry_time": ts.isoformat(), "funding": 0.0, "fees": fee,
+                              "context": {"avg_rate": float(a)}}
             elif st.active and a <= cfg.exit_rate:
                 fee = st.notional * leg_cost
                 st.cash -= fee
@@ -205,7 +211,8 @@ def run_funding(strategy: FundingArbitrage, funding: pd.Series, start_cash: floa
                 c["fees"] += fee
                 st.trades.append({"entry_time": c["entry_time"], "exit_time": ts.isoformat(),
                                   "pnl": c["funding"] - c["fees"], "funding": c["funding"],
-                                  "fees": c["fees"], "reason": "funding_negativ"})
+                                  "fees": c["fees"], "reason": "funding_negativ",
+                                  "context": {**c.get("context", {}), "exit_avg_rate": float(a)}})
                 st.active, st.notional, st.current = False, 0.0, None
         # Bewertung inkl. der Kosten, die ein Ausstieg jetzt verursachen würde
         equity = st.cash - (st.notional * leg_cost if st.active else 0.0)
