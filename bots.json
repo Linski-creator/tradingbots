@@ -1,0 +1,14 @@
+{
+  "start_cash": 1000,
+  "risk": {"risk_per_trade": 0.01, "target_vol": 0.30, "halt_drawdown": 0.10},
+  "bots": [
+    {"id": "dualmom",    "kind": "rotation", "strategy": "dualmom",    "universe": ["BTCUSDT", "ETHUSDT", "PAXGUSDT"]},
+    {"id": "sma200-btc", "kind": "single",   "strategy": "sma200",     "symbol": "BTCUSDT"},
+    {"id": "tsmom-eth",  "kind": "single",   "strategy": "tsmom",      "symbol": "ETHUSDT"},
+    {"id": "donchian-btc","kind": "single",  "strategy": "donchian",   "symbol": "BTCUSDT"},
+    {"id": "chandelier-sol","kind": "single","strategy": "chandelier", "symbol": "SOLUSDT"},
+    {"id": "rsi2-btc",   "kind": "single",   "strategy": "rsi2",       "symbol": "BTCUSDT"},
+    {"id": "pullback-eth","kind": "single",  "strategy": "pullback",   "symbol": "ETHUSDT"},
+    {"id": "funding-btc","kind": "funding",  "strategy": "funding",    "symbol": "BTCUSDT"}
+  ]
+}
