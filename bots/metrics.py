@@ -12,7 +12,7 @@ def equity_series(equity: list) -> pd.Series:
     if not equity:
         return pd.Series(dtype=float)
     ts, vals = zip(*equity)
-    return pd.Series(vals, index=pd.to_datetime(list(ts), utc=True), dtype=float)
+    return pd.Series(vals, index=pd.to_datetime(list(ts), utc=True, format="ISO8601"), dtype=float)
 
 
 def max_drawdown(eq: pd.Series) -> float:

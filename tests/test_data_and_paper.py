@@ -26,6 +26,21 @@ def test_clean_removes_bad_and_duplicates():
     assert out.loc["2024-01-01", "close"] == 10.6  # letzter Duplikat-Eintrag gewinnt
 
 
+def test_align_drops_off_grid_candles():
+    idx = pd.to_datetime(["2018-02-09 09:00", "2018-02-09 09:28:14.789", "2018-02-09 10:00"], utc=True, format="ISO8601")
+    df = pd.DataFrame({"open": 1.0, "high": 1.0, "low": 1.0, "close": 1.0, "volume": 1.0}, index=idx)
+    assert list(D.align(df, "1h").index) == [idx[0], idx[2]]
+    days = pd.to_datetime(["2024-01-01", "2024-01-02 00:00:01"], utc=True)
+    assert len(D.align(df.iloc[:2].set_axis(days), "1d")) == 1
+
+
+def test_metrics_accept_mixed_iso_timestamps():
+    from bots.metrics import summarize
+    eq = [("2018-02-09T09:00:00+00:00", 1000.0), ("2018-02-09T09:28:14.789000+00:00", 1001.0),
+          ("2018-02-10T09:00:00+00:00", 1002.0)]
+    assert summarize(eq, [], 1000.0)["final"] == 1002.0
+
+
 def test_drop_unclosed():
     idx = pd.date_range("2024-01-01 00:00", periods=3, freq="1h", tz="UTC")
     df = pd.DataFrame({"open": 1, "high": 1, "low": 1, "close": 1, "volume": 1}, index=idx)

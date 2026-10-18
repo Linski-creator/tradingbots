@@ -79,6 +79,16 @@ def clean(df: pd.DataFrame, interval_ms: Optional[int] = None) -> pd.DataFrame:
     return df
 
 
+def align(df: pd.DataFrame, interval: str) -> pd.DataFrame:
+    """Entfernt Kerzen, deren Startzeit nicht auf dem Raster liegt
+    (Binance hatte z. B. 2018 nach Wartungen Kerzen mit krummen Zeiten)."""
+    step = pd.Timedelta(milliseconds=INTERVAL_MS[interval])
+    ok = (df.index - pd.Timestamp("1970-01-01", tz="UTC")) % step == pd.Timedelta(0)
+    if (~ok).any():
+        log.warning("%d Kerzen außerhalb des %s-Rasters entfernt", int((~ok).sum()), interval)
+    return df[ok]
+
+
 def drop_unclosed(df: pd.DataFrame, interval: str, now: Optional[pd.Timestamp] = None) -> pd.DataFrame:
     now = now or pd.Timestamp.now(tz="UTC")
     end = df.index + pd.Timedelta(milliseconds=INTERVAL_MS[interval])
@@ -125,11 +135,11 @@ def binance_vision_klines(symbol: str, interval: str, start: str = "2017-08") ->
         frames.append(_parse_klines(raw.values.tolist()))
     if not frames:
         raise RuntimeError(f"Keine Daten für {symbol} {interval}")
-    df = clean(pd.concat(frames))
+    df = align(clean(pd.concat(frames)), interval)
     df.to_csv(cache)
     # aktueller Monat über die API ergänzen
     recent = binance_api_klines(symbol, interval, since=df.index[-1])
-    return clean(pd.concat([df, recent]))
+    return align(clean(pd.concat([df, recent])), interval)
 
 
 def binance_api_klines(symbol: str, interval: str, since: Optional[pd.Timestamp] = None,
@@ -151,7 +161,7 @@ def binance_api_klines(symbol: str, interval: str, since: Optional[pd.Timestamp]
     if not rows:
         return pd.DataFrame(columns=["open", "high", "low", "close", "volume"],
                             index=pd.DatetimeIndex([], tz="UTC"))
-    return drop_unclosed(clean(_parse_klines(rows)), interval)
+    return drop_unclosed(align(clean(_parse_klines(rows)), interval), interval)
 
 
 # --- Coinbase (Ersatz) ------------------------------------------------------
@@ -173,7 +183,7 @@ def coinbase_klines(symbol: str, interval: str, bars: int) -> pd.DataFrame:
         time.sleep(0.2)
     df = pd.DataFrame(rows, columns=["t", "low", "high", "open", "close", "volume"])
     df.index = pd.to_datetime(df.pop("t"), unit="s", utc=True)
-    return drop_unclosed(clean(df), interval)
+    return drop_unclosed(align(clean(df), interval), interval)
 
 
 def recent_klines(symbol: str, interval: str, bars: int) -> pd.DataFrame:
