@@ -32,11 +32,16 @@ jobs:
       - run: python -m pytest -q
       - name: Backtest
         run: python -m bots.backtest
+      - name: Ergebnisse als Download sichern
+        uses: actions/upload-artifact@v4
+        with:
+          name: backtest-results
+          path: results
       - name: Ergebnisse speichern
         run: |
           git config user.name "backtest-bot"
           git config user.email "backtest-bot@users.noreply.github.com"
-          git pull --rebase origin main
           git add -f results
           git diff --cached --quiet || git commit -m "Backtest-Ergebnisse $(date -u +'%Y-%m-%d %H:%M') UTC"
+          git pull --rebase origin main
           git push
