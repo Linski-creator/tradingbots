@@ -59,6 +59,10 @@ def test_resample_4h_only_complete_blocks():
     assert r["high"] == first["high"].max() and r["low"] == first["low"].min()
 
 
+def bot_states(tmp):
+    return [p for p in (tmp / "state").glob("*.json") if p.name != "team.json"]
+
+
 @pytest.fixture
 def sandbox(tmp_path, monkeypatch):
     """Paper-Lauf in einem leeren Ordner mit erfundenen Kursen (nur Test)."""
@@ -84,6 +88,8 @@ def sandbox(tmp_path, monkeypatch):
 
     monkeypatch.setattr(D, "recent_klines", fake_klines)
     monkeypatch.setattr(D, "recent_funding", fake_funding)
+    from bots import news
+    monkeypatch.setattr(news, "fetch_events", lambda: None)  # Tests nie online
     monkeypatch.setattr(paper, "STATE", tmp_path / "state")
     monkeypatch.setattr(paper, "WARMUP_BARS", {"1h": 1000, "4h": 300, "1d": 60})
     import bots.dashboard as dash
@@ -111,7 +117,7 @@ def test_paper_runs_repeatedly_and_writes_dashboard(sandbox):
     for k in range(40):
         clock["n"] = k * 24  # jeder Lauf einen Tag später
         assert paper.main() == 0
-    states = list((tmp / "state").glob("*.json"))
+    states = bot_states(tmp)
     assert len(states) == 8
     n_trades = {p.stem: len(json.loads(p.read_text())["trades"]) for p in states}
     traded = [k for k, v in n_trades.items() if v > 0]
@@ -152,13 +158,13 @@ def test_paper_skipped_runs_equal_continuous_runs(sandbox):
     for k in range(0, 31):
         clock["n"] = k * 12
         paper.main()
-    every = {p.name: json.loads(p.read_text()) for p in (tmp / "state").glob("*.json")}
+    every = {p.name: json.loads(p.read_text()) for p in bot_states(tmp)}
     for p in (tmp / "state").glob("*.json"):
         p.unlink()
     for k in (0, 7, 8, 19, 30):  # viele Läufe ausgelassen
         clock["n"] = k * 12
         paper.main()
-    skipped = {p.name: json.loads(p.read_text()) for p in (tmp / "state").glob("*.json")}
+    skipped = {p.name: json.loads(p.read_text()) for p in bot_states(tmp)}
     for name in every:
         if name.startswith("funding"):
             continue  # Funding-Fenster ist im Test kürzer als die Pause
@@ -192,3 +198,100 @@ def test_entry_reasons_readable_for_all_strategies():
         assert text and "{" not in text and "None" not in text, (strat, text)
     assert "BTCUSDT 20,0 %" in entry_reason("dualmom", ctx)
     assert entry_reason("donchian", {}) == "–"  # fehlender Kontext stürzt nicht ab
+
+
+def test_news_parse_and_block_window():
+    from bots import news
+    raw = [{"title": "CPI m/m", "country": "USD", "date": "2026-10-20T08:30:00-04:00", "impact": "High"},
+           {"title": "Retail", "country": "EUR", "date": "2026-10-20T10:00:00+02:00", "impact": "High"},
+           {"title": "Kleinkram", "country": "USD", "date": "2026-10-20T10:00:00-04:00", "impact": "Low"},
+           {"title": "kaputt", "country": "USD", "date": "kein datum", "impact": "High"}]
+    ev = news.parse_events(raw)
+    assert [e["title"] for e in ev] == ["CPI m/m"]
+    assert ev[0]["time"] == pd.Timestamp("2026-10-20 12:30", tz="UTC")
+    blocked = news.entry_blocker(ev)
+    assert blocked(pd.Timestamp("2026-10-20 10:30", tz="UTC"))      # 2 h davor
+    assert blocked(pd.Timestamp("2026-10-20 13:30", tz="UTC"))      # 1 h danach
+    assert not blocked(pd.Timestamp("2026-10-20 10:29", tz="UTC"))
+    assert not blocked(pd.Timestamp("2026-10-20 13:31", tz="UTC"))
+    assert news.entry_blocker(None) is None and news.entry_blocker([]) is None
+
+
+def test_entry_waits_during_news_then_executes():
+    from bots.engine import Costs, Enter, RiskConfig, Simulator
+    from tests.conftest import bars
+
+    class Once:
+        name, sizing = "once", "all"
+
+        def __init__(self):
+            self.i = -1
+
+        def on_bar(self, v):
+            self.i += 1
+            return [Enter()] if self.i == 0 else []
+
+    df = bars([(100, 100, 100, 100), (101, 101, 101, 101), (102, 102, 102, 102), (103, 103, 103, 103)],
+              freq="1h")
+    news_hour = df.index[1]
+    sim = Simulator(Once(), Costs(0, 0), RiskConfig(), entry_block=lambda ts: ts == news_hour)
+    st = sim.run(df)
+    # Signal bei Bar 0, Bar 1 gesperrt -> Einstieg zum Open von Bar 2
+    assert st.position.entry_time == df.index[2].isoformat() and st.position.entry_price == 102
+
+
+def test_team_brake_closes_and_stops_all_team_bots(sandbox):
+    tmp, clock = sandbox
+    for k in range(25):
+        clock["n"] = k * 24
+        paper.main()
+    (tmp / "state" / "team.json").write_text(json.dumps({"halted": True, "peak": 9999.0}))
+    clock["n"] = 25 * 24
+    paper.main()
+    clock["n"] = 26 * 24
+    paper.main()
+    for p in bot_states(tmp):
+        st = json.loads(p.read_text())
+        if p.stem == "video-ema-btc":
+            assert not st.get("halted")  # Vergleichs-Bot zählt nicht zum Team
+            continue
+        assert st["halted"], p.stem
+        assert not st.get("position") and not st.get("holding") and not st.get("active"), p.stem
+    assert "TEAM-NOTBREMSE AKTIV" in (tmp / "docs" / "DASHBOARD.md").read_text()
+
+
+def test_update_team_triggers_only_with_complete_data():
+    cfg = {"start_cash": 1000, "team_halt_drawdown": 0.2,
+           "bots": [{"id": "a"}, {"id": "b"}, {"id": "v", "compare": True}]}
+    rep = lambda i, v, c=False: {"bot": {"id": i, "compare": c}, "state": {"equity": [["t", v]]}}
+    t = paper.update_team([rep("a", 1000), rep("b", 1000)], cfg, {})
+    assert t["peak"] == 2000 and not t.get("halted")
+    t = paper.update_team([rep("a", 800), rep("b", 800), rep("v", 1, True)], cfg, t)
+    assert t["halted"]  # 1600 = 20 % unter 2000
+    t2 = paper.update_team([rep("a", 100)], cfg, {"peak": 2000})  # b fehlt -> keine Entscheidung
+    assert not t2.get("halted")
+
+
+def test_funding_halt_closes_position():
+    from bots.portfolio import FundingArbitrage, FundingConfig, FundingState, run_funding
+    idx = pd.date_range("2023-01-01", periods=20, freq="8h", tz="UTC")
+    rates = pd.Series([0.0002] * 20, index=idx)
+    fa = FundingArbitrage(FundingConfig(avg_n=3))
+    st = run_funding(fa, rates.iloc[:10])
+    assert st.active
+    st.halted = True
+    st = run_funding(fa, rates, state=st)
+    assert not st.active and st.trades[-1]["reason"] == "notbremse"
+    assert len(st.trades) == 1  # danach kein neuer Einstieg
+
+
+def test_daily_summary_counts_and_values():
+    from bots.webpage import daily_summary
+    eq = [("2026-10-01T00:00:00+00:00", 1000.0), ("2026-10-02T00:00:00+00:00", 1010.0),
+          ("2026-10-04T00:00:00+00:00", 1005.0)]
+    trades = [{"entry_time": "2026-10-01T00:00:00+00:00", "exit_time": "2026-10-03T05:00:00+00:00"}]
+    d = daily_summary(eq, trades, 1000.0, ["2026-10-04T00:00:00+00:00"])
+    assert d["2026-10-01"]["opened"] == 1 and d["2026-10-01"]["trades"] == 0
+    assert d["2026-10-03"]["trades"] == 1 and d["2026-10-03"]["value"] == 1010.0  # Lücke: Vortageswert
+    assert d["2026-10-04"]["opened"] == 1 and d["2026-10-04"]["pnl"] == -5.0
+    assert sum(v["pnl"] for v in d.values()) == pytest.approx(5.0)

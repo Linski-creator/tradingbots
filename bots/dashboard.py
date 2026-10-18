@@ -132,7 +132,8 @@ def write_dashboard(reports: list[dict], errors: list[dict], cfg: dict) -> None:
     n = n or 1
     team = team_average(team_curves, start_cash)
     team_dd = max_drawdown(equity_series(team)) * 100 if team else 0.0
-    (DOCS / "equity.svg").write_text(_svg([("TEAM (Durchschnitt)", team)] + curves, start_cash))
+    svg = _svg([("TEAM (Durchschnitt)", team)] + curves, start_cash)
+    (DOCS / "equity.svg").write_text(svg, encoding="utf-8")
     lines = [
         "# 📈 Paper-Trading Dashboard",
         "",
@@ -142,6 +143,12 @@ def write_dashboard(reports: list[dict], errors: list[dict], cfg: dict) -> None:
         f"größter Team-Einbruch: **{team_dd:.1f} %** · Risikostufe: **{cfg.get('level', '-')}**",
         "",
         "Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.",
+        *([f"", f"⛔ **TEAM-NOTBREMSE AKTIV** seit {cfg['_team'].get('halted_at', '')[:16].replace('T', ' ')} UTC: "
+           "alle Team-Bots geschlossen und gestoppt. Wieder einschalten: `state/team.json` löschen."]
+          if cfg.get("_team", {}).get("halted") else []),
+        *([f"", "📅 **News-Filter** (keine neuen Einstiege 2 h vor bis 1 h nach): "
+           + " · ".join(f"{e['time'].strftime('%a %d.%m. %H:%M')} UTC {e['title']}" for e in cfg["_news"][:6])]
+          if cfg.get("_news") else []),
         "",
         "📒 **[Trading-Journal](JOURNAL.md)** (Grund jedes Trades) · ✍️ **[Eigene Notizen](NOTIZEN.md)**",
         "",
@@ -165,4 +172,4 @@ def write_dashboard(reports: list[dict], errors: list[dict], cfg: dict) -> None:
         lines.append(f"| {when} | {bot_id} | {ep} | {xp} | {_fmt_eur(t['pnl'])} | {t['reason']} |")
     if not all_trades:
         lines.append("| – | – | – | – | – | noch keine abgeschlossenen Trades |")
-    (DOCS / "DASHBOARD.md").write_text("\n".join(lines) + "\n")
+    (DOCS / "DASHBOARD.md").write_text("\n".join(lines) + "\n", encoding="utf-8")

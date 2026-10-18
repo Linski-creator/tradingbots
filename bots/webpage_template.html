@@ -50,6 +50,9 @@
   @media (min-width: 600px) { .day { min-height: 84px; font-size: 14px; } .day .p { font-size: 15px; } }
   @media (max-width: 380px) { .day .p { font-size: 10px; } .day .t { display: none; } }
   .section { margin-top: 22px; font-weight: 600; }
+  .alert { background: var(--red); border-radius: 12px; padding: 10px 14px; margin: 10px 0; font-size: 14px; }
+  .note { background: var(--panel2); border-radius: 12px; padding: 10px 14px; margin: 10px 0; font-size: 13px;
+          color: var(--muted); }
   .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--line);
          font-size: 14px; gap: 8px; }
   .row:last-child { border-bottom: 0; }
@@ -63,11 +66,15 @@ const DATA = /*__DATA__*/null;
 const REASONS = {stop: "Stop-Loss", take_profit: "Ziel erreicht", kanal_tief: "10-Tage-Tief",
   unter_sma: "unter 200-Tage-Linie", momentum_negativ: "Momentum negativ", rsi_hoch: "RSI hoch",
   zeitstop: "Zeitlimit", death_cross: "EMA kreuzt nach unten", rotation: "Wechsel",
-  funding_negativ: "Funding negativ", notbremse: "Notbremse"};
+  funding_negativ: "Funding negativ", notbremse: "Notbremse", team_notbremse: "Team-Notbremse"};
 const MONTHS = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
 const eur = (x, sign) => (sign && x > 0 ? "+" : "") + x.toLocaleString("de-DE", {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " €";
 const narrow = () => window.innerWidth < 600;
-const eurDay = x => narrow() ? (x > 0 ? "+" : "") + Math.round(x).toLocaleString("de-DE") + " €" : eur(x, true);
+const eurDay = x => !narrow() || Math.abs(x) < 10 ? eur(x, true)
+  : (x > 0 ? "+" : "") + Math.round(x).toLocaleString("de-DE") + " €";
+const localDay = (d = new Date()) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+const teamName = () => `Team (alle ${DATA.team.count} Bots)`;
 const cls = x => x > 0.005 ? "pos" : x < -0.005 ? "neg" : "";
 const el = (tag, attrs = {}, ...kids) => {
   const e = document.createElement(tag);
@@ -79,9 +86,9 @@ let month = null;
 
 function card(b, isTeam) {
   const diff = b.current - b.start;
-  const name = el("div", {}, el("span", {class: "name"}, isTeam ? "Team (alle 7 Bots)" : b.id));
+  const name = el("div", {}, el("span", {class: "name"}, isTeam ? teamName() : b.id));
   if (b.compare) name.append(el("span", {class: "tag"}, "Vergleich"));
-  if (b.halted) name.append(el("span", {class: "tag"}, "Notbremse"));
+  if (b.halted) name.append(el("span", {class: "tag"}, isTeam ? "Team-Notbremse aktiv" : "Notbremse"));
   return el("div", {class: "card" + (isTeam ? " team" : ""), onclick: () => { location.hash = isTeam ? "team" : b.id; }},
     el("div", {}, name, el("div", {class: "sub"}, isTeam ? "Start " + eur(b.start) : b.label + " · Start " + eur(b.start))),
     el("div", {class: "right"}, el("div", {class: "big"}, eur(b.current)),
@@ -93,6 +100,9 @@ function home() {
   app.replaceChildren(
     el("h1", {}, "Trading-Bots"),
     el("div", {class: "muted"}, "Spielgeld · Stand " + DATA.updated + " · Stufe " + DATA.level),
+    ...(DATA.errors.length ? [el("div", {class: "alert"}, "⚠️ Beim letzten Lauf nicht aktualisiert: " + DATA.errors.join(", "))] : []),
+    ...(DATA.news.length ? [el("div", {class: "note"}, "📅 News-Filter: keine neuen Einstiege 2 h vor bis 1 h nach "
+      + DATA.news.map(n => new Date(n.time).toLocaleString("de-DE", {weekday: "short", hour: "2-digit", minute: "2-digit"}) + " " + n.title).join(" · "))] : []),
     card(DATA.team, true),
     ...DATA.bots.map(b => card(b, false)));
 }
@@ -103,7 +113,7 @@ function calendar(days, y, m) {
   const first = new Date(Date.UTC(y, m, 1));
   const offset = (first.getUTCDay() + 6) % 7;
   const n = new Date(Date.UTC(y, m + 1, 0)).getUTCDate();
-  const today = new Date().toISOString().slice(0, 10);
+  const today = localDay();
   for (let i = 0; i < offset; i++) grid.append(el("div", {class: "day empty"}));
   for (let d = 1; d <= n; d++) {
     const key = `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
@@ -112,9 +122,10 @@ function calendar(days, y, m) {
     if (v && v.pnl > 0.005) c += " win"; else if (v && v.pnl < -0.005) c += " loss";
     if (key === today) c += " today";
     const cell = el("div", {class: c}, el("span", {class: "n"}, String(d)));
-    if (v && (Math.abs(v.pnl) > 0.005 || v.trades)) {
+    if (v && (Math.abs(v.pnl) > 0.005 || v.trades || v.opened)) {
       cell.append(el("span", {class: "p"}, eurDay(v.pnl)));
       if (v.trades) cell.append(el("span", {class: "t"}, v.trades + (v.trades === 1 ? " Trade" : " Trades")));
+      if (v.opened) cell.append(el("span", {class: "t"}, "↗ " + (v.opened === 1 ? "Einstieg" : v.opened + " Einstiege")));
     }
     grid.append(cell);
   }
@@ -124,7 +135,7 @@ function calendar(days, y, m) {
 function detail(b, isTeam) {
   const keys = Object.keys(b.days).sort();
   if (!month) {
-    const last = keys.length ? keys[keys.length - 1] : new Date().toISOString().slice(0, 10);
+    const last = keys.length ? keys[keys.length - 1] : localDay();
     month = [Number(last.slice(0, 4)), Number(last.slice(5, 7)) - 1];
   }
   const [y, m] = month;
@@ -136,9 +147,9 @@ function detail(b, isTeam) {
   const shift = k => () => { const d = new Date(Date.UTC(y, m + k, 1)); month = [d.getUTCFullYear(), d.getUTCMonth()]; render(); };
 
   const kids = [
-    el("button", {class: "back", onclick: () => { location.hash = ""; }}, "‹ Alle Bots"),
+    el("button", {class: "back", onclick: goHome}, "‹ Alle Bots"),
     el("div", {class: "head"},
-      el("div", {}, el("h1", {}, isTeam ? "Team (alle 7 Bots)" : b.id),
+      el("div", {}, el("h1", {}, isTeam ? teamName() : b.id),
         el("div", {class: "muted"}, isTeam ? "Summe aller Team-Bots" : b.label + " · " + b.market)),
       el("div", {style: "text-align:right"}, el("div", {class: "big"}, eur(b.current)),
         el("div", {class: cls(diff)}, eur(diff, true) + " seit Start (" + eur(b.start) + ")"))),
@@ -146,7 +157,7 @@ function detail(b, isTeam) {
       el("button", {onclick: shift(-1), "aria-label": "Vormonat"}, "‹"),
       el("span", {class: "title"}, MONTHS[m] + " " + y),
       el("button", {onclick: shift(1), "aria-label": "Nächster Monat"}, "›"),
-      el("span", {class: cls(mPnl), style: "margin-left:auto"}, eur(mPnl, true) + " · " + mTrades + " Trades")),
+      el("span", {class: cls(mPnl), style: "margin-left:auto"}, eur(mPnl, true) + " · " + mTrades + (mTrades === 1 ? " Trade" : " Trades"))),
     calendar(b.days, y, m),
   ];
   if (!isTeam) {
@@ -170,8 +181,18 @@ function render() {
   const b = DATA.bots.find(x => x.id === id);
   b ? detail(b, false) : home();
 }
-window.addEventListener("hashchange", () => { month = null; render(); });
-window.addEventListener("resize", () => render());
+// Zurück: war die Übersicht die Seite davor, echter Browser-Schritt zurück
+// (damit Wischen-zurück nicht wieder im Bot landet), sonst Übersicht ersetzen.
+let cameFromHome = false;
+function goHome() {
+  if (cameFromHome) history.back();
+  else history.replaceState(null, "", location.pathname), month = null, render();
+}
+window.addEventListener("hashchange", e => {
+  cameFromHome = !new URL(e.oldURL).hash && !!location.hash;
+  month = null; render();
+});
+matchMedia("(max-width: 599px)").addEventListener("change", () => render());
 render();
 </script>
 </body>

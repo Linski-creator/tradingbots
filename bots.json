@@ -1,6 +1,7 @@
 {
   "start_cash": 1000,
   "level": "mutig",
+  "team_halt_drawdown": 0.20,
   "risk": {"risk_per_trade": 0.02, "target_vol": 0.40, "halt_drawdown": 0.30},
   "bots": [
     {"id": "donchian-btc",   "kind": "single",   "strategy": "donchian",   "symbol": "BTCUSDT"},

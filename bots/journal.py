@@ -30,6 +30,7 @@ EXIT_REASONS = {
     "rotation": "Wochenwechsel: anderer Markt stärker oder Cash",
     "funding_negativ": "Funding-Durchschnitt nicht mehr positiv",
     "notbremse": "Notbremse (Einbruch zu groß)",
+    "team_notbremse": "Team-Notbremse (Team-Einbruch zu groß)",
 }
 
 
@@ -174,4 +175,4 @@ def write_journal(reports: list[dict], cfg: dict) -> None:
                         f"{opened.get(day, 0)} | {closed.get(day, 0)} |")
             prev = v
         lines += rows[::-1][:60]  # neueste 60 Tage, neueste zuerst
-    (DOCS / "JOURNAL.md").write_text("\n".join(lines) + "\n")
+    (DOCS / "JOURNAL.md").write_text("\n".join(lines) + "\n", encoding="utf-8")

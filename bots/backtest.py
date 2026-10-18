@@ -152,9 +152,9 @@ def main() -> None:
     corr = pd.concat({f"{s}|{m}": dailies[f"{s}|{m}|standard"] for s, m in PORTFOLIO}, axis=1) \
         .dropna().pct_change().dropna().corr().round(2)
 
-    (OUT / "results.json").write_text(json.dumps(results, indent=1, default=str))
-    (OUT / "curves.json").write_text(json.dumps(curves))
-    (OUT / "correlation.json").write_text(corr.to_json())
+    (OUT / "results.json").write_text(json.dumps(results, indent=1, default=str), encoding="utf-8")
+    (OUT / "curves.json").write_text(json.dumps(curves), encoding="utf-8")
+    (OUT / "correlation.json").write_text(corr.to_json(), encoding="utf-8")
     log.info("Fertig: %d Ergebnisse in %s", len(results), OUT)
 
 

@@ -158,6 +158,7 @@ class FundingState:
     trades: list = field(default_factory=list)
     equity: list = field(default_factory=list)
     current: Optional[dict] = None
+    halted: bool = False   # Team-Notbremse: Absicherung schließen, nichts Neues
 
 
 class FundingArbitrage:
@@ -196,7 +197,24 @@ def run_funding(strategy: FundingArbitrage, funding: pd.Series, start_cash: floa
             st.cash += income
             st.current["funding"] += income
         a = avg.loc[ts]
-        if math.isfinite(a):
+        exit_reason = None
+        if st.active and st.halted:
+            exit_reason = "notbremse"
+        elif st.active and math.isfinite(a) and a <= cfg.exit_rate:
+            exit_reason = "funding_negativ"
+        if exit_reason:
+            fee = st.notional * leg_cost
+            st.cash -= fee
+            c = st.current
+            c["fees"] += fee
+            ctx = {**c.get("context", {})}
+            if math.isfinite(a):
+                ctx["exit_avg_rate"] = float(a)
+            st.trades.append({"entry_time": c["entry_time"], "exit_time": ts.isoformat(),
+                              "pnl": c["funding"] - c["fees"], "funding": c["funding"],
+                              "fees": c["fees"], "reason": exit_reason, "context": ctx})
+            st.active, st.notional, st.current = False, 0.0, None
+        elif math.isfinite(a) and not st.halted:
             if not st.active and a > cfg.enter_rate:
                 st.notional = st.cash * cfg.hedge_fraction
                 fee = st.notional * leg_cost
@@ -204,16 +222,6 @@ def run_funding(strategy: FundingArbitrage, funding: pd.Series, start_cash: floa
                 st.active = True
                 st.current = {"entry_time": ts.isoformat(), "funding": 0.0, "fees": fee,
                               "context": {"avg_rate": float(a)}}
-            elif st.active and a <= cfg.exit_rate:
-                fee = st.notional * leg_cost
-                st.cash -= fee
-                c = st.current
-                c["fees"] += fee
-                st.trades.append({"entry_time": c["entry_time"], "exit_time": ts.isoformat(),
-                                  "pnl": c["funding"] - c["fees"], "funding": c["funding"],
-                                  "fees": c["fees"], "reason": "funding_negativ",
-                                  "context": {**c.get("context", {}), "exit_avg_rate": float(a)}})
-                st.active, st.notional, st.current = False, 0.0, None
         # Bewertung inkl. der Kosten, die ein Ausstieg jetzt verursachen würde
         equity = st.cash - (st.notional * leg_cost if st.active else 0.0)
         st.peak = max(st.peak, equity)

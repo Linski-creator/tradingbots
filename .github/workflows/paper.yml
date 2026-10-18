@@ -7,16 +7,13 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
-
-concurrency:
-  group: paper-trading
-  cancel-in-progress: false   # nie zwei Läufe gleichzeitig
 
 jobs:
   run:
     runs-on: ubuntu-latest
+    concurrency:
+      group: paper-trading
+      cancel-in-progress: false   # nie zwei Läufe gleichzeitig
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -47,6 +44,12 @@ jobs:
     needs: run
     runs-on: ubuntu-latest
     continue-on-error: true
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: true
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}

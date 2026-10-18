@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import asdict, dataclass, field
-from typing import Optional
+from typing import Callable, Optional
 
 import pandas as pd
 
@@ -124,11 +124,15 @@ def signal_context(row: pd.Series) -> dict:
 
 class Simulator:
     def __init__(self, strategy, costs: Costs, risk: RiskConfig, start_cash: float = 1000.0,
-                 state: Optional[SimState] = None):
+                 state: Optional[SimState] = None,
+                 entry_block: Optional[Callable[[pd.Timestamp], bool]] = None):
         self.strategy = strategy
         self.costs = costs
         self.risk = risk
         self.state = state or SimState(cash=start_cash, peak=start_cash)
+        # News-Filter: liefert True, wenn zu diesem Zeitpunkt kein Einstieg erlaubt ist.
+        # Der Einstieg wartet dann bis zur nächsten freien Bar.
+        self.entry_block = entry_block
 
     # ---- öffentliche API ----
 
@@ -154,7 +158,9 @@ class Simulator:
             raise ValueError(f"Inkonsistente Kerze {ts}: {row.to_dict()}")
 
         # 1. ausstehenden Auftrag zum Open ausführen
-        if st.pending is not None:
+        waiting = (st.pending is not None and st.pending["type"] == "enter"
+                   and self.entry_block is not None and self.entry_block(ts))
+        if st.pending is not None and not waiting:
             p, st.pending = st.pending, None
             if p["type"] == "exit" and st.position is not None:
                 self._close(ts, o * (1 - self.costs.slippage), p["reason"])

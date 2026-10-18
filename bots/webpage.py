@@ -13,30 +13,33 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
+import pandas as pd
+
 from .dashboard import _position_text
 from .metrics import equity_series
 
 SITE = Path(__file__).resolve().parent.parent / "site"
 
 
-def daily_summary(equity: list, trades: list, start_cash: float, extra_events: list = ()) -> dict:
-    """{'YYYY-MM-DD': {'pnl': €, 'value': Konto am Tagesende, 'trades': Anzahl}}.
-    Trades zählen am Tag des Einstiegs und am Tag des Ausstiegs (je eine Aktion)."""
-    actions = defaultdict(int)
+def daily_summary(equity: list, trades: list, start_cash: float, extra_entries: list = ()) -> dict:
+    """{'YYYY-MM-DD': {'pnl': €, 'value': Konto am Tagesende, 'trades': abgeschlossene
+    Trades, 'opened': neue Einstiege}}. Ein Trade zählt am Tag seines Ausstiegs."""
+    closed, opened = defaultdict(int), defaultdict(int)
     for t in trades:
-        actions[t["entry_time"][:10]] += 1
-        actions[t["exit_time"][:10]] += 1
-    for ts in extra_events:  # offene Position: Einstieg zählt schon
-        actions[ts[:10]] += 1
-    out, prev = {}, start_cash
+        closed[t["exit_time"][:10]] += 1
+        opened[t["entry_time"][:10]] += 1
+    for ts in extra_entries:  # noch offene Position
+        opened[ts[:10]] += 1
     eq = equity_series(equity)
-    if not eq.empty:
-        for ts, v in eq.resample("1D").last().dropna().items():
-            day = ts.strftime("%Y-%m-%d")
-            out[day] = {"pnl": round(v - prev, 2), "value": round(v, 2), "trades": actions.get(day, 0)}
-            prev = v
-    for day, n in actions.items():
-        out.setdefault(day, {"pnl": 0.0, "value": round(prev, 2), "trades": n})
+    daily = eq.resample("1D").last() if not eq.empty else eq
+    days = set(closed) | set(opened) | {ts.strftime("%Y-%m-%d") for ts in daily.dropna().index}
+    out, prev = {}, start_cash
+    for day in sorted(days):
+        upto = daily[:day].dropna() if not daily.empty else daily
+        value = float(upto.iloc[-1]) if len(upto) else start_cash
+        out[day] = {"pnl": round(value - prev, 2), "value": round(value, 2),
+                    "trades": closed.get(day, 0), "opened": opened.get(day, 0)}
+        prev = value
     return out
 
 
@@ -50,9 +53,9 @@ def _open_entry(st: dict) -> list:
     return []
 
 
-def build_data(reports: list[dict], cfg: dict) -> dict:
+def build_data(reports: list[dict], cfg: dict, errors: list = ()) -> dict:
     start_cash = cfg["start_cash"]
-    bots, team_days = [], defaultdict(lambda: {"pnl": 0.0, "trades": 0})
+    bots, team_days = [], defaultdict(lambda: {"pnl": 0.0, "trades": 0, "opened": 0})
     for r in reports:
         bot, st = r["bot"], r["state"]
         eq = st.get("equity") or []
@@ -70,18 +73,24 @@ def build_data(reports: list[dict], cfg: dict) -> dict:
             for d, v in days.items():
                 team_days[d]["pnl"] += v["pnl"]
                 team_days[d]["trades"] += v["trades"]
+                team_days[d]["opened"] += v["opened"]
     team = [b for b in bots if not b["compare"]]
     return {
         "updated": datetime.now(timezone.utc).strftime("%d.%m.%Y %H:%M UTC"),
         "level": cfg.get("level", ""),
         "team": {"start": start_cash * len(team), "current": round(sum(b["current"] for b in team), 2),
-                 "days": {d: {"pnl": round(v["pnl"], 2), "trades": v["trades"]} for d, v in team_days.items()}},
+                 "count": len(team), "halted": bool(cfg.get("_team", {}).get("halted")),
+                 "days": {d: {"pnl": round(v["pnl"], 2), "trades": v["trades"], "opened": v["opened"]}
+                          for d, v in team_days.items()}},
+        "errors": [e["bot"] for e in errors],
+        "news": [{"time": e["time"].isoformat(), "title": e["title"]} for e in (cfg.get("_news") or [])
+                 if e["time"] >= datetime.now(timezone.utc) - pd.Timedelta(hours=1)][:5],
         "bots": bots,
     }
 
 
-def write_site(reports: list[dict], cfg: dict) -> None:
+def write_site(reports: list[dict], errors: list, cfg: dict) -> None:
     SITE.mkdir(exist_ok=True)
-    data = json.dumps(build_data(reports, cfg), ensure_ascii=False).replace("</", "<\\/")
-    template = (Path(__file__).resolve().parent / "webpage_template.html").read_text()
-    (SITE / "index.html").write_text(template.replace("/*__DATA__*/null", data))
+    data = json.dumps(build_data(reports, cfg, errors), ensure_ascii=False).replace("</", "<\\/")
+    template = (Path(__file__).resolve().parent / "webpage_template.html").read_text(encoding="utf-8")
+    (SITE / "index.html").write_text(template.replace("/*__DATA__*/null", data), encoding="utf-8")
