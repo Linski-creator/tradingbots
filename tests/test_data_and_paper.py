@@ -90,6 +90,8 @@ def sandbox(tmp_path, monkeypatch):
     monkeypatch.setattr(dash, "DOCS", tmp_path / "docs")
     import bots.journal as jour
     monkeypatch.setattr(jour, "DOCS", tmp_path / "docs")
+    import bots.webpage as web
+    monkeypatch.setattr(web, "SITE", tmp_path / "site")
     cfg = json.loads((paper.ROOT / "bots.json").read_text())
     # Tagesstrategien brauchen lange Historie; im Test kurze Fenster
     from bots import strategies as S
@@ -117,6 +119,18 @@ def test_paper_runs_repeatedly_and_writes_dashboard(sandbox):
     md = (tmp / "docs" / "DASHBOARD.md").read_text()
     assert "Paper-Trading Dashboard" in md and "Fehler" not in md
     assert (tmp / "docs" / "equity.svg").read_text().startswith("<svg")
+    html = (tmp / "site" / "index.html").read_text()
+    raw = html.split("const DATA = ", 1)[1].split(";\nconst REASONS", 1)[0]
+    data = json.loads(raw.replace("<\\/", "</"))
+    assert len(data["bots"]) == 8 and data["team"]["start"] == 7000
+    team_bots = [b for b in data["bots"] if not b["compare"]]
+    assert data["team"]["current"] == pytest.approx(sum(b["current"] for b in team_bots), abs=0.05)
+    for b in data["bots"]:
+        days = sorted(b["days"])
+        if days:  # Tagesgewinne summieren sich zum Gesamtergebnis
+            assert sum(v["pnl"] for v in b["days"].values()) == pytest.approx(
+                b["days"][days[-1]]["value"] - 1000, abs=0.05)
+        assert sum(v["trades"] for v in b["days"].values()) >= len(b["trades"])
     journal = (tmp / "docs" / "JOURNAL.md").read_text()
     assert "Trading-Journal" in journal and "Tagesprotokoll" in journal
     assert journal.count("- **Grund:**") == sum(n_trades.values())

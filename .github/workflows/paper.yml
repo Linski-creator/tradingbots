@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: paper-trading
@@ -34,3 +36,20 @@ jobs:
           git add state docs
           git diff --cached --quiet || git commit -m "Paper-Trading $(date -u +'%Y-%m-%d %H:%M') UTC"
           git pull --rebase origin main && git push
+      - name: Webseite bereitstellen
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  webseite:
+    # Veröffentlicht site/ über GitHub Pages. Schlägt das fehl (Pages nicht
+    # eingeschaltet), läuft das Paper-Trading trotzdem normal weiter.
+    needs: run
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

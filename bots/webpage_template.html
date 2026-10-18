@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bots">
+<title>Trading-Bots</title>
+<style>
+  :root {
+    --bg: #12141c; --panel: #1b1e29; --panel2: #232736; --text: #e8eaf0; --muted: #8a90a2;
+    --green: #0e7c74; --green-text: #3fd1b8; --red: #b2455e; --red-text: #ff8099; --line: #2c3142;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 16px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+         padding: env(safe-area-inset-top) 16px 32px; }
+  main { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 20px 0 4px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .card { background: var(--panel); border-radius: 14px; padding: 14px 16px; margin: 10px 0;
+          display: flex; align-items: center; gap: 12px; cursor: pointer; border: 1px solid transparent; }
+  .card:active { border-color: var(--line); }
+  .card .name { font-weight: 600; }
+  .card .sub { color: var(--muted); font-size: 13px; }
+  .card .right { margin-left: auto; text-align: right; white-space: nowrap; }
+  .big { font-size: 18px; font-weight: 700; }
+  .pos { color: var(--green-text); } .neg { color: var(--red-text); }
+  .team { background: var(--panel2); }
+  .tag { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 6px;
+         background: var(--line); color: var(--muted); margin-left: 6px; vertical-align: 2px; }
+  .back { background: none; border: 0; color: var(--green-text); font-size: 16px; padding: 12px 0; cursor: pointer; }
+  .head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 8px; }
+  .monthbar { display: flex; align-items: center; gap: 10px; margin: 16px 0 8px; }
+  .monthbar button { background: var(--panel); color: var(--text); border: 0; border-radius: 8px;
+                     width: 36px; height: 32px; font-size: 18px; cursor: pointer; }
+  .monthbar .title { font-size: 18px; font-weight: 600; }
+  .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .dow { text-align: center; color: var(--muted); font-size: 12px; padding: 4px 0; }
+  .day { background: var(--panel); border-radius: 8px; min-height: 64px; padding: 5px; font-size: 12px;
+         display: flex; flex-direction: column; overflow: hidden; }
+  .day .n { color: var(--muted); font-size: 11px; }
+  .day.empty { background: transparent; }
+  .day.win { background: var(--green); } .day.loss { background: var(--red); }
+  .day.win .n, .day.loss .n { color: rgba(255,255,255,.75); }
+  .day .p { font-weight: 700; margin-top: auto; font-size: 12px; white-space: nowrap; }
+  .day .t { opacity: .85; font-size: 11px; }
+  .day.today { outline: 2px solid var(--muted); }
+  @media (min-width: 600px) { .day { min-height: 84px; font-size: 14px; } .day .p { font-size: 15px; } }
+  @media (max-width: 380px) { .day .p { font-size: 10px; } .day .t { display: none; } }
+  .section { margin-top: 22px; font-weight: 600; }
+  .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--line);
+         font-size: 14px; gap: 8px; }
+  .row:last-child { border-bottom: 0; }
+  .box { background: var(--panel); border-radius: 12px; padding: 4px 14px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+const DATA = /*__DATA__*/null;
+const REASONS = {stop: "Stop-Loss", take_profit: "Ziel erreicht", kanal_tief: "10-Tage-Tief",
+  unter_sma: "unter 200-Tage-Linie", momentum_negativ: "Momentum negativ", rsi_hoch: "RSI hoch",
+  zeitstop: "Zeitlimit", death_cross: "EMA kreuzt nach unten", rotation: "Wechsel",
+  funding_negativ: "Funding negativ", notbremse: "Notbremse"};
+const MONTHS = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
+const eur = (x, sign) => (sign && x > 0 ? "+" : "") + x.toLocaleString("de-DE", {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " €";
+const narrow = () => window.innerWidth < 600;
+const eurDay = x => narrow() ? (x > 0 ? "+" : "") + Math.round(x).toLocaleString("de-DE") + " €" : eur(x, true);
+const cls = x => x > 0.005 ? "pos" : x < -0.005 ? "neg" : "";
+const el = (tag, attrs = {}, ...kids) => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) k === "onclick" ? e.onclick = v : e.setAttribute(k, v);
+  for (const k of kids) e.append(k instanceof Node ? k : document.createTextNode(k));
+  return e;
+};
+let month = null;
+
+function card(b, isTeam) {
+  const diff = b.current - b.start;
+  const name = el("div", {}, el("span", {class: "name"}, isTeam ? "Team (alle 7 Bots)" : b.id));
+  if (b.compare) name.append(el("span", {class: "tag"}, "Vergleich"));
+  if (b.halted) name.append(el("span", {class: "tag"}, "Notbremse"));
+  return el("div", {class: "card" + (isTeam ? " team" : ""), onclick: () => { location.hash = isTeam ? "team" : b.id; }},
+    el("div", {}, name, el("div", {class: "sub"}, isTeam ? "Start " + eur(b.start) : b.label + " · Start " + eur(b.start))),
+    el("div", {class: "right"}, el("div", {class: "big"}, eur(b.current)),
+      el("div", {class: cls(diff)}, eur(diff, true) + " (" + (diff / b.start * 100).toFixed(2).replace(".", ",") + " %)")));
+}
+
+function home() {
+  const app = document.getElementById("app");
+  app.replaceChildren(
+    el("h1", {}, "Trading-Bots"),
+    el("div", {class: "muted"}, "Spielgeld · Stand " + DATA.updated + " · Stufe " + DATA.level),
+    card(DATA.team, true),
+    ...DATA.bots.map(b => card(b, false)));
+}
+
+function calendar(days, y, m) {
+  const grid = el("div", {class: "grid"});
+  ["Mo","Di","Mi","Do","Fr","Sa","So"].forEach(d => grid.append(el("div", {class: "dow"}, d)));
+  const first = new Date(Date.UTC(y, m, 1));
+  const offset = (first.getUTCDay() + 6) % 7;
+  const n = new Date(Date.UTC(y, m + 1, 0)).getUTCDate();
+  const today = new Date().toISOString().slice(0, 10);
+  for (let i = 0; i < offset; i++) grid.append(el("div", {class: "day empty"}));
+  for (let d = 1; d <= n; d++) {
+    const key = `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+    const v = days[key];
+    let c = "day";
+    if (v && v.pnl > 0.005) c += " win"; else if (v && v.pnl < -0.005) c += " loss";
+    if (key === today) c += " today";
+    const cell = el("div", {class: c}, el("span", {class: "n"}, String(d)));
+    if (v && (Math.abs(v.pnl) > 0.005 || v.trades)) {
+      cell.append(el("span", {class: "p"}, eurDay(v.pnl)));
+      if (v.trades) cell.append(el("span", {class: "t"}, v.trades + (v.trades === 1 ? " Trade" : " Trades")));
+    }
+    grid.append(cell);
+  }
+  return grid;
+}
+
+function detail(b, isTeam) {
+  const keys = Object.keys(b.days).sort();
+  if (!month) {
+    const last = keys.length ? keys[keys.length - 1] : new Date().toISOString().slice(0, 10);
+    month = [Number(last.slice(0, 4)), Number(last.slice(5, 7)) - 1];
+  }
+  const [y, m] = month;
+  const prefix = `${y}-${String(m + 1).padStart(2, "0")}`;
+  const inMonth = keys.filter(k => k.startsWith(prefix)).map(k => b.days[k]);
+  const mPnl = inMonth.reduce((s, v) => s + v.pnl, 0);
+  const mTrades = inMonth.reduce((s, v) => s + v.trades, 0);
+  const diff = b.current - b.start;
+  const shift = k => () => { const d = new Date(Date.UTC(y, m + k, 1)); month = [d.getUTCFullYear(), d.getUTCMonth()]; render(); };
+
+  const kids = [
+    el("button", {class: "back", onclick: () => { location.hash = ""; }}, "‹ Alle Bots"),
+    el("div", {class: "head"},
+      el("div", {}, el("h1", {}, isTeam ? "Team (alle 7 Bots)" : b.id),
+        el("div", {class: "muted"}, isTeam ? "Summe aller Team-Bots" : b.label + " · " + b.market)),
+      el("div", {style: "text-align:right"}, el("div", {class: "big"}, eur(b.current)),
+        el("div", {class: cls(diff)}, eur(diff, true) + " seit Start (" + eur(b.start) + ")"))),
+    el("div", {class: "monthbar"},
+      el("button", {onclick: shift(-1), "aria-label": "Vormonat"}, "‹"),
+      el("span", {class: "title"}, MONTHS[m] + " " + y),
+      el("button", {onclick: shift(1), "aria-label": "Nächster Monat"}, "›"),
+      el("span", {class: cls(mPnl), style: "margin-left:auto"}, eur(mPnl, true) + " · " + mTrades + " Trades")),
+    calendar(b.days, y, m),
+  ];
+  if (!isTeam) {
+    kids.push(el("div", {class: "section"}, "Jetzt"),
+      el("div", {class: "box"}, el("div", {class: "row"}, el("span", {}, "Position"), el("span", {}, b.position))));
+    kids.push(el("div", {class: "section"}, "Letzte Trades"));
+    const box = el("div", {class: "box"});
+    if (!b.trades.length) box.append(el("div", {class: "row muted"}, "Noch keine abgeschlossenen Trades"));
+    for (const t of b.trades) box.append(el("div", {class: "row"},
+      el("span", {}, t.exit.slice(8, 10) + "." + t.exit.slice(5, 7) + ". " + (REASONS[t.reason] || t.reason)),
+      el("span", {class: cls(t.pnl)}, eur(t.pnl, true))));
+    kids.push(box);
+  }
+  document.getElementById("app").replaceChildren(...kids);
+}
+
+function render() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  if (!id) { month = null; return home(); }
+  if (id === "team") return detail(DATA.team, true);
+  const b = DATA.bots.find(x => x.id === id);
+  b ? detail(b, false) : home();
+}
+window.addEventListener("hashchange", () => { month = null; render(); });
+window.addEventListener("resize", () => render());
+render();
+</script>
+</body>
+</html>
