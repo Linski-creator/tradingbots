@@ -1,0 +1,47 @@
+name: Hardcore-Backtest
+
+on:
+  workflow_dispatch: {}
+  push:
+    paths: [".github/workflows/hardcore-backtest.yml"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hardcore-backtest
+  cancel-in-progress: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Kursdaten-Cache
+        uses: actions/cache@v4
+        with:
+          path: data/cache
+          key: kurse-hc-${{ github.run_id }}
+          restore-keys: kurse-hc-
+      - run: python -m pytest -q
+      - name: Backtest
+        run: python -m bots.hardcore.backtest
+      - name: Ergebnisse als Download sichern
+        uses: actions/upload-artifact@v4
+        with:
+          name: hardcore-results
+          path: results/hardcore*.json
+      - name: Ergebnisse speichern
+        run: |
+          git config user.name "backtest-bot"
+          git config user.email "backtest-bot@users.noreply.github.com"
+          git add -f results/hardcore.json results/hardcore_curves.json
+          git diff --cached --quiet || git commit -m "Hardcore-Backtest $(date -u +'%Y-%m-%d %H:%M') UTC"
+          git pull --rebase origin main
+          git push

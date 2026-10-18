@@ -28,7 +28,7 @@ log = logging.getLogger(__name__)
 
 CACHE = Path(__file__).resolve().parent.parent / "data" / "cache"
 UA = {"User-Agent": "krypto-bots/1.0"}
-INTERVAL_MS = {"1h": 3_600_000, "4h": 14_400_000, "1d": 86_400_000}
+INTERVAL_MS = {"5m": 300_000, "15m": 900_000, "1h": 3_600_000, "4h": 14_400_000, "1d": 86_400_000}
 COINBASE_GRAN = {"1h": 3600, "1d": 86400}
 COINBASE_SYMBOL = {"BTCUSDT": "BTC-USD", "ETHUSDT": "ETH-USD", "SOLUSDT": "SOL-USD",
                    "XRPUSDT": "XRP-USD", "PAXGUSDT": "PAXG-USD"}
@@ -112,9 +112,13 @@ def _parse_klines(rows) -> pd.DataFrame:
     return df
 
 
-def binance_vision_klines(symbol: str, interval: str, start: str = "2017-08") -> pd.DataFrame:
-    """Komplette Historie aus den Monatsdateien (mit lokalem Cache)."""
-    cache = CACHE / f"bv_{symbol}_{interval}.csv"
+def binance_vision_klines(symbol: str, interval: str, start: str = "2017-08",
+                          market: str = "spot") -> pd.DataFrame:
+    """Komplette Historie aus den Monatsdateien (mit lokalem Cache).
+    ``market="futures"``: USDT-Perpetuals; dort ohne den laufenden Monat,
+    weil die Futures-API aus den USA (GitHub-Server) gesperrt ist."""
+    prefix = {"spot": "spot", "futures": "futures/um"}[market]
+    cache = CACHE / (f"bv_{symbol}_{interval}.csv" if market == "spot" else f"bvf_{symbol}_{interval}.csv")
     CACHE.mkdir(parents=True, exist_ok=True)
     have = pd.read_csv(cache, index_col=0, parse_dates=True) if cache.exists() else None
     months = pd.period_range(start, pd.Timestamp.now(tz="UTC").tz_localize(None).to_period("M") - 1, freq="M")
@@ -123,7 +127,7 @@ def binance_vision_klines(symbol: str, interval: str, start: str = "2017-08") ->
     for m in months:
         if str(m) in done:
             continue
-        url = (f"https://data.binance.vision/data/spot/monthly/klines/{symbol}/{interval}/"
+        url = (f"https://data.binance.vision/data/{prefix}/monthly/klines/{symbol}/{interval}/"
                f"{symbol}-{interval}-{m}.zip")
         r = _get(url)
         if r is None:
@@ -137,6 +141,8 @@ def binance_vision_klines(symbol: str, interval: str, start: str = "2017-08") ->
         raise RuntimeError(f"Keine Daten für {symbol} {interval}")
     df = align(clean(pd.concat(frames)), interval)
     df.to_csv(cache)
+    if market != "spot":
+        return df
     # aktueller Monat über die API ergänzen
     recent = binance_api_klines(symbol, interval, since=df.index[-1])
     return align(clean(pd.concat([df, recent])), interval)
