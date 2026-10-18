@@ -1,0 +1,10 @@
+{
+ "cash": 1000,
+ "peak": 1000,
+ "position": null,
+ "pending": null,
+ "halted": false,
+ "last_ts": "2026-10-18T13:00:00+00:00",
+ "trades": [],
+ "equity": []
+}
