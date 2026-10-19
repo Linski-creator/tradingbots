@@ -223,3 +223,51 @@ def test_hardcore_backtest_main_runs(tmp_path, monkeypatch):
     assert len(res) == len(HARDCORE) * len(HB.SYMBOLS) * len(HB.COSTS)
     traded = {r["strategy"] for r in res if r["all"]["trades"] > 0}
     assert traded == set(HARDCORE), traded  # jede Strategie handelt wirklich
+
+
+def test_search_signals_causal_and_present():
+    from bots.hardcore.search import SIGNALS, signals
+    df = make_ohlc(2000, seed=12, freq="1h", vol=0.006)
+    full = signals(df)
+    assert set(full) == set(SIGNALS)
+    for k in (600, 1500):
+        part = signals(df.iloc[:k])
+        for name in SIGNALS:
+            for a, b in zip(part[name], full[name]):
+                pd.testing.assert_series_equal(a, b.iloc[:k], check_names=False)
+    for name, (lg, sh) in full.items():
+        assert not (lg & sh).any(), name  # nie gleichzeitig long und short
+        assert lg.sum() + sh.sum() > 0, name
+
+
+def test_search_evaluate_rules():
+    from bots.hardcore.search import evaluate
+    rows = []
+    for sym, pf, ret in (("A", 1.3, 5), ("B", 1.2, 2), ("C", 0.8, -4)):
+        for costs in ("futures", "stress"):
+            rows.append({"signal": "x", "timeframe": "1h", "atr_mult": 2.0, "symbol": sym, "costs": costs,
+                         "selection": {"profit_factor": pf, "trades_per_day": 1, "win_rate_pct": 30},
+                         "validation": {"total_return_pct": ret}})
+    v = evaluate(rows)[0]
+    assert v["passes_selection"] and v["passes"]
+    rows[3]["validation"]["total_return_pct"] = -1  # B im Stress-Test verloren
+    assert not evaluate(rows)[0]["passes"]
+
+
+def test_search_main_runs(tmp_path, monkeypatch):
+    from bots.hardcore import search as S
+    rng = np.random.default_rng(8)
+
+    def fake(symbol, interval):
+        df = make_ohlc(3000, seed=len(symbol) + len(interval), freq={"15m": "15min", "1h": "1h"}[interval],
+                       vol=0.005)
+        df.index = pd.date_range("2024-06-01", periods=3000, freq={"15m": "15min", "1h": "1h"}[interval], tz="UTC")
+        df["volume"] = rng.lognormal(0, 1, len(df))
+        return df
+
+    monkeypatch.setattr(S, "load", fake)
+    monkeypatch.setattr(S, "OUT", tmp_path)
+    S.main()
+    res = json.loads((tmp_path / "search.json").read_text())
+    assert len(res["verdicts"]) == len(S.SIGNALS) * len(S.TIMEFRAMES) * len(S.ATR_MULTS)
+    assert len(res["rows"]) == len(res["verdicts"]) * len(S.SYMBOLS) * len(S.COSTS)
