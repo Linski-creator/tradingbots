@@ -6,9 +6,23 @@
  "cost": 0.0,
  "entry_time": null,
  "entry_context": null,
- "pending": null,
+ "pending": {
+  "target": "ETHUSDT",
+  "vol": 0.36173932720999025,
+  "reason": "rotation",
+  "context": {
+   "mom_BTCUSDT": 0.2583764957166068,
+   "mom_ETHUSDT": 0.26540737201866893,
+   "mom_PAXGUSDT": 0.04276980661260121
+  }
+ },
  "halted": false,
- "last_ts": "2026-10-17T00:00:00+00:00",
+ "last_ts": "2026-10-18T00:00:00+00:00",
  "trades": [],
- "equity": []
+ "equity": [
+  [
+   "2026-10-18T00:00:00+00:00",
+   1000
+  ]
+ ]
 }

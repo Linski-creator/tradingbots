@@ -2,9 +2,25 @@
  "cash": 1000,
  "peak": 1000,
  "position": null,
- "pending": null,
+ "pending": {
+  "type": "enter",
+  "stop": null,
+  "rr": null,
+  "vol": 0.321151423932922,
+  "context": {
+   "close": 82116.0,
+   "vol": 0.321151423932922,
+   "mom": 0.2583764957166068
+  },
+  "signal_ts": "2026-10-18T00:00:00+00:00"
+ },
  "halted": false,
- "last_ts": "2026-10-17T00:00:00+00:00",
+ "last_ts": "2026-10-18T00:00:00+00:00",
  "trades": [],
- "equity": []
+ "equity": [
+  [
+   "2026-10-18T00:00:00+00:00",
+   1000
+  ]
+ ]
 }
