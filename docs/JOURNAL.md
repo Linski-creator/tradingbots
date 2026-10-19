@@ -1,6 +1,6 @@
 # 📒 Trading-Journal
 
-Stand: **19.10.2026 19:48 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
+Stand: **19.10.2026 23:33 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
 
 ## Kennzahlen je Bot
 
@@ -36,5 +36,5 @@ R = Ergebnis im Verhältnis zum eingeplanten Risiko (1 R = Verlust bis zum Stop)
 
 | Tag | Team Ø | Veränderung | Geöffnet | Geschlossen |
 |---|---:|---:|---:|---:|
-| 19.10.2026 | 999,67 € | +0,00 % | 1 | 1 |
+| 19.10.2026 | 999,68 € | +0,00 % | 1 | 1 |
 | 18.10.2026 | 999,65 € | -0,03 % | 0 | 0 |
