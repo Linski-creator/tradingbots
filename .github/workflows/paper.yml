@@ -2,7 +2,10 @@ name: Paper-Trading
 
 on:
   schedule:
-    - cron: "7 * * * *"   # jede Stunde, 7 Minuten nach der vollen Stunde
+    # GitHub lässt geplante Läufe bei hoher Last oft ausfallen. Mehrere Termine pro
+    # Stunde sorgen dafür, dass trotzdem fast jede Stunde ein Lauf stattfindet;
+    # doppelte Läufe schaden nicht (es werden nur neue Kerzen verarbeitet).
+    - cron: "4,24,44 * * * *"
   workflow_dispatch: {}    # manuell starten über den Actions-Tab
 
 permissions:
