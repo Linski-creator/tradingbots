@@ -1,28 +1,27 @@
 {
- "cash": 1000,
+ "cash": 0.0,
  "peak": 1000,
- "holding": null,
- "qty": 0.0,
- "cost": 0.0,
- "entry_time": null,
- "entry_context": null,
- "pending": {
-  "target": "ETHUSDT",
-  "vol": 0.36173932720999025,
-  "reason": "rotation",
-  "context": {
-   "mom_BTCUSDT": 0.2583764957166068,
-   "mom_ETHUSDT": 0.26540737201866893,
-   "mom_PAXGUSDT": 0.04276980661260121
-  }
+ "holding": "ETHUSDT",
+ "qty": 0.4142627911459255,
+ "cost": 1000.0,
+ "entry_time": "2026-10-19T00:00:00+00:00",
+ "entry_context": {
+  "mom_BTCUSDT": 0.2583764957166068,
+  "mom_ETHUSDT": 0.26540737201866893,
+  "mom_PAXGUSDT": 0.04276980661260121
  },
+ "pending": null,
  "halted": false,
- "last_ts": "2026-10-18T00:00:00+00:00",
+ "last_ts": "2026-10-19T00:00:00+00:00",
  "trades": [],
  "equity": [
   [
    "2026-10-18T00:00:00+00:00",
    1000
+  ],
+  [
+   "2026-10-19T00:00:00+00:00",
+   996.5513947635928
   ]
  ]
 }
