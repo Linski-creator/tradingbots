@@ -1,6 +1,6 @@
 # 📒 Trading-Journal
 
-Stand: **22.10.2026 06:36 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
+Stand: **22.10.2026 12:29 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
 
 ## Kennzahlen je Bot
 
@@ -8,7 +8,7 @@ Stand: **22.10.2026 06:36 UTC** · automatisch bei jedem Lauf erstellt · [Dashb
 |---|---:|---:|---:|---:|---:|---:|
 | donchian-btc | 0 | 0 % | 0,00 € | – | – | – |
 | donchian-bnb | 0 | 0 % | 0,00 € | – | – | – |
-| chandelier-btc | 0 | 0 % | 0,00 € | – | – | – |
+| chandelier-btc | 1 | 0 % | -9,86 € | -9,86 € | -9,86 € | -0,54 R |
 | tsmom-btc | 0 | 0 % | 0,00 € | – | – | – |
 | sma200-gold | 0 | 0 % | 0,00 € | – | – | – |
 | dualmom | 0 | 0 % | 0,00 € | – | – | – |
@@ -21,12 +21,19 @@ R = Ergebnis im Verhältnis zum eingeplanten Risiko (1 R = Verlust bis zum Stop)
 
 | Bot | Seit | Einstieg | Stop | Ziel | Grund |
 |---|---|---:|---:|---:|---|
-| chandelier-btc | 21.10.26 12:00 | 83.541,76 | 82.475,29 | – | EMA 20 (82.388,70) kreuzt EMA 50 (82.376,52) nach oben, Kurs über EMA 200 (82.056,43) |
 | tsmom-btc | 19.10.26 00:00 | 82.157,06 | – | – | 90-Tage-Rendite positiv: 25,8 % |
 | dualmom | 19.10.26 00:00 | ETHUSDT | – | – | Stärkster Markt (90 Tage): ETHUSDT 26,5 %, BTCUSDT 25,8 %, PAXGUSDT 4,3 % |
 | funding-btc | 18.10.26 08:00 | Absicherung | – | – | Ø Funding 0,0109 % pro 8 h (≈ 12,0 % p. a.) |
 
 ## Alle Trades (neueste zuerst)
+
+### 🔴 chandelier-btc · -9,86 € (-1,52 %) · -0,54 R
+
+- **Einstieg:** 21.10.26 12:00 zu 83.541,76
+- **Grund:** EMA 20 (82.388,70) kreuzt EMA 50 (82.376,52) nach oben, Kurs über EMA 200 (82.056,43)
+- **Stop / Ziel:** 81.168,80 / –
+- **Ausstieg:** 22.10.26 04:00 zu 82.434,05 · Stop-Loss ausgelöst
+- **Dauer:** 16 h
 
 ### 🔴 video-ema-btc (Vergleich) · -7,15 € (-0,72 %)
 
@@ -46,8 +53,8 @@ R = Ergebnis im Verhältnis zum eingeplanten Risiko (1 R = Verlust bis zum Stop)
 
 | Tag | Team Ø | Veränderung | Geöffnet | Geschlossen |
 |---|---:|---:|---:|---:|
-| 22.10.2026 | 1.005,33 € | -0,13 % | 0 | 1 |
-| 21.10.2026 | 1.006,62 € | +0,37 % | 0 | 0 |
+| 22.10.2026 | 1.004,79 € | -0,18 % | 0 | 2 |
+| 21.10.2026 | 1.006,62 € | +0,37 % | 1 | 0 |
 | 20.10.2026 | 1.002,88 € | +0,44 % | 1 | 0 |
 | 19.10.2026 | 998,52 € | -0,11 % | 1 | 1 |
 | 18.10.2026 | 999,65 € | -0,03 % | 0 | 0 |
