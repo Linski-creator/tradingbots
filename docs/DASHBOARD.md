@@ -1,8 +1,8 @@
 # 📈 Paper-Trading Dashboard
 
-Stand: **22.10.2026 01:27 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
+Stand: **22.10.2026 06:36 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
 
-**Team: 7.046,32 €** (+0,66 % auf 7 Bots) · größter Team-Einbruch: **-0.1 %** · Risikostufe: **mutig**
+**Team: 7.037,29 €** (+0,53 % auf 7 Bots) · größter Team-Einbruch: **-0.2 %** · Risikostufe: **mutig**
 
 Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.
 
@@ -14,15 +14,16 @@ Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.
 |---|---|---|---:|---:|---:|---:|---:|---|---|
 | donchian-btc | Donchian-Breakout | BTCUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
 | donchian-bnb | Donchian-Breakout | BNBUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
-| chandelier-btc | Chandelier-Trend | BTCUSDT | 1.002,97 € | +0,30 % | -0.3 % | 0 | 0 % | Long ab 83,541.76, Stop 82,475.29 | ✅ läuft |
+| chandelier-btc | Chandelier-Trend | BTCUSDT | 993,94 € | -0,61 % | -1.2 % | 0 | 0 % | Long ab 83,541.76, Stop 82,475.29 | ✅ läuft |
 | tsmom-btc | Zeitreihen-Momentum | BTCUSDT | 1.021,52 € | +2,15 % | -0.5 % | 0 | 0 % | Long ab 82,157.06 | ✅ läuft |
 | sma200-gold | 200-Tage-Linie | PAXGUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
 | dualmom | Dual Momentum | BTCUSDT/ETHUSDT/PAXGUSDT | 1.023,76 € | +2,38 % | -0.3 % | 0 | 0 % | hält ETHUSDT | ✅ läuft |
 | funding-btc | Funding-Arbitrage | BTCUSDT | 998,07 € | -0,19 % | -0.0 % | 0 | 0 % | Absicherung aktiv | ✅ läuft |
-| video-ema-btc (Vergleich) | EMA 9/21 (YouTube-Vergleich) | BTCUSDT | 1.001,08 € | +0,11 % | -2.3 % | 1 | 0 % | Long ab 83,318.40 | ✅ läuft |
+| video-ema-btc (Vergleich) | EMA 9/21 (YouTube-Vergleich) | BTCUSDT | 985,41 € | -1,46 % | -2.3 % | 2 | 0 % | Cash | ✅ läuft |
 
 ## Letzte Trades
 
 | Geschlossen | Bot | Einstieg | Ausstieg | Gewinn | Grund |
 |---|---|---:|---:|---:|---|
+| 2026-10-22 04:00 | video-ema-btc | 83,318.40 | 82,883.68 | -7,15 € | death_cross |
 | 2026-10-19 18:00 | video-ema-btc | 82,343.59 | 81,895.04 | -7,43 € | death_cross |
