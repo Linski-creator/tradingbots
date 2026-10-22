@@ -1,6 +1,6 @@
 # 📒 Trading-Journal
 
-Stand: **21.10.2026 22:47 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
+Stand: **22.10.2026 01:27 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
 
 ## Kennzahlen je Bot
 
@@ -21,7 +21,7 @@ R = Ergebnis im Verhältnis zum eingeplanten Risiko (1 R = Verlust bis zum Stop)
 
 | Bot | Seit | Einstieg | Stop | Ziel | Grund |
 |---|---|---:|---:|---:|---|
-| chandelier-btc | 21.10.26 12:00 | 83.541,76 | 82.472,74 | – | EMA 20 (82.388,70) kreuzt EMA 50 (82.376,52) nach oben, Kurs über EMA 200 (82.056,43) |
+| chandelier-btc | 21.10.26 12:00 | 83.541,76 | 82.475,29 | – | EMA 20 (82.388,70) kreuzt EMA 50 (82.376,52) nach oben, Kurs über EMA 200 (82.056,43) |
 | tsmom-btc | 19.10.26 00:00 | 82.157,06 | – | – | 90-Tage-Rendite positiv: 25,8 % |
 | dualmom | 19.10.26 00:00 | ETHUSDT | – | – | Stärkster Markt (90 Tage): ETHUSDT 26,5 %, BTCUSDT 25,8 %, PAXGUSDT 4,3 % |
 | funding-btc | 18.10.26 08:00 | Absicherung | – | – | Ø Funding 0,0109 % pro 8 h (≈ 12,0 % p. a.) |
@@ -40,7 +40,7 @@ R = Ergebnis im Verhältnis zum eingeplanten Risiko (1 R = Verlust bis zum Stop)
 
 | Tag | Team Ø | Veränderung | Geöffnet | Geschlossen |
 |---|---:|---:|---:|---:|
-| 21.10.2026 | 1.003,75 € | +0,09 % | 0 | 0 |
+| 21.10.2026 | 1.006,62 € | +0,37 % | 0 | 0 |
 | 20.10.2026 | 1.002,88 € | +0,44 % | 0 | 0 |
 | 19.10.2026 | 998,52 € | -0,11 % | 1 | 1 |
 | 18.10.2026 | 999,65 € | -0,03 % | 0 | 0 |

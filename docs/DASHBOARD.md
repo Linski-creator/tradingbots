@@ -1,8 +1,8 @@
 # 📈 Paper-Trading Dashboard
 
-Stand: **21.10.2026 22:47 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
+Stand: **22.10.2026 01:27 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
 
-**Team: 7.026,28 €** (+0,38 % auf 7 Bots) · größter Team-Einbruch: **-0.1 %** · Risikostufe: **mutig**
+**Team: 7.046,32 €** (+0,66 % auf 7 Bots) · größter Team-Einbruch: **-0.1 %** · Risikostufe: **mutig**
 
 Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.
 
@@ -14,12 +14,12 @@ Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.
 |---|---|---|---:|---:|---:|---:|---:|---|---|
 | donchian-btc | Donchian-Breakout | BTCUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
 | donchian-bnb | Donchian-Breakout | BNBUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
-| chandelier-btc | Chandelier-Trend | BTCUSDT | 1.006,03 € | +0,60 % | -0.0 % | 0 | 0 % | Long ab 83,541.76, Stop 82,472.74 | ✅ läuft |
-| tsmom-btc | Zeitreihen-Momentum | BTCUSDT | 1.008,58 € | +0,86 % | -0.5 % | 0 | 0 % | Long ab 82,157.06 | ✅ läuft |
+| chandelier-btc | Chandelier-Trend | BTCUSDT | 1.002,97 € | +0,30 % | -0.3 % | 0 | 0 % | Long ab 83,541.76, Stop 82,475.29 | ✅ läuft |
+| tsmom-btc | Zeitreihen-Momentum | BTCUSDT | 1.021,52 € | +2,15 % | -0.5 % | 0 | 0 % | Long ab 82,157.06 | ✅ läuft |
 | sma200-gold | 200-Tage-Linie | PAXGUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
-| dualmom | Dual Momentum | BTCUSDT/ETHUSDT/PAXGUSDT | 1.013,60 € | +1,36 % | -0.3 % | 0 | 0 % | hält ETHUSDT | ✅ läuft |
-| funding-btc | Funding-Arbitrage | BTCUSDT | 998,07 € | -0,19 % | 0.0 % | 0 | 0 % | Absicherung aktiv | ✅ läuft |
-| video-ema-btc (Vergleich) | EMA 9/21 (YouTube-Vergleich) | BTCUSDT | 1.008,72 € | +0,87 % | -2.3 % | 1 | 0 % | Long ab 83,318.40 | ✅ läuft |
+| dualmom | Dual Momentum | BTCUSDT/ETHUSDT/PAXGUSDT | 1.023,76 € | +2,38 % | -0.3 % | 0 | 0 % | hält ETHUSDT | ✅ läuft |
+| funding-btc | Funding-Arbitrage | BTCUSDT | 998,07 € | -0,19 % | -0.0 % | 0 | 0 % | Absicherung aktiv | ✅ läuft |
+| video-ema-btc (Vergleich) | EMA 9/21 (YouTube-Vergleich) | BTCUSDT | 1.001,08 € | +0,11 % | -2.3 % | 1 | 0 % | Long ab 83,318.40 | ✅ läuft |
 
 ## Letzte Trades
 
