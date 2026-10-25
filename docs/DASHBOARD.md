@@ -1,6 +1,6 @@
 # 📈 Paper-Trading Dashboard
 
-Stand: **25.10.2026 04:58 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
+Stand: **25.10.2026 09:45 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
 
 **Team: 6.947,62 €** (-0,75 % auf 7 Bots) · größter Team-Einbruch: **-1.5 %** · Risikostufe: **mutig**
 
@@ -21,12 +21,13 @@ Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.
 | sma200-gold | 200-Tage-Linie | PAXGUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
 | dualmom | Dual Momentum | BTCUSDT/ETHUSDT/PAXGUSDT | 976,19 € | -2,38 % | -4.6 % | 0 | 0 % | hält ETHUSDT | ✅ läuft |
 | funding-btc | Funding-Arbitrage | BTCUSDT | 998,70 € | -0,13 % | -0.0 % | 0 | 0 % | Absicherung aktiv | ✅ läuft |
-| video-ema-btc (Vergleich) | EMA 9/21 (YouTube-Vergleich) | BTCUSDT | 982,26 € | -1,77 % | -2.6 % | 2 | 0 % | Long ab 80,960.47 | ✅ läuft |
+| video-ema-btc (Vergleich) | EMA 9/21 (YouTube-Vergleich) | BTCUSDT | 977,31 € | -2,27 % | -3.1 % | 3 | 0 % | Cash | ✅ läuft |
 
 ## Letzte Trades
 
 | Geschlossen | Bot | Einstieg | Ausstieg | Gewinn | Grund |
 |---|---|---:|---:|---:|---|
+| 2026-10-25 07:00 | video-ema-btc | 80,960.47 | 80,455.76 | -8,10 € | death_cross |
 | 2026-10-22 04:00 | chandelier-btc | 83,541.76 | 82,434.05 | -9,86 € | stop |
 | 2026-10-22 04:00 | video-ema-btc | 83,318.40 | 82,883.68 | -7,15 € | death_cross |
 | 2026-10-19 18:00 | video-ema-btc | 82,343.59 | 81,895.04 | -7,43 € | death_cross |
