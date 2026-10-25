@@ -1,6 +1,6 @@
 # 📈 Paper-Trading Dashboard
 
-Stand: **25.10.2026 17:36 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
+Stand: **25.10.2026 19:59 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
 
 **Team: 6.947,65 €** (-0,75 % auf 7 Bots) · größter Team-Einbruch: **-1.5 %** · Risikostufe: **mutig**
 
@@ -21,7 +21,7 @@ Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.
 | sma200-gold | 200-Tage-Linie | PAXGUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
 | dualmom | Dual Momentum | BTCUSDT/ETHUSDT/PAXGUSDT | 976,19 € | -2,38 % | -4.6 % | 0 | 0 % | hält ETHUSDT | ✅ läuft |
 | funding-btc | Funding-Arbitrage | BTCUSDT | 998,72 € | -0,13 % | -0.0 % | 0 | 0 % | Absicherung aktiv | ✅ läuft |
-| video-ema-btc (Vergleich) | EMA 9/21 (YouTube-Vergleich) | BTCUSDT | 977,31 € | -2,27 % | -3.1 % | 3 | 0 % | Cash | ✅ läuft |
+| video-ema-btc (Vergleich) | EMA 9/21 (YouTube-Vergleich) | BTCUSDT | 973,31 € | -2,67 % | -3.5 % | 3 | 0 % | Long ab 80,836.40 | ✅ läuft |
 
 ## Letzte Trades
 
