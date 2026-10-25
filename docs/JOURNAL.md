@@ -1,6 +1,6 @@
 # 📒 Trading-Journal
 
-Stand: **25.10.2026 00:14 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
+Stand: **25.10.2026 04:58 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
 
 ## Kennzahlen je Bot
 
@@ -24,6 +24,7 @@ R = Ergebnis im Verhältnis zum eingeplanten Risiko (1 R = Verlust bis zum Stop)
 | tsmom-btc | 19.10.26 00:00 | 82.157,06 | – | – | 90-Tage-Rendite positiv: 25,8 % |
 | dualmom | 19.10.26 00:00 | ETHUSDT | – | – | Stärkster Markt (90 Tage): ETHUSDT 26,5 %, BTCUSDT 25,8 %, PAXGUSDT 4,3 % |
 | funding-btc | 18.10.26 08:00 | Absicherung | – | – | Ø Funding 0,0109 % pro 8 h (≈ 12,0 % p. a.) |
+| video-ema-btc (Vergleich) | 25.10.26 03:00 | 80.960,47 | – | – | EMA 9 (80.727,13) kreuzt EMA 21 (80.712,53) nach oben |
 
 ## Alle Trades (neueste zuerst)
 
