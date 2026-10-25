@@ -1,6 +1,6 @@
 # 📒 Trading-Journal
 
-Stand: **25.10.2026 19:59 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
+Stand: **25.10.2026 22:28 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
 
 ## Kennzahlen je Bot
 
@@ -13,7 +13,7 @@ Stand: **25.10.2026 19:59 UTC** · automatisch bei jedem Lauf erstellt · [Dashb
 | sma200-gold | 0 | 0 % | 0,00 € | – | – | – |
 | dualmom | 0 | 0 % | 0,00 € | – | – | – |
 | funding-btc | 0 | 0 % | 0,00 € | – | – | – |
-| video-ema-btc (Vergleich) | 3 | 0 % | -22,69 € | -7,15 € | -8,10 € | – |
+| video-ema-btc (Vergleich) | 4 | 0 % | -29,27 € | -6,58 € | -8,10 € | – |
 
 R = Ergebnis im Verhältnis zum eingeplanten Risiko (1 R = Verlust bis zum Stop).
 
@@ -24,9 +24,15 @@ R = Ergebnis im Verhältnis zum eingeplanten Risiko (1 R = Verlust bis zum Stop)
 | tsmom-btc | 19.10.26 00:00 | 82.157,06 | – | – | 90-Tage-Rendite positiv: 25,8 % |
 | dualmom | 19.10.26 00:00 | ETHUSDT | – | – | Stärkster Markt (90 Tage): ETHUSDT 26,5 %, BTCUSDT 25,8 %, PAXGUSDT 4,3 % |
 | funding-btc | 18.10.26 08:00 | Absicherung | – | – | Ø Funding 0,0109 % pro 8 h (≈ 12,0 % p. a.) |
-| video-ema-btc (Vergleich) | 25.10.26 18:00 | 80.836,40 | – | – | EMA 9 (80.636,31) kreuzt EMA 21 (80.625,76) nach oben |
 
 ## Alle Trades (neueste zuerst)
+
+### 🔴 video-ema-btc (Vergleich) · -6,58 € (-0,67 %)
+
+- **Einstieg:** 25.10.26 18:00 zu 80.836,40
+- **Grund:** EMA 9 (80.636,31) kreuzt EMA 21 (80.625,76) nach oben
+- **Ausstieg:** 25.10.26 21:00 zu 80.452,60 · EMA 9 kreuzt EMA 21 nach unten
+- **Dauer:** 3 h
 
 ### 🔴 video-ema-btc (Vergleich) · -8,10 € (-0,82 %)
 
@@ -61,7 +67,7 @@ R = Ergebnis im Verhältnis zum eingeplanten Risiko (1 R = Verlust bis zum Stop)
 
 | Tag | Team Ø | Veränderung | Geöffnet | Geschlossen |
 |---|---:|---:|---:|---:|
-| 25.10.2026 | 992,52 € | +0,00 % | 1 | 1 |
+| 25.10.2026 | 992,52 € | +0,00 % | 2 | 2 |
 | 24.10.2026 | 992,51 € | -0,22 % | 0 | 0 |
 | 23.10.2026 | 994,71 € | -0,05 % | 0 | 0 |
 | 22.10.2026 | 995,16 € | -1,14 % | 0 | 2 |
