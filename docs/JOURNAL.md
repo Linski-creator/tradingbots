@@ -1,6 +1,6 @@
 # 📒 Trading-Journal
 
-Stand: **29.10.2026 22:56 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
+Stand: **30.10.2026 02:33 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
 
 ## Kennzahlen je Bot
 
@@ -12,7 +12,6 @@ Stand: **29.10.2026 22:56 UTC** · automatisch bei jedem Lauf erstellt · [Dashb
 | tsmom-btc | 0 | 0 % | 0,00 € | – | – | – |
 | sma200-gold | 0 | 0 % | 0,00 € | – | – | – |
 | dualmom | 1 | 0 % | -36,27 € | -36,27 € | -36,27 € | – |
-| funding-btc | 0 | 0 % | 0,00 € | – | – | – |
 | video-ema-btc (Vergleich) | 7 | 14 % | -80,67 € | 0,34 € | -36,98 € | – |
 
 R = Ergebnis im Verhältnis zum eingeplanten Risiko (1 R = Verlust bis zum Stop).
@@ -23,7 +22,6 @@ R = Ergebnis im Verhältnis zum eingeplanten Risiko (1 R = Verlust bis zum Stop)
 |---|---|---:|---:|---:|---|
 | tsmom-btc | 19.10.26 00:00 | 82.157,06 | – | – | 90-Tage-Rendite positiv: 25,8 % |
 | dualmom | 26.10.26 00:00 | BTCUSDT | – | – | Stärkster Markt (90 Tage): BTCUSDT 25,7 %, ETHUSDT 23,1 %, PAXGUSDT -1,4 % |
-| funding-btc | 18.10.26 08:00 | Absicherung | – | – | Ø Funding 0,0109 % pro 8 h (≈ 12,0 % p. a.) |
 
 ## Alle Trades (neueste zuerst)
 
@@ -95,15 +93,15 @@ R = Ergebnis im Verhältnis zum eingeplanten Risiko (1 R = Verlust bis zum Stop)
 
 | Tag | Team Ø | Veränderung | Geöffnet | Geschlossen |
 |---|---:|---:|---:|---:|
-| 29.10.2026 | 993,31 € | +0,00 % | 1 | 2 |
-| 28.10.2026 | 993,30 € | +0,15 % | 1 | 1 |
-| 27.10.2026 | 991,79 € | +0,27 % | 1 | 0 |
-| 26.10.2026 | 989,15 € | -0,04 % | 0 | 1 |
-| 25.10.2026 | 989,54 € | -0,30 % | 2 | 2 |
-| 24.10.2026 | 992,51 € | -0,22 % | 0 | 0 |
-| 23.10.2026 | 994,71 € | -0,05 % | 0 | 0 |
-| 22.10.2026 | 995,16 € | -1,14 % | 0 | 2 |
-| 21.10.2026 | 1.006,62 € | +0,37 % | 1 | 0 |
-| 20.10.2026 | 1.002,88 € | +0,44 % | 1 | 0 |
-| 19.10.2026 | 998,52 € | -0,11 % | 2 | 1 |
-| 18.10.2026 | 999,65 € | -0,03 % | 0 | 0 |
+| 29.10.2026 | 978,82 € | -1,36 % | 1 | 2 |
+| 28.10.2026 | 992,31 € | +0,18 % | 1 | 1 |
+| 27.10.2026 | 990,56 € | +0,31 % | 1 | 0 |
+| 26.10.2026 | 987,51 € | -0,05 % | 0 | 1 |
+| 25.10.2026 | 988,00 € | -0,35 % | 2 | 2 |
+| 24.10.2026 | 991,49 € | -0,26 % | 0 | 0 |
+| 23.10.2026 | 994,08 € | -0,06 % | 0 | 0 |
+| 22.10.2026 | 994,65 € | -1,33 % | 0 | 2 |
+| 21.10.2026 | 1.008,04 € | +0,43 % | 1 | 0 |
+| 20.10.2026 | 1.003,70 € | +0,51 % | 1 | 0 |
+| 19.10.2026 | 998,65 € | -0,14 % | 2 | 1 |
+| 18.10.2026 | 1.000,00 € | +0,00 % | 0 | 0 |
