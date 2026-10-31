@@ -1,8 +1,8 @@
 # 📈 Paper-Trading Dashboard
 
-Stand: **31.10.2026 20:31 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
+Stand: **31.10.2026 23:46 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
 
-**Team: 6.857,58 €** (-2,03 % auf 7 Bots) · größter Team-Einbruch: **-2.7 %** · Risikostufe: **mutig**
+**Team: 6.857,64 €** (-2,03 % auf 7 Bots) · größter Team-Einbruch: **-2.7 %** · Risikostufe: **mutig**
 
 Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.
 
@@ -20,8 +20,8 @@ Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.
 | tsmom-btc | Zeitreihen-Momentum | BTCUSDT | 939,84 € | -6,02 % | -8.0 % | 0 | 0 % | Long ab 82,157.06 | ✅ läuft |
 | sma200-gold | 200-Tage-Linie | PAXGUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
 | dualmom | Dual Momentum | BTCUSDT/ETHUSDT/PAXGUSDT | 927,92 € | -7,21 % | -9.4 % | 1 | 0 % | hält BTCUSDT | ✅ läuft |
-| funding-btc | Funding-Arbitrage | BTCUSDT | 999,68 € | -0,03 % | -0.0 % | 0 | 0 % | Absicherung aktiv | ✅ läuft |
-| video-ema-btc (Vergleich) | EMA 9/21 (YouTube-Vergleich) | BTCUSDT | 916,64 € | -8,34 % | -9.1 % | 7 | 14 % | Long ab 77,660.82 | ✅ läuft |
+| funding-btc | Funding-Arbitrage | BTCUSDT | 999,75 € | -0,03 % | -0.0 % | 0 | 0 % | Absicherung aktiv | ✅ läuft |
+| video-ema-btc (Vergleich) | EMA 9/21 (YouTube-Vergleich) | BTCUSDT | 916,16 € | -8,38 % | -9.2 % | 7 | 14 % | Long ab 77,660.82 | ✅ läuft |
 
 ## Letzte Trades
 
