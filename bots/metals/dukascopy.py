@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import logging
 import lzma
+import random
 import struct
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -23,6 +24,7 @@ log = logging.getLogger(__name__)
 CACHE = Path(__file__).resolve().parents[2] / "data" / "cache" / "dukascopy"
 URL = "https://datafeed.dukascopy.com/datafeed/{sym}/{y}/{m:02d}/{d:02d}/BID_candles_min_1.bi5"
 RECORD = struct.Struct(">5if")
+THREADS = 3
 
 # Preis = Ganzzahl / Teiler; Plausibilitätsbereich gegen falsche Teiler
 INSTRUMENTS = {
@@ -49,20 +51,22 @@ def decode(raw: bytes, day: pd.Timestamp, divisor: float) -> pd.DataFrame:
     return df[cols]
 
 
-def _fetch(sym: str, day: pd.Timestamp) -> bytes:
+def _fetch(sym: str, day: pd.Timestamp):
+    """Rohdaten eines Tages; b"" = kein Handel, None = trotz Wiederholungen nicht ladbar."""
     url = URL.format(sym=sym, y=day.year, m=day.month - 1, d=day.day)
-    last = None
-    for k in range(4):
+    for k in range(7):
         try:
             r = requests.get(url, timeout=30, headers={"User-Agent": "krypto-bots/1.0"})
             if r.status_code == 404:
                 return b""
             r.raise_for_status()
+            time.sleep(0.15)  # höflich bleiben, Dukascopy drosselt sonst (503)
             return r.content
         except requests.RequestException as e:
-            last = e
-            time.sleep(2 ** k)
-    raise RuntimeError(f"Dukascopy nicht erreichbar: {url} ({last})")
+            log.debug("Wiederhole %s (%s)", url, e)
+            time.sleep(min(60, 2 ** (k + 1)) + random.random())
+    log.warning("Tag nicht ladbar: %s", url)
+    return None
 
 
 def resample(df1m: pd.DataFrame, rule: str) -> pd.DataFrame:
@@ -82,9 +86,12 @@ def month_5m(sym: str, month: pd.Period) -> pd.DataFrame:
     divisor = INSTRUMENTS[sym]["divisor"]
     days = pd.date_range(month.start_time, month.end_time.normalize(), freq="D", tz="UTC")
     days = [d for d in days if d.weekday() != 5]  # samstags kein Handel
-    with ThreadPoolExecutor(8) as ex:
+    with ThreadPoolExecutor(THREADS) as ex:
         raws = list(ex.map(lambda d: _fetch(sym, d), days))
-    parts = [decode(r, d, divisor) for r, d in zip(raws, days)]
+    missing = sum(r is None for r in raws)
+    if missing > 0.2 * len(days):
+        raise RuntimeError(f"{sym} {month}: {missing} von {len(days)} Tagen nicht ladbar")
+    parts = [decode(r, d, divisor) for r, d in zip(raws, days) if r is not None]
     parts = [p for p in parts if not p.empty]
     if not parts:
         return pd.DataFrame(columns=["open", "high", "low", "close", "volume"])
@@ -93,8 +100,8 @@ def month_5m(sym: str, month: pd.Period) -> pd.DataFrame:
     med = df["close"].median()
     if not lo <= med <= hi:
         raise ValueError(f"{sym} {month}: Median {med} außerhalb {lo}-{hi}, falscher Teiler?")
-    if month < pd.Timestamp.now(tz="UTC").tz_localize(None).to_period("M"):
-        df.to_csv(path)  # laufenden Monat nicht cachen
+    if missing == 0 and month < pd.Timestamp.now(tz="UTC").tz_localize(None).to_period("M"):
+        df.to_csv(path)  # nur vollständige, abgeschlossene Monate cachen
     return df
 
 

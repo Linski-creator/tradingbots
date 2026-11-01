@@ -23,8 +23,8 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Kursdaten-Cache
-        uses: actions/cache@v4
+      - name: Kursdaten-Cache laden
+        uses: actions/cache/restore@v4
         with:
           path: data/cache
           key: kurse-metals-${{ github.run_id }}
@@ -32,6 +32,12 @@ jobs:
       - run: python -m pytest -q
       - name: Backtest
         run: python -m bots.metals.backtest
+      - name: Kursdaten-Cache speichern (auch bei Abbruch, damit nichts doppelt geladen wird)
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: data/cache
+          key: kurse-metals-${{ github.run_id }}
       - name: Ergebnisse als Download sichern
         uses: actions/upload-artifact@v4
         with:

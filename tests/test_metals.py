@@ -85,3 +85,25 @@ def test_metals_main_runs(tmp_path, monkeypatch):
     assert len(res["verdicts"]) == len(MB.TIMEFRAMES) * len(MB.EXITS)
     assert len(res["rows"]) == len(MB.SYMBOLS) * len(MB.TIMEFRAMES) * len(MB.EXITS) * 2
     assert any(r["selection"].get("trades", 0) > 0 for r in res["rows"])
+
+
+def test_fetch_retries_then_gives_up(monkeypatch):
+    calls = []
+
+    class R:
+        def __init__(self, code, content=b"x"):
+            self.status_code, self.content = code, content
+
+        def raise_for_status(self):
+            if self.status_code >= 400:
+                import requests
+                raise requests.HTTPError(str(self.status_code))
+
+    seq = [R(503), R(503), R(200, b"daten")]
+    monkeypatch.setattr(DK.time, "sleep", lambda s: None)
+    monkeypatch.setattr(DK.requests, "get", lambda *a, **k: calls.append(1) or seq.pop(0))
+    assert DK._fetch("XAUUSD", pd.Timestamp("2024-01-02", tz="UTC")) == b"daten" and len(calls) == 3
+    monkeypatch.setattr(DK.requests, "get", lambda *a, **k: R(503))
+    assert DK._fetch("XAUUSD", pd.Timestamp("2024-01-02", tz="UTC")) is None
+    monkeypatch.setattr(DK.requests, "get", lambda *a, **k: R(404))
+    assert DK._fetch("XAUUSD", pd.Timestamp("2024-01-02", tz="UTC")) == b""
