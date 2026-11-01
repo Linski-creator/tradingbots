@@ -1,12 +1,12 @@
 # 📈 Paper-Trading Dashboard
 
-Stand: **31.10.2026 23:46 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
+Stand: **01.11.2026 05:49 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
 
-**Team: 6.857,64 €** (-2,03 % auf 7 Bots) · größter Team-Einbruch: **-2.7 %** · Risikostufe: **mutig**
+**Team: 6.862,79 €** (-1,96 % auf 7 Bots) · größter Team-Einbruch: **-2.7 %** · Risikostufe: **mutig**
 
 Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.
 
-📅 **News-Filter** (keine neuen Einstiege 2 h vor bis 1 h nach): Wed 28.10. 18:00 UTC Federal Funds Rate · Wed 28.10. 18:00 UTC FOMC Statement · Wed 28.10. 18:30 UTC FOMC Press Conference · Thu 29.10. 12:30 UTC Advance GDP q/q · Thu 29.10. 12:30 UTC Core PCE Price Index m/m
+📅 **News-Filter** (keine neuen Einstiege 2 h vor bis 1 h nach): Tue 03.11. 15:16 UTC Congressional Elections · Fri 06.11. 13:30 UTC Average Hourly Earnings m/m · Fri 06.11. 13:30 UTC Non-Farm Employment Change · Fri 06.11. 13:30 UTC Unemployment Rate
 
 📒 **[Trading-Journal](JOURNAL.md)** (Grund jedes Trades) · ✍️ **[Eigene Notizen](NOTIZEN.md)**
 
@@ -17,11 +17,11 @@ Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.
 | donchian-btc | Donchian-Breakout | BTCUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
 | donchian-bnb | Donchian-Breakout | BNBUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
 | chandelier-btc | Chandelier-Trend | BTCUSDT | 990,14 € | -0,99 % | -1.6 % | 1 | 0 % | Cash | ✅ läuft |
-| tsmom-btc | Zeitreihen-Momentum | BTCUSDT | 939,84 € | -6,02 % | -8.0 % | 0 | 0 % | Long ab 82,157.06 | ✅ läuft |
+| tsmom-btc | Zeitreihen-Momentum | BTCUSDT | 942,43 € | -5,76 % | -8.0 % | 0 | 0 % | Long ab 82,157.06 | ✅ läuft |
 | sma200-gold | 200-Tage-Linie | PAXGUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
-| dualmom | Dual Momentum | BTCUSDT/ETHUSDT/PAXGUSDT | 927,92 € | -7,21 % | -9.4 % | 1 | 0 % | hält BTCUSDT | ✅ läuft |
+| dualmom | Dual Momentum | BTCUSDT/ETHUSDT/PAXGUSDT | 930,47 € | -6,95 % | -9.4 % | 1 | 0 % | hält BTCUSDT | ✅ läuft |
 | funding-btc | Funding-Arbitrage | BTCUSDT | 999,75 € | -0,03 % | -0.0 % | 0 | 0 % | Absicherung aktiv | ✅ läuft |
-| video-ema-btc (Vergleich) | EMA 9/21 (YouTube-Vergleich) | BTCUSDT | 916,16 € | -8,38 % | -9.2 % | 7 | 14 % | Long ab 77,660.82 | ✅ läuft |
+| video-ema-btc (Vergleich) | EMA 9/21 (YouTube-Vergleich) | BTCUSDT | 919,38 € | -8,06 % | -9.2 % | 7 | 14 % | Long ab 77,660.82 | ✅ läuft |
 
 ## Letzte Trades
 
