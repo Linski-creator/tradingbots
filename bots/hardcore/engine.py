@@ -83,7 +83,8 @@ class FxSimulator:
         st = self.st
         idx = df.index
         o, h, l, c = (df[k].to_numpy(float) for k in ("open", "high", "low", "close"))
-        bar_hours = (idx[1] - idx[0]).total_seconds() / 3600 if len(idx) > 1 else 0.25
+        # Median statt erster Abstand: Lücken (Wochenende) verfälschen ihn nicht
+        bar_hours = (pd.Series(idx).diff().median().total_seconds() / 3600) if len(idx) > 1 else 0.25
         start = 0
         if st.last_ts is not None:
             start = int(idx.searchsorted(pd.Timestamp(st.last_ts), side="right"))

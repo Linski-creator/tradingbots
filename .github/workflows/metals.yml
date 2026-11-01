@@ -1,0 +1,47 @@
+name: Metall-Backtest
+
+on:
+  workflow_dispatch: {}
+  push:
+    paths: [".github/workflows/metals.yml"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: metals
+  cancel-in-progress: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Kursdaten-Cache
+        uses: actions/cache@v4
+        with:
+          path: data/cache
+          key: kurse-metals-${{ github.run_id }}
+          restore-keys: kurse-metals-
+      - run: python -m pytest -q
+      - name: Backtest
+        run: python -m bots.metals.backtest
+      - name: Ergebnisse als Download sichern
+        uses: actions/upload-artifact@v4
+        with:
+          name: metals-results
+          path: results/metals.json
+      - name: Ergebnisse speichern
+        run: |
+          git config user.name "backtest-bot"
+          git config user.email "backtest-bot@users.noreply.github.com"
+          git add -f results/metals.json
+          git diff --cached --quiet || git commit -m "Metall-Backtest $(date -u +'%Y-%m-%d %H:%M') UTC"
+          git pull --rebase origin main
+          git push
