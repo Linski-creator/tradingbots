@@ -71,10 +71,13 @@ def test_metals_main_runs(tmp_path, monkeypatch):
     rng = np.random.default_rng(4)
     base = {"XAUUSD": 2000, "XAGUSD": 25, "XPTUSD": 1000, "USDJPY": 140}
 
-    def fake(sym, rule):
-        freq = {"5min": "5min", "15min": "15min", "1h": "1h"}[rule]
+    base["PAXGUSDT"] = 2000
+
+    def fake(sym, tf):
+        freq = {"5m": "5min", "15m": "15min", "1h": "1h"}[tf]
+        start = "2019-06-01" if tf == "1h" else "2023-11-01"
         df = make_ohlc(3000, seed=len(sym), freq=freq, vol=0.002, drift=0.0001, start=base[sym])
-        df.index = pd.date_range("2019-06-01", periods=3000, freq=freq, tz="UTC")
+        df.index = pd.date_range(start, periods=3000, freq=freq, tz="UTC")
         df["volume"] = rng.lognormal(0, 1, len(df))
         return df
 
@@ -82,8 +85,10 @@ def test_metals_main_runs(tmp_path, monkeypatch):
     monkeypatch.setattr(MB, "OUT", tmp_path)
     MB.main()
     res = json.loads((tmp_path / "metals.json").read_text())
-    assert len(res["verdicts"]) == len(MB.TIMEFRAMES) * len(MB.EXITS)
-    assert len(res["rows"]) == len(MB.SYMBOLS) * len(MB.TIMEFRAMES) * len(MB.EXITS) * 2
+    n_jobs = sum(len(g["jobs"]) for g in MB.GROUPS.values())
+    n_variants = len({(g, tf) for g, spec in MB.GROUPS.items() for _, tf in spec["jobs"]}) * len(MB.EXITS)
+    assert len(res["verdicts"]) == n_variants
+    assert len(res["rows"]) == n_jobs * len(MB.EXITS) * 2
     assert any(r["selection"].get("trades", 0) > 0 for r in res["rows"])
 
 
@@ -107,3 +112,15 @@ def test_fetch_retries_then_gives_up(monkeypatch):
     assert DK._fetch("XAUUSD", pd.Timestamp("2024-01-02", tz="UTC")) is None
     monkeypatch.setattr(DK.requests, "get", lambda *a, **k: R(404))
     assert DK._fetch("XAUUSD", pd.Timestamp("2024-01-02", tz="UTC")) == b""
+
+
+def test_month_hourly_uses_month_start(monkeypatch, tmp_path):
+    recs = [(0, 2000_000, 2001_000, 1999_000, 2002_000, 5.0),
+            (3600 * 24 * 3 + 7200, 2010_000, 2011_000, 2009_000, 2012_000, 4.0)]  # 4. Tag, 02:00
+    raw = lzma.compress(b"".join(struct.pack(">5if", *r) for r in recs), format=lzma.FORMAT_ALONE)
+    seen = []
+    monkeypatch.setattr(DK, "_fetch", lambda sym, day, url=None: seen.append(url) or raw)
+    monkeypatch.setattr(DK, "CACHE", tmp_path)
+    df = DK.month_hourly("XAUUSD", pd.Period("2024-03", "M"))
+    assert seen[0].endswith("/XAUUSD/2024/02/BID_candles_hour_1.bi5")  # Monat 0-basiert
+    assert list(df.index) == [pd.Timestamp("2024-03-01", tz="UTC"), pd.Timestamp("2024-03-04 02:00", tz="UTC")]

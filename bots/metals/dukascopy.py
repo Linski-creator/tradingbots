@@ -23,6 +23,7 @@ log = logging.getLogger(__name__)
 
 CACHE = Path(__file__).resolve().parents[2] / "data" / "cache" / "dukascopy"
 URL = "https://datafeed.dukascopy.com/datafeed/{sym}/{y}/{m:02d}/{d:02d}/BID_candles_min_1.bi5"
+URL_HOUR = "https://datafeed.dukascopy.com/datafeed/{sym}/{y}/{m:02d}/BID_candles_hour_1.bi5"
 RECORD = struct.Struct(">5if")
 THREADS = 3
 
@@ -51,9 +52,9 @@ def decode(raw: bytes, day: pd.Timestamp, divisor: float) -> pd.DataFrame:
     return df[cols]
 
 
-def _fetch(sym: str, day: pd.Timestamp):
+def _fetch(sym: str, day: pd.Timestamp, url: str | None = None):
     """Rohdaten eines Tages; b"" = kein Handel, None = trotz Wiederholungen nicht ladbar."""
-    url = URL.format(sym=sym, y=day.year, m=day.month - 1, d=day.day)
+    url = url or URL.format(sym=sym, y=day.year, m=day.month - 1, d=day.day)
     for k in range(7):
         try:
             r = requests.get(url, timeout=30, headers={"User-Agent": "krypto-bots/1.0"})
@@ -114,3 +115,36 @@ def history(sym: str, start: str = "2012-01", interval: str = "15min") -> pd.Dat
     df = pd.concat([f for f in frames if not f.empty]).sort_index()
     df = df[~df.index.duplicated(keep="last")]
     return df if interval == "5min" else resample(df, interval)
+
+
+def month_hourly(sym: str, month: pd.Period) -> pd.DataFrame:
+    """1-Stunden-Kerzen eines ganzen Monats aus EINER Datei (viel schneller als
+    die Minutendaten). Zeitangaben in der Datei: Sekunden seit Monatsbeginn."""
+    CACHE.mkdir(parents=True, exist_ok=True)
+    path = CACHE / f"{sym}_{month}_1h.csv"
+    if path.exists():
+        df = pd.read_csv(path, index_col=0)
+        df.index = pd.to_datetime(df.index, utc=True, format="ISO8601")
+        return df
+    start = pd.Timestamp(month.start_time, tz="UTC")
+    raw = _fetch(sym, start, URL_HOUR.format(sym=sym, y=month.year, m=month.month - 1))
+    if raw is None:
+        raise RuntimeError(f"{sym} {month}: Stundendaten nicht ladbar")
+    df = decode(raw, start, INSTRUMENTS[sym]["divisor"])
+    if df.empty:
+        return df
+    lo, hi = INSTRUMENTS[sym]["range"]
+    med = df["close"].median()
+    if not lo <= med <= hi:
+        raise ValueError(f"{sym} {month}: Median {med} außerhalb {lo}-{hi}, falscher Teiler?")
+    if month < pd.Timestamp.now(tz="UTC").tz_localize(None).to_period("M"):
+        df.to_csv(path)
+    return df
+
+
+def history_hourly(sym: str, start: str = "2012-01") -> pd.DataFrame:
+    end = pd.Timestamp.now(tz="UTC").tz_localize(None).to_period("M")
+    frames = [month_hourly(sym, m) for m in pd.period_range(start, end, freq="M")]
+    df = pd.concat([f for f in frames if not f.empty]).sort_index()
+    log.info("%s 1h: %d Kerzen ab %s", sym, len(df), df.index[0])
+    return df[~df.index.duplicated(keep="last")]
