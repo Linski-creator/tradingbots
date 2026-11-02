@@ -69,13 +69,13 @@ def test_bar_hours_ignores_weekend_gap():
 
 def test_metals_main_runs(tmp_path, monkeypatch):
     rng = np.random.default_rng(4)
-    base = {"XAUUSD": 2000, "XAGUSD": 25, "XPTUSD": 1000, "USDJPY": 140}
+    base = {"GC=F": 2000, "SI=F": 25, "PL=F": 1000, "JPY=X": 140}
 
     base["PAXGUSDT"] = 2000
 
     def fake(sym, tf):
         freq = {"5m": "5min", "15m": "15min", "1h": "1h"}[tf]
-        start = "2019-06-01" if tf == "1h" else "2023-11-01"
+        start = "2025-08-01" if sym != "PAXGUSDT" else "2023-11-01"
         df = make_ohlc(3000, seed=len(sym), freq=freq, vol=0.002, drift=0.0001, start=base[sym])
         df.index = pd.date_range(start, periods=3000, freq=freq, tz="UTC")
         df["volume"] = rng.lognormal(0, 1, len(df))

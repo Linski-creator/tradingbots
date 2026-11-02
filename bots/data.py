@@ -223,6 +223,19 @@ def yahoo_daily(ticker: str = "GC=F", start: str = "2000-01-01") -> pd.DataFrame
     return drop_unclosed(clean(df.dropna(subset=["open", "high", "low", "close"])), "1d")
 
 
+def yahoo_hourly(ticker: str) -> pd.DataFrame:
+    """1-Stunden-Kerzen der letzten ~2 Jahre (mehr liefert Yahoo für 1h nicht)."""
+    r = _get(f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}",
+             {"range": "730d", "interval": "60m"})
+    res = r.json()["chart"]["result"][0]
+    q = res["indicators"]["quote"][0]
+    df = pd.DataFrame({k: q[k] for k in ("open", "high", "low", "close", "volume")},
+                      index=pd.to_datetime(res["timestamp"], unit="s", utc=True).floor("h"))
+    df["volume"] = df["volume"].fillna(0)
+    df = clean(df.dropna(subset=["open", "high", "low", "close"]))
+    return drop_unclosed(df, "1h")
+
+
 # --- Funding-Raten --------------------------------------------------------
 
 def binance_funding_history(symbol: str = "BTCUSDT", start: str = "2020-01") -> pd.Series:
