@@ -136,7 +136,7 @@ def evaluate(rows: list[dict]) -> list[dict]:
                                                        for s in fut},
                          "trades_per_day": sum(fut[s]["selection"].get("trades_per_day", 0) for s in fut) / max(len(fut), 1),
                          "win_rate": {s: fut[s]["selection"].get("win_rate_pct", 0) for s in fut},
-                         "passes_selection": sel_ok, "passes": sel_ok and val_ok})
+                         "passes_selection": bool(sel_ok), "passes": bool(sel_ok and val_ok)})
     return verdicts
 
 

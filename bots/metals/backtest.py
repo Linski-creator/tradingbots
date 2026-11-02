@@ -126,7 +126,7 @@ def evaluate(rows: list[dict]) -> list[dict]:
                     "win_rate": {s: base[s]["selection"].get("win_rate_pct", 0) for s in base},
                     "trades_per_day": {s: base[s]["selection"].get("trades_per_day", 0) for s in base},
                     "yearly_gold": gold.get("yearly", {}),
-                    "passes_selection": sel_ok, "passes": sel_ok and val_ok})
+                    "passes_selection": bool(sel_ok), "passes": bool(sel_ok and val_ok)})
     return out
 
 
