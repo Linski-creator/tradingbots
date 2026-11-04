@@ -1,8 +1,8 @@
 # 📈 Paper-Trading Dashboard
 
-Stand: **03.11.2026 22:25 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
+Stand: **04.11.2026 02:44 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
 
-**Team: 6.844,70 €** (-2,22 % auf 7 Bots) · größter Team-Einbruch: **-2.9 %** · Risikostufe: **mutig**
+**Team: 6.860,14 €** (-2,00 % auf 7 Bots) · größter Team-Einbruch: **-2.9 %** · Risikostufe: **mutig**
 
 Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.
 
@@ -17,11 +17,11 @@ Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.
 | donchian-btc | Donchian-Breakout | BTCUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
 | donchian-bnb | Donchian-Breakout | BNBUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
 | chandelier-btc | Chandelier-Trend | BTCUSDT | 990,14 € | -0,99 % | -1.6 % | 1 | 0 % | Cash | ✅ läuft |
-| tsmom-btc | Zeitreihen-Momentum | BTCUSDT | 933,12 € | -6,69 % | -8.7 % | 0 | 0 % | Long ab 82,157.06 | ✅ läuft |
+| tsmom-btc | Zeitreihen-Momentum | BTCUSDT | 940,87 € | -5,91 % | -8.7 % | 0 | 0 % | Long ab 82,157.06 | ✅ läuft |
 | sma200-gold | 200-Tage-Linie | PAXGUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
-| dualmom | Dual Momentum | BTCUSDT/ETHUSDT/PAXGUSDT | 921,29 € | -7,87 % | -10.0 % | 1 | 0 % | hält BTCUSDT | ✅ läuft |
-| funding-btc | Funding-Arbitrage | BTCUSDT | 1.000,15 € | +0,02 % | -0.0 % | 0 | 0 % | Absicherung aktiv | ✅ läuft |
-| video-ema-btc (Vergleich) | EMA 9/21 (YouTube-Vergleich) | BTCUSDT | 922,50 € | -7,75 % | -9.2 % | 8 | 12 % | Long ab 77,432.70 | ✅ läuft |
+| dualmom | Dual Momentum | BTCUSDT/ETHUSDT/PAXGUSDT | 928,94 € | -7,11 % | -10.0 % | 1 | 0 % | hält BTCUSDT | ✅ läuft |
+| funding-btc | Funding-Arbitrage | BTCUSDT | 1.000,19 € | +0,02 % | -0.0 % | 0 | 0 % | Absicherung aktiv | ✅ läuft |
+| video-ema-btc (Vergleich) | EMA 9/21 (YouTube-Vergleich) | BTCUSDT | 912,23 € | -8,78 % | -9.6 % | 8 | 12 % | Long ab 77,432.70 | ✅ läuft |
 
 ## Letzte Trades
 
