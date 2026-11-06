@@ -1,8 +1,8 @@
 # 📈 Paper-Trading Dashboard
 
-Stand: **05.11.2026 20:09 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
+Stand: **06.11.2026 01:00 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
 
-**Team: 6.934,12 €** (-0,94 % auf 7 Bots) · größter Team-Einbruch: **-2.9 %** · Risikostufe: **mutig**
+**Team: 6.827,67 €** (-2,46 % auf 7 Bots) · größter Team-Einbruch: **-3.2 %** · Risikostufe: **mutig**
 
 Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.
 
@@ -17,10 +17,10 @@ Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.
 | donchian-btc | Donchian-Breakout | BTCUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
 | donchian-bnb | Donchian-Breakout | BNBUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
 | chandelier-btc | Chandelier-Trend | BTCUSDT | 990,14 € | -0,99 % | -1.6 % | 1 | 0 % | Cash | ✅ läuft |
-| tsmom-btc | Zeitreihen-Momentum | BTCUSDT | 977,92 € | -2,21 % | -8.7 % | 0 | 0 % | Long ab 82,157.06 | ✅ läuft |
+| tsmom-btc | Zeitreihen-Momentum | BTCUSDT | 924,28 € | -7,57 % | -9.5 % | 0 | 0 % | Long ab 82,157.06 | ✅ läuft |
 | sma200-gold | 200-Tage-Linie | PAXGUSDT | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | Cash | ✅ läuft |
-| dualmom | Dual Momentum | BTCUSDT/ETHUSDT/PAXGUSDT | 965,52 € | -3,45 % | -10.0 % | 1 | 0 % | hält BTCUSDT | ✅ läuft |
-| funding-btc | Funding-Arbitrage | BTCUSDT | 1.000,54 € | +0,05 % | -0.0 % | 0 | 0 % | Absicherung aktiv | ✅ läuft |
+| dualmom | Dual Momentum | BTCUSDT/ETHUSDT/PAXGUSDT | 912,55 € | -8,74 % | -10.9 % | 1 | 0 % | hält BTCUSDT | ✅ läuft |
+| funding-btc | Funding-Arbitrage | BTCUSDT | 1.000,70 € | +0,07 % | -0.0 % | 0 | 0 % | Absicherung aktiv | ✅ läuft |
 | video-ema-btc (Vergleich) | EMA 9/21 (YouTube-Vergleich) | BTCUSDT | 902,07 € | -9,79 % | -10.7 % | 10 | 20 % | Cash | ✅ läuft |
 
 ## Letzte Trades
