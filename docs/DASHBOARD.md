@@ -1,6 +1,6 @@
 # 📈 Paper-Trading Dashboard
 
-Stand: **06.11.2026 15:53 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
+Stand: **06.11.2026 21:27 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
 
 **Team: 6.827,69 €** (-2,46 % auf 7 Bots) · größter Team-Einbruch: **-3.2 %** · Risikostufe: **mutig**
 
