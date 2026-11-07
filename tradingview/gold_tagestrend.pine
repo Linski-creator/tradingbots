@@ -1,5 +1,5 @@
 //@version=5
-// Gold-Tagestrend v4.2 – Grundregeln wie der Python-Test (bots/metals/daily.py, Regel "sma")
+// Gold-Tagestrend v4.3 – Grundregeln wie der Python-Test (bots/metals/daily.py, Regel "sma")
 // und die Paper-Bots, dazu Reparaturen als Schalter (B ist an, Rest aus).
 // Chart: OANDA:XAUUSD, 4h oder 1D, normale Kerzen (kein Heikin Ashi).
 //
@@ -22,7 +22,9 @@
 // Ergebnis der Tests (Woche 2/3): B hilft überall -> standardmäßig AN, Start-Stop 2 ATR (E) als Standard.
 // C und D bringen nichts.
 //  T  Teilgewinn: bei +1 R die Hälfte verkaufen, für den Rest rückt der Stop auf den Einstieg.
-strategy("Gold-Tagestrend v4.2", overlay = true, initial_capital = 100000, currency = currency.USD,
+//  F  Nur kaufen, wenn der Kurs über der 50er-Linie schließt (gegen Trades, die direkt nach unten laufen).
+//  H  Nur Signale aus Kerzen, die zwischen 12 und 24 Uhr UTC beginnen (keine Asien-/Europa-Vormittag-Signale).
+strategy("Gold-Tagestrend v4.3", overlay = true, initial_capital = 100000, currency = currency.USD,
      pyramiding = 3, commission_type = strategy.commission.percent, commission_value = 0.01,
      slippage = 2, process_orders_on_close = false)
 
@@ -38,6 +40,8 @@ atrS   = input.float(2.0, "E: Start-Stop × ATR (Standard 2, vorher 3)")
 maxAdd = input.int(0, "P: Gewinner ausbauen – max. Nachkäufe (0 = aus)", minval = 0, maxval = 3)
 posCap = input.float(1.0, "Crash-Schutz: Gesamtposition max. × Konto", minval = 0.1)
 usePT  = input.bool(false, "T: Teilgewinn – Hälfte bei +1 R verkaufen")
+useF   = input.bool(false, "F: Nur kaufen über der 50er-Linie")
+useH   = input.bool(false, "H: Nur Signale 12-24 Uhr UTC")
 
 riskPct = modus == "Sicher" ? 1.0 : 3.0
 maxLev  = math.min(modus == "Sicher" ? 5.0 : 10.0, posCap)
@@ -58,8 +62,9 @@ pullS = ta.highest(high, 5) >= s50 and close < low[1]
 rising  = s200 > s200[20]
 falling = s200 < s200[20]
 
-longOK  = up and (not useA or pullL) and (not useB or rising)
-shortOK = useSh and dn and (not useA or pullS) and (not useB or falling)
+hourOK  = not useH or hour(time, "UTC") >= 12
+longOK  = up and (not useA or pullL) and (not useB or rising) and (not useF or close > s50) and hourOK
+shortOK = useSh and dn and (not useA or pullS) and (not useB or falling) and (not useF or close < s50) and hourOK
 
 var float stopPx = na
 var float bestPx = na
