@@ -1,0 +1,322 @@
+{
+ "universe": [
+  "SPY",
+  "QQQ",
+  "IWM",
+  "EFA",
+  "EEM",
+  "TLT",
+  "IEF",
+  "LQD",
+  "GLD",
+  "SLV",
+  "USO",
+  "DBC",
+  "DBA",
+  "UUP",
+  "FXE",
+  "FXY",
+  "VNQ"
+ ],
+ "runs": {
+  "long_short": {
+   "normal": {
+    "gesamt": {
+     "cagr_pct": 2.09,
+     "vol_pct": 9.35,
+     "sharpe": 0.27,
+     "max_drawdown_pct": -19.68,
+     "calmar": 0.11,
+     "positive_months_pct": 49.1,
+     "worst_month_pct": -6.51,
+     "years": 22.8
+    },
+    "suche": {
+     "cagr_pct": 4.2,
+     "vol_pct": 9.58,
+     "sharpe": 0.48,
+     "max_drawdown_pct": -12.47,
+     "calmar": 0.34,
+     "positive_months_pct": 49.3,
+     "worst_month_pct": -5.02,
+     "years": 12.0
+    },
+    "pruefung": {
+     "cagr_pct": -0.2,
+     "vol_pct": 9.09,
+     "sharpe": 0.02,
+     "max_drawdown_pct": -19.16,
+     "calmar": -0.01,
+     "positive_months_pct": 48.9,
+     "worst_month_pct": -6.51,
+     "years": 10.8
+    }
+   },
+   "stress": {
+    "gesamt": {
+     "cagr_pct": -0.78,
+     "vol_pct": 9.36,
+     "sharpe": -0.04,
+     "max_drawdown_pct": -37.89,
+     "calmar": -0.02,
+     "positive_months_pct": 43.6,
+     "worst_month_pct": -6.78,
+     "years": 22.8
+    },
+    "suche": {
+     "cagr_pct": 1.63,
+     "vol_pct": 9.6,
+     "sharpe": 0.22,
+     "max_drawdown_pct": -19.14,
+     "calmar": 0.09,
+     "positive_months_pct": 46.5,
+     "worst_month_pct": -5.23,
+     "years": 12.0
+    },
+    "pruefung": {
+     "cagr_pct": -3.39,
+     "vol_pct": 9.09,
+     "sharpe": -0.33,
+     "max_drawdown_pct": -35.81,
+     "calmar": -0.09,
+     "positive_months_pct": 40.5,
+     "worst_month_pct": -6.78,
+     "years": 10.8
+    }
+   },
+   "yearly": {
+    "2004": 0.0,
+    "2005": 4.6,
+    "2006": 14.1,
+    "2007": 2.6,
+    "2008": 12.6,
+    "2009": -0.5,
+    "2010": 3.9,
+    "2011": -5.4,
+    "2012": 2.2,
+    "2013": 9.1,
+    "2014": 8.0,
+    "2015": 0.8,
+    "2016": -5.6,
+    "2017": -2.4,
+    "2018": -2.7,
+    "2019": 2.7,
+    "2020": 1.4,
+    "2021": 2.2,
+    "2022": 9.4,
+    "2023": -7.3,
+    "2024": 2.4,
+    "2025": -0.0,
+    "2026": -1.1
+   }
+  },
+  "nur_long": {
+   "normal": {
+    "gesamt": {
+     "cagr_pct": 4.17,
+     "vol_pct": 7.32,
+     "sharpe": 0.6,
+     "max_drawdown_pct": -11.98,
+     "calmar": 0.35,
+     "positive_months_pct": 52.0,
+     "worst_month_pct": -6.97,
+     "years": 22.8
+    },
+    "suche": {
+     "cagr_pct": 4.78,
+     "vol_pct": 7.64,
+     "sharpe": 0.65,
+     "max_drawdown_pct": -8.12,
+     "calmar": 0.59,
+     "positive_months_pct": 48.6,
+     "worst_month_pct": -4.9,
+     "years": 12.0
+    },
+    "pruefung": {
+     "cagr_pct": 3.49,
+     "vol_pct": 6.95,
+     "sharpe": 0.53,
+     "max_drawdown_pct": -11.98,
+     "calmar": 0.29,
+     "positive_months_pct": 55.7,
+     "worst_month_pct": -6.97,
+     "years": 10.8
+    }
+   },
+   "stress": {
+    "gesamt": {
+     "cagr_pct": 2.38,
+     "vol_pct": 7.33,
+     "sharpe": 0.36,
+     "max_drawdown_pct": -13.26,
+     "calmar": 0.18,
+     "positive_months_pct": 49.1,
+     "worst_month_pct": -7.14,
+     "years": 22.8
+    },
+    "suche": {
+     "cagr_pct": 3.14,
+     "vol_pct": 7.65,
+     "sharpe": 0.44,
+     "max_drawdown_pct": -10.0,
+     "calmar": 0.31,
+     "positive_months_pct": 46.5,
+     "worst_month_pct": -5.04,
+     "years": 12.0
+    },
+    "pruefung": {
+     "cagr_pct": 1.56,
+     "vol_pct": 6.96,
+     "sharpe": 0.26,
+     "max_drawdown_pct": -13.26,
+     "calmar": 0.12,
+     "positive_months_pct": 51.9,
+     "worst_month_pct": -7.14,
+     "years": 10.8
+    }
+   },
+   "yearly": {
+    "2004": 0.0,
+    "2005": 7.3,
+    "2006": 18.7,
+    "2007": 6.6,
+    "2008": 5.5,
+    "2009": 4.1,
+    "2010": 9.8,
+    "2011": -0.6,
+    "2012": 1.6,
+    "2013": 4.6,
+    "2014": 3.2,
+    "2015": -1.9,
+    "2016": 0.4,
+    "2017": 6.9,
+    "2018": -3.8,
+    "2019": 12.7,
+    "2020": 1.4,
+    "2021": 5.7,
+    "2022": 0.8,
+    "2023": -0.7,
+    "2024": 7.3,
+    "2025": 5.7,
+    "2026": 2.5
+   }
+  }
+ },
+ "vergleich": {
+  "gleichgewicht_halten": {
+   "gesamt": {
+    "cagr_pct": 6.67,
+    "vol_pct": 10.68,
+    "sharpe": 0.66,
+    "max_drawdown_pct": -33.04,
+    "calmar": 0.2,
+    "positive_months_pct": 62.2,
+    "worst_month_pct": -13.4,
+    "years": 22.8
+   },
+   "suche": {
+    "cagr_pct": 5.52,
+    "vol_pct": 11.64,
+    "sharpe": 0.52,
+    "max_drawdown_pct": -33.04,
+    "calmar": 0.17,
+    "positive_months_pct": 58.3,
+    "worst_month_pct": -13.4,
+    "years": 12.0
+   },
+   "pruefung": {
+    "cagr_pct": 7.96,
+    "vol_pct": 9.51,
+    "sharpe": 0.85,
+    "max_drawdown_pct": -21.34,
+    "calmar": 0.37,
+    "positive_months_pct": 66.4,
+    "worst_month_pct": -10.8,
+    "years": 10.8
+   }
+  },
+  "spy": {
+   "gesamt": {
+    "cagr_pct": 10.61,
+    "vol_pct": 18.6,
+    "sharpe": 0.64,
+    "max_drawdown_pct": -55.19,
+    "calmar": 0.19,
+    "positive_months_pct": 66.5,
+    "worst_month_pct": -16.52,
+    "years": 22.8
+   },
+   "suche": {
+    "cagr_pct": 7.32,
+    "vol_pct": 19.37,
+    "sharpe": 0.46,
+    "max_drawdown_pct": -55.19,
+    "calmar": 0.13,
+    "positive_months_pct": 63.9,
+    "worst_month_pct": -16.52,
+    "years": 12.0
+   },
+   "pruefung": {
+    "cagr_pct": 14.38,
+    "vol_pct": 17.72,
+    "sharpe": 0.85,
+    "max_drawdown_pct": -33.72,
+    "calmar": 0.43,
+    "positive_months_pct": 69.5,
+    "worst_month_pct": -12.49,
+    "years": 10.8
+   }
+  },
+  "gld": {
+   "gesamt": {
+    "cagr_pct": 9.76,
+    "vol_pct": 17.94,
+    "sharpe": 0.61,
+    "max_drawdown_pct": -45.56,
+    "calmar": 0.21,
+    "positive_months_pct": 51.3,
+    "worst_month_pct": -16.14,
+    "years": 22.8
+   },
+   "suche": {
+    "cagr_pct": 7.14,
+    "vol_pct": 19.12,
+    "sharpe": 0.46,
+    "max_drawdown_pct": -45.56,
+    "calmar": 0.16,
+    "positive_months_pct": 49.3,
+    "worst_month_pct": -16.14,
+    "years": 12.0
+   },
+   "pruefung": {
+    "cagr_pct": 12.75,
+    "vol_pct": 16.53,
+    "sharpe": 0.81,
+    "max_drawdown_pct": -28.26,
+    "calmar": 0.45,
+    "positive_months_pct": 53.4,
+    "worst_month_pct": -11.68,
+    "years": 10.8
+   }
+  }
+ },
+ "beitrag_je_markt_pct": {
+  "UUP": 0.4,
+  "VNQ": 1.6,
+  "SLV": 2.1,
+  "IWM": 2.7,
+  "TLT": 4.0,
+  "FXE": 4.9,
+  "FXY": 5.5,
+  "DBA": 5.6,
+  "EFA": 6.2,
+  "USO": 7.3,
+  "LQD": 8.1,
+  "IEF": 8.9,
+  "EEM": 10.3,
+  "DBC": 10.4,
+  "SPY": 11.0,
+  "GLD": 12.3,
+  "QQQ": 12.5
+ }
+}
