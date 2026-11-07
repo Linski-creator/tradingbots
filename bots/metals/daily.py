@@ -111,7 +111,8 @@ class DailyTrend:
                 stop = a["swing_low"][i] - atr if side == 1 else a["swing_high"][i] + atr
                 if not (0.5 * atr <= abs(c - stop) <= 5 * atr):
                     continue
-            return [("order", {"side": side, "type": "market", "sl": float(stop), "tag": f"daily_{self.rule}"})]
+            return [("order", {"side": side, "type": "market", "sl": float(stop), "tag": f"daily_{self.rule}",
+                               "context": {"close": float(c), "sma200": float(a["s200"][i]), "atr": float(atr)}})]
         return []
 
 

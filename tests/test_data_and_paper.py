@@ -301,21 +301,20 @@ def test_daily_summary_counts_and_values():
 
 def test_fx_metal_bots_paper_run(tmp_path, monkeypatch):
     """Die Metall-Bots aus bots.json (Sicher/Krass) laufen mehrmals durch; Positionsgröße bleibt gedeckelt."""
-    rng = np.random.default_rng(3)
     base = {"GC=F": 2400, "SI=F": 30, "PL=F": 1000, "JPY=X": 150}
     clock = {"n": 0}
     def trend(i, p):
-        up = make_ohlc(2000, seed=i, freq="1h", vol=0.003, drift=0.0006, start=p)
-        dn = make_ohlc(2000, seed=i + 10, freq="1h", vol=0.003, drift=-0.0006, start=up["close"].iloc[-1])
-        dn.index = up.index + pd.Timedelta(hours=2000)
+        up = make_ohlc(700, seed=i, freq="1D", vol=0.01, drift=0.002, start=p)
+        dn = make_ohlc(700, seed=i + 10, freq="1D", vol=0.01, drift=-0.002, start=up["close"].iloc[-1])
+        dn.index = up.index + pd.Timedelta(days=700)
         return pd.concat([up, dn])
 
     full = {s: trend(i, p) for i, (s, p) in enumerate(base.items())}
 
-    def fake_hourly(sym):
-        return full[sym].iloc[:2000 + clock["n"]]
+    def fake_daily(sym, start="2000-01-01"):
+        return full[sym].iloc[:400 + clock["n"]]
 
-    monkeypatch.setattr(D, "yahoo_hourly", fake_hourly)
+    monkeypatch.setattr(D, "yahoo_daily", fake_daily)
     from bots import news
     monkeypatch.setattr(news, "fetch_events", lambda: None)
     monkeypatch.setattr(paper, "STATE", tmp_path / "state")
@@ -328,7 +327,7 @@ def test_fx_metal_bots_paper_run(tmp_path, monkeypatch):
     cfg_path = tmp_path / "bots.json"
     cfg_path.write_text((paper.ROOT / "bots.json").read_text())
     monkeypatch.setattr(paper, "CONFIG", cfg_path)
-    for k in range(0, 2000, 100):
+    for k in range(0, 1000, 20):
         clock["n"] = k
         assert paper.main() == 0
     cfg = json.loads(cfg_path.read_text())
@@ -342,6 +341,7 @@ def test_fx_metal_bots_paper_run(tmp_path, monkeypatch):
     html = (tmp_path / "site" / "index.html").read_text()
     data = json.loads(html.split("const DATA = ", 1)[1].split(";\nconst REASONS", 1)[0].replace("<\\/", "</"))
     assert sorted(g["name"] for g in data["groups"]) == sorted({b["group"] for b in cfg["bots"]})
-    assert all(g["start"] == 4000 for g in data["groups"])
+    n = {g: sum(b["group"] == g for b in cfg["bots"]) for g in {b["group"] for b in cfg["bots"]}}
+    assert all(g["start"] == 1000 * n[g["name"]] for g in data["groups"])
     journal = (tmp_path / "docs" / "JOURNAL.md").read_text()
     assert "Trading-Journal" in journal

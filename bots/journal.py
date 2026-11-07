@@ -32,7 +32,7 @@ EXIT_REASONS = {
     "notbremse": "Notbremse (Einbruch zu groß)",
     "teilgewinn": "Teilgewinn bei +1R (Hälfte geschlossen, Stop auf Einstieg)",
     "wochenende": "Vor dem Wochenende geschlossen",
-    "trendbruch": "Trendbruch (Schluss jenseits EMA 200 oder höhere Zeitebene gekippt)",
+    "trendbruch": "Trendbruch (Schluss jenseits der 200er-Linie bzw. höhere Zeitebene gekippt)",
     "team_notbremse": "Team-Notbremse (Team-Einbruch zu groß)",
 }
 
@@ -64,6 +64,9 @@ def entry_reason(strategy: str, c: dict) -> str:
             moms = {k[4:]: v for k, v in c.items() if k.startswith("mom_")}
             return "Stärkster Markt (90 Tage): " + ", ".join(
                 f"{k} {_n(v * 100, 1)} %" for k, v in sorted(moms.items(), key=lambda kv: -kv[1]))
+        if strategy == "daily_trend":
+            return (f"Tagesschluss {_n(g('close'))} über der 200-Tage-Linie {_n(g('sma200'))}, "
+                    f"50-Tage-Linie darüber (ATR {_n(g('atr'))})")
         if strategy == "trend_v3":
             return (f"Rücksetzer im Trend bestätigt, Schluss {_n(g('close'))} "
                     f"(EMA 50 {_n(g('ema50'))}, ATR {_n(g('atr'))})")

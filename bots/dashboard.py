@@ -86,10 +86,10 @@ def _position_text(r: dict) -> str:
         return txt
     if kind == "rotation":
         return f"hält {st['holding']}" if st.get("holding") else "Cash"
-    if kind in ("fx", "fx3"):
+    if kind in ("fx", "fx3", "fxd"):
         p = st.get("position")
         if not p:
-            return "wartet auf Rücksetzer"
+            return "wartet auf Trend" if kind == "fxd" else "wartet auf Rücksetzer"
         side = "Long" if p["side"] == 1 else "Short"
         txt = f"{side} ab {p['entry_price']:,.2f}, Stop {p['sl']:,.2f}"
         return txt + (f", Ziel {p['tp']:,.2f}" if p.get("tp") else "")

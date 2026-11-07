@@ -178,8 +178,35 @@ def run_trend_v3_bot(bot: dict, cfg: dict, ctx: dict) -> dict:
             "price": float(df["close"].iloc[-1])}
 
 
+def run_daily_bot(bot: dict, cfg: dict, ctx: dict) -> dict:
+    """Trendfolge auf dem Tageschart (bots/metals/daily.py), Positionen bleiben übers Wochenende."""
+    from .data import yahoo_daily
+    from .hardcore.engine import FxRisk, FxSimulator, FxState
+    from .metals.backtest import COSTS
+    from .metals.daily import DailyTrend, tidy
+    strat = DailyTrend(bot.get("rule", "sma"), shorts=bot.get("shorts", False),
+                       flat_weekend=bot.get("flat_weekend", False))
+    df = tidy(yahoo_daily(bot["symbol"], start="2023-01-01"))
+    if len(df) < 300:
+        raise RuntimeError(f"zu wenig Daten für {bot['id']}: {len(df)} Tage")
+    prepared = strat.prepare(df)
+    path = STATE / f"{bot['id']}.json"
+    raw = _load(path)
+    if raw is None:
+        st = FxState(cash=cfg["start_cash"], peak=cfg["start_cash"], last_ts=df.index[-1].isoformat())
+        log.info("%s: neu gestartet ab %s", bot["id"], st.last_ts)
+    else:
+        st = FxState.from_dict(raw)
+    risk = FxRisk(risk_per_trade=bot["risk_per_trade"], max_leverage=bot["max_leverage"],
+                  min_stop=0.002, halt_drawdown=bot["halt_drawdown"])
+    st = FxSimulator(strat, COSTS[bot["symbol"]], risk, state=st).run(prepared)
+    _save(path, st.to_dict())
+    return {"bot": bot, "label": f"Tagestrend ({bot['group']})", "state": st.to_dict(),
+            "price": float(df["close"].iloc[-1])}
+
+
 RUNNERS = {"single": run_single_bot, "rotation": run_rotation_bot, "funding": run_funding_bot,
-           "fx": run_fx_bot, "fx3": run_trend_v3_bot}
+           "fx": run_fx_bot, "fx3": run_trend_v3_bot, "fxd": run_daily_bot}
 TEAM_KINDS = {"single", "rotation", "funding"}
 
 
