@@ -1,0 +1,53 @@
+//@version=5
+// Rücksetzer im Trend – Nachbau der TikTok-Strategie (Sicher / Vollgas)
+// Regel: Kurs über EMA 150, RSI(14) fällt unter 35 und steigt wieder darüber -> Kauf.
+// Stop und Ziel als Vielfache der ATR(14), gemessen ab dem Schluss der Signal-Kerze.
+// Positionsgröße: festes Risiko in % des Kontos bis zum Stop, hart gedeckelt (max. Hebel).
+// Empfohlen: 1-Stunden-Chart, z. B. OANDA:XAUUSD, OANDA:XAGUSD, OANDA:XPTUSD, OANDA:USDJPY
+strategy("Rücksetzer im Trend", overlay = true, initial_capital = 1000, currency = currency.USD,
+     pyramiding = 0, commission_type = strategy.commission.percent, commission_value = 0.01,
+     slippage = 2, process_orders_on_close = false)
+
+modus     = input.string("Sicher", "Modus", options = ["Sicher", "Vollgas"])
+emaLen    = input.int(150, "EMA-Länge (Trend)", minval = 10)
+rsiLen    = input.int(14, "RSI-Länge", minval = 2)
+rsiLevel  = input.float(35, "RSI-Schwelle", minval = 5, maxval = 50)
+atrLen    = input.int(14, "ATR-Länge", minval = 2)
+
+grpS = "Sicher"
+slS   = input.float(2.0, "Stop × ATR", group = grpS)
+tpS   = input.float(1.0, "Ziel × ATR", group = grpS)
+rskS  = input.float(1.0, "Risiko pro Trade %", group = grpS)
+levS  = input.float(5.0, "Max. Hebel", group = grpS)
+
+grpV = "Vollgas"
+slV   = input.float(1.5, "Stop × ATR", group = grpV)
+tpV   = input.float(3.0, "Ziel × ATR", group = grpV)
+rskV  = input.float(3.0, "Risiko pro Trade %", group = grpV)
+levV  = input.float(10.0, "Max. Hebel", group = grpV)
+
+isSafe  = modus == "Sicher"
+slMult  = isSafe ? slS  : slV
+tpMult  = isSafe ? tpS  : tpV
+riskPct = isSafe ? rskS : rskV
+maxLev  = isSafe ? levS : levV
+
+ema = ta.ema(close, emaLen)
+rsi = ta.rsi(close, rsiLen)
+atr = ta.atr(atrLen)
+
+signal = close > ema and rsi[1] < rsiLevel and rsi >= rsiLevel and strategy.position_size == 0
+
+if signal
+    stopDist = slMult * atr
+    stopPx   = close - stopDist
+    targetPx = close + tpMult * atr
+    qtyRisk  = strategy.equity * riskPct / 100 / stopDist
+    qtyCap   = strategy.equity * maxLev / close          // Schutz gegen zu große Positionen
+    qty      = math.min(qtyRisk, qtyCap)
+    strategy.entry("Long", strategy.long, qty = qty, comment = "Rücksetzer")
+    strategy.exit("SL/TP", "Long", stop = stopPx, limit = targetPx)
+
+plot(ema, "EMA", color = color.new(color.blue, 0), linewidth = 2)
+plotshape(signal, "Signal", shape.triangleup, location.belowbar, color.new(color.green, 0), size = size.small)
+alertcondition(signal, "Kaufsignal", "Rücksetzer im Trend: Kaufsignal auf {{ticker}} bei {{close}}")
