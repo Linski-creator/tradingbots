@@ -4,7 +4,7 @@
 // Chart: OANDA:XAUUSD, 4h oder 1D, normale Kerzen (kein Heikin Ashi).
 //
 // Einstieg: Schluss über der 200er-Linie UND 50er-Linie über der 200er-Linie -> Kauf zum nächsten Open.
-// Stop:     3 ATR unter dem Einstieg, danach 3 ATR unter dem besten Kurs nachgezogen (nie zurück).
+// Stop:     2 ATR unter dem Einstieg (einstellbar), danach 3 ATR unter dem besten Kurs nachgezogen (nie zurück).
 // Ausstieg: Stop oder Schluss unter der 200er-Linie.
 //
 // Reparaturen:
