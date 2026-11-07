@@ -4,6 +4,7 @@
   "setup": "tageschart",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 0,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 2.535136391982862,
    "max_drawdown_pct": -7.723980372622174,
@@ -37,6 +38,7 @@
   "setup": "tageschart",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 1,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 3.906320270021779,
    "max_drawdown_pct": -11.148492103764418,
@@ -70,6 +72,7 @@
   "setup": "tageschart",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 2,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 4.175136268877511,
    "max_drawdown_pct": -12.459101026466179,
@@ -103,6 +106,7 @@
   "setup": "tageschart",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 3,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 3.938095070464742,
    "max_drawdown_pct": -13.400084710223492,
@@ -136,6 +140,7 @@
   "setup": "tageschart",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 0,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 3.9867029619429006,
    "max_drawdown_pct": -10.611283005569538,
@@ -169,6 +174,7 @@
   "setup": "tageschart",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 1,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 5.530816296807961,
    "max_drawdown_pct": -13.65466251668651,
@@ -202,6 +208,7 @@
   "setup": "tageschart",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 2,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 6.1118432790086,
    "max_drawdown_pct": -15.071951974522868,
@@ -235,6 +242,7 @@
   "setup": "tageschart",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 3,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 6.300176374027,
    "max_drawdown_pct": -16.221949635971168,
@@ -265,9 +273,146 @@
  },
  {
   "symbol": "GC=F",
+  "setup": "tageschart",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 0,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 3.3794935605398813,
+   "max_drawdown_pct": -10.611283005569494,
+   "profit_factor": 1.823785427094176,
+   "win_rate_pct": 37.98449612403101,
+   "trades": 129,
+   "avg_r": 0.5067076670862686
+  },
+  "pruefung": {
+   "cagr_pct": 3.3320486958959172,
+   "max_drawdown_pct": -10.045020738633436,
+   "profit_factor": 2.2911576595897922,
+   "win_rate_pct": 32.467532467532465,
+   "trades": 77,
+   "avg_r": 0.49995568360673875
+  },
+  "suche_stress_cagr": 2.07206376046265,
+  "pruefung_stress_cagr": 1.9399226024240157,
+  "trades_mit_nachkauf": 0,
+  "top5_r": [
+   9.4,
+   9.8,
+   11.2,
+   13.1,
+   16.6
+  ],
+  "schlimmster_r": -2.49
+ },
+ {
+  "symbol": "GC=F",
+  "setup": "tageschart",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 1,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 4.6350017875125715,
+   "max_drawdown_pct": -13.654662516686633,
+   "profit_factor": 2.028009809675889,
+   "win_rate_pct": 31.782945736434108,
+   "trades": 129,
+   "avg_r": 0.6671117220285402
+  },
+  "pruefung": {
+   "cagr_pct": 3.4349216272479,
+   "max_drawdown_pct": -14.874793358360916,
+   "profit_factor": 1.9974336428109503,
+   "win_rate_pct": 19.480519480519483,
+   "trades": 77,
+   "avg_r": 0.5323902542742323
+  },
+  "suche_stress_cagr": 2.8971445283791253,
+  "pruefung_stress_cagr": 1.7687348371435263,
+  "trades_mit_nachkauf": 73,
+  "top5_r": [
+   12.4,
+   13.4,
+   14.5,
+   15.0,
+   16.6
+  ],
+  "schlimmster_r": -2.49
+ },
+ {
+  "symbol": "GC=F",
+  "setup": "tageschart",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 2,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 5.157755170751188,
+   "max_drawdown_pct": -14.991344603510282,
+   "profit_factor": 2.15134737296172,
+   "win_rate_pct": 31.007751937984494,
+   "trades": 129,
+   "avg_r": 0.7363745061256718
+  },
+  "pruefung": {
+   "cagr_pct": 3.8268512534615162,
+   "max_drawdown_pct": -15.881339479664513,
+   "profit_factor": 2.123059306214499,
+   "win_rate_pct": 19.480519480519483,
+   "trades": 77,
+   "avg_r": 0.5941076578072835
+  },
+  "suche_stress_cagr": 3.2865207514007233,
+  "pruefung_stress_cagr": 2.0603587090071374,
+  "trades_mit_nachkauf": 73,
+  "top5_r": [
+   13.9,
+   14.5,
+   15.0,
+   15.7,
+   16.6
+  ],
+  "schlimmster_r": -2.49
+ },
+ {
+  "symbol": "GC=F",
+  "setup": "tageschart",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 3,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 5.138611399336757,
+   "max_drawdown_pct": -14.99134460351026,
+   "profit_factor": 2.1457373385339675,
+   "win_rate_pct": 31.007751937984494,
+   "trades": 129,
+   "avg_r": 0.7346624566077644
+  },
+  "pruefung": {
+   "cagr_pct": 3.987112523560299,
+   "max_drawdown_pct": -16.78263595087288,
+   "profit_factor": 2.1773241587132275,
+   "win_rate_pct": 19.480519480519483,
+   "trades": 77,
+   "avg_r": 0.6200815652084892
+  },
+  "suche_stress_cagr": 3.25173890468613,
+  "pruefung_stress_cagr": 2.1840758610707445,
+  "trades_mit_nachkauf": 73,
+  "top5_r": [
+   13.9,
+   14.5,
+   15.0,
+   16.6,
+   17.8
+  ],
+  "schlimmster_r": -2.49
+ },
+ {
+  "symbol": "GC=F",
   "setup": "4h_nachbau",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 0,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 3.88376198190592,
    "max_drawdown_pct": -12.147452427188243,
@@ -301,6 +446,7 @@
   "setup": "4h_nachbau",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 1,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 4.712815044374796,
    "max_drawdown_pct": -15.496209021187068,
@@ -334,6 +480,7 @@
   "setup": "4h_nachbau",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 2,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 4.754926107324953,
    "max_drawdown_pct": -19.078832536427203,
@@ -367,6 +514,7 @@
   "setup": "4h_nachbau",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 3,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 4.64903120672806,
    "max_drawdown_pct": -19.76968451832156,
@@ -400,6 +548,7 @@
   "setup": "4h_nachbau",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 0,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 5.287838322741045,
    "max_drawdown_pct": -14.685998327614168,
@@ -433,6 +582,7 @@
   "setup": "4h_nachbau",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 1,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 6.021221733673188,
    "max_drawdown_pct": -17.84147177578398,
@@ -466,6 +616,7 @@
   "setup": "4h_nachbau",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 2,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 6.034376531489749,
    "max_drawdown_pct": -18.450897436964475,
@@ -499,6 +650,7 @@
   "setup": "4h_nachbau",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 3,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 5.562576789313267,
    "max_drawdown_pct": -18.71253361881372,
@@ -528,10 +680,147 @@
   "schlimmster_r": -6.05
  },
  {
+  "symbol": "GC=F",
+  "setup": "4h_nachbau",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 0,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 5.20813184998683,
+   "max_drawdown_pct": -12.608665244214269,
+   "profit_factor": 1.49896322812328,
+   "win_rate_pct": 33.557046979865774,
+   "trades": 298,
+   "avg_r": 0.2957422120719936
+  },
+  "pruefung": {
+   "cagr_pct": 5.379040636294419,
+   "max_drawdown_pct": -14.976704530313324,
+   "profit_factor": 1.5154574942569596,
+   "win_rate_pct": 35.4978354978355,
+   "trades": 231,
+   "avg_r": 0.31577066935414666
+  },
+  "suche_stress_cagr": 3.2992896861016474,
+  "pruefung_stress_cagr": 3.2039975098433704,
+  "trades_mit_nachkauf": 0,
+  "top5_r": [
+   9.7,
+   10.0,
+   10.6,
+   12.9,
+   13.4
+  ],
+  "schlimmster_r": -6.05
+ },
+ {
+  "symbol": "GC=F",
+  "setup": "4h_nachbau",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 1,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 5.1335727451032875,
+   "max_drawdown_pct": -12.713579131457486,
+   "profit_factor": 1.4846449031606839,
+   "win_rate_pct": 31.879194630872483,
+   "trades": 298,
+   "avg_r": 0.29418170120400033
+  },
+  "pruefung": {
+   "cagr_pct": 6.230458081468426,
+   "max_drawdown_pct": -16.165138395318234,
+   "profit_factor": 1.607010003104475,
+   "win_rate_pct": 30.735930735930733,
+   "trades": 231,
+   "avg_r": 0.3612516544809916
+  },
+  "suche_stress_cagr": 3.139861398982746,
+  "pruefung_stress_cagr": 3.889760419467936,
+  "trades_mit_nachkauf": 98,
+  "top5_r": [
+   10.6,
+   10.7,
+   12.9,
+   16.4,
+   17.1
+  ],
+  "schlimmster_r": -6.05
+ },
+ {
+  "symbol": "GC=F",
+  "setup": "4h_nachbau",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 2,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 5.067118044626007,
+   "max_drawdown_pct": -12.713579131457386,
+   "profit_factor": 1.4778165001841508,
+   "win_rate_pct": 31.879194630872483,
+   "trades": 298,
+   "avg_r": 0.2908067789395673
+  },
+  "pruefung": {
+   "cagr_pct": 6.085573128624189,
+   "max_drawdown_pct": -16.165138395318213,
+   "profit_factor": 1.5889235272845394,
+   "win_rate_pct": 30.303030303030305,
+   "trades": 231,
+   "avg_r": 0.35475573650050524
+  },
+  "suche_stress_cagr": 3.0678731724535835,
+  "pruefung_stress_cagr": 3.7367228392957585,
+  "trades_mit_nachkauf": 98,
+  "top5_r": [
+   10.6,
+   10.7,
+   12.9,
+   16.4,
+   17.1
+  ],
+  "schlimmster_r": -6.05
+ },
+ {
+  "symbol": "GC=F",
+  "setup": "4h_nachbau",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 3,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 5.067118044626007,
+   "max_drawdown_pct": -12.713579131457386,
+   "profit_factor": 1.4778165001841508,
+   "win_rate_pct": 31.879194630872483,
+   "trades": 298,
+   "avg_r": 0.2908067789395673
+  },
+  "pruefung": {
+   "cagr_pct": 6.085573128624189,
+   "max_drawdown_pct": -16.165138395318213,
+   "profit_factor": 1.5889235272845394,
+   "win_rate_pct": 30.303030303030305,
+   "trades": 231,
+   "avg_r": 0.35475573650050524
+  },
+  "suche_stress_cagr": 3.0678731724535835,
+  "pruefung_stress_cagr": 3.7367228392957585,
+  "trades_mit_nachkauf": 98,
+  "top5_r": [
+   10.6,
+   10.7,
+   12.9,
+   16.4,
+   17.1
+  ],
+  "schlimmster_r": -6.05
+ },
+ {
   "symbol": "SI=F",
   "setup": "tageschart",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 0,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 0.953015107407551,
    "max_drawdown_pct": -13.41443302326285,
@@ -565,6 +854,7 @@
   "setup": "tageschart",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 1,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 2.42697068137927,
    "max_drawdown_pct": -17.9394105912285,
@@ -598,6 +888,7 @@
   "setup": "tageschart",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 2,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 2.9761348661489606,
    "max_drawdown_pct": -19.02542976130691,
@@ -631,6 +922,7 @@
   "setup": "tageschart",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 3,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 3.2527788770862154,
    "max_drawdown_pct": -21.215479242400903,
@@ -664,6 +956,7 @@
   "setup": "tageschart",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 0,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 0.5375977603944149,
    "max_drawdown_pct": -19.227278606429454,
@@ -697,6 +990,7 @@
   "setup": "tageschart",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 1,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 0.688402932010379,
    "max_drawdown_pct": -21.19185264838658,
@@ -730,6 +1024,7 @@
   "setup": "tageschart",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 2,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 1.2139952139746724,
    "max_drawdown_pct": -22.99155577478651,
@@ -763,6 +1058,7 @@
   "setup": "tageschart",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 3,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 1.352472345258704,
    "max_drawdown_pct": -24.33518517935125,
@@ -793,9 +1089,146 @@
  },
  {
   "symbol": "SI=F",
+  "setup": "tageschart",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 0,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 0.549952357875072,
+   "max_drawdown_pct": -19.21645033388173,
+   "profit_factor": 1.1262942291698455,
+   "win_rate_pct": 35.15625,
+   "trades": 128,
+   "avg_r": 0.07878662223740265
+  },
+  "pruefung": {
+   "cagr_pct": 4.487291774583491,
+   "max_drawdown_pct": -8.235745679917372,
+   "profit_factor": 2.4272309735766733,
+   "win_rate_pct": 41.9753086419753,
+   "trades": 81,
+   "avg_r": 0.6929063819620088
+  },
+  "suche_stress_cagr": 0.5660521148050268,
+  "pruefung_stress_cagr": 3.5220983576708553,
+  "trades_mit_nachkauf": 0,
+  "top5_r": [
+   6.4,
+   6.5,
+   12.0,
+   17.0,
+   23.4
+  ],
+  "schlimmster_r": -2.6
+ },
+ {
+  "symbol": "SI=F",
+  "setup": "tageschart",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 1,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 0.7007760612367298,
+   "max_drawdown_pct": -21.181287743753042,
+   "profit_factor": 1.1434711519180467,
+   "win_rate_pct": 22.65625,
+   "trades": 128,
+   "avg_r": 0.10757015912615542
+  },
+  "pruefung": {
+   "cagr_pct": 5.290753219869604,
+   "max_drawdown_pct": -13.928631842381535,
+   "profit_factor": 2.472395508711034,
+   "win_rate_pct": 33.33333333333333,
+   "trades": 81,
+   "avg_r": 0.8399882327675592
+  },
+  "suche_stress_cagr": 0.45310247201786336,
+  "pruefung_stress_cagr": 4.1844109604880275,
+  "trades_mit_nachkauf": 68,
+  "top5_r": [
+   9.5,
+   10.4,
+   15.7,
+   19.5,
+   32.8
+  ],
+  "schlimmster_r": -2.6
+ },
+ {
+  "symbol": "SI=F",
+  "setup": "tageschart",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 2,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 1.2482325219112411,
+   "max_drawdown_pct": -22.981232135714258,
+   "profit_factor": 1.261973410066411,
+   "win_rate_pct": 21.875,
+   "trades": 128,
+   "avg_r": 0.190163165935966
+  },
+  "pruefung": {
+   "cagr_pct": 5.414583472240575,
+   "max_drawdown_pct": -15.36994913996742,
+   "profit_factor": 2.496165441932846,
+   "win_rate_pct": 33.33333333333333,
+   "trades": 81,
+   "avg_r": 0.8604366544500508
+  },
+  "suche_stress_cagr": 0.8778624944232316,
+  "pruefung_stress_cagr": 4.305021243075835,
+  "trades_mit_nachkauf": 68,
+  "top5_r": [
+   12.2,
+   12.6,
+   19.7,
+   24.6,
+   32.8
+  ],
+  "schlimmster_r": -2.6
+ },
+ {
+  "symbol": "SI=F",
+  "setup": "tageschart",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 3,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 1.459099396156116,
+   "max_drawdown_pct": -24.325041665266067,
+   "profit_factor": 1.3094238848801505,
+   "win_rate_pct": 21.875,
+   "trades": 128,
+   "avg_r": 0.22440464655851788
+  },
+  "pruefung": {
+   "cagr_pct": 5.180750338167339,
+   "max_drawdown_pct": -16.11154894372361,
+   "profit_factor": 2.4280027788532847,
+   "win_rate_pct": 33.33333333333333,
+   "trades": 81,
+   "avg_r": 0.8279613826141056
+  },
+  "suche_stress_cagr": 1.0595096089501377,
+  "pruefung_stress_cagr": 4.042293115044071,
+  "trades_mit_nachkauf": 68,
+  "top5_r": [
+   13.7,
+   14.1,
+   19.2,
+   28.5,
+   32.8
+  ],
+  "schlimmster_r": -2.6
+ },
+ {
+  "symbol": "SI=F",
   "setup": "4h_nachbau",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 0,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 2.6987226316147916,
    "max_drawdown_pct": -12.350753203148447,
@@ -829,6 +1262,7 @@
   "setup": "4h_nachbau",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 1,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 1.626157411492568,
    "max_drawdown_pct": -20.15452534431882,
@@ -862,6 +1296,7 @@
   "setup": "4h_nachbau",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 2,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 2.7516779952695414,
    "max_drawdown_pct": -19.308915450405195,
@@ -895,6 +1330,7 @@
   "setup": "4h_nachbau",
   "stop_anteil": 1.0,
   "nachkaeufe_max": 3,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 3.214386557750193,
    "max_drawdown_pct": -22.47353862558432,
@@ -928,6 +1364,7 @@
   "setup": "4h_nachbau",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 0,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 5.764761778223848,
    "max_drawdown_pct": -20.899290742490873,
@@ -961,6 +1398,7 @@
   "setup": "4h_nachbau",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 1,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 5.685374677128063,
    "max_drawdown_pct": -26.31693070758757,
@@ -994,6 +1432,7 @@
   "setup": "4h_nachbau",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 2,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 6.534778357055959,
    "max_drawdown_pct": -27.645142204550854,
@@ -1027,6 +1466,7 @@
   "setup": "4h_nachbau",
   "stop_anteil": 0.67,
   "nachkaeufe_max": 3,
+  "max_position": 5,
   "suche": {
    "cagr_pct": 7.137890184166418,
    "max_drawdown_pct": -27.645142204550854,
@@ -1054,5 +1494,141 @@
    65.9
   ],
   "schlimmster_r": -9.08
+ },
+ {
+  "symbol": "SI=F",
+  "setup": "4h_nachbau",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 0,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 4.49374177518842,
+   "max_drawdown_pct": -15.618259563495352,
+   "profit_factor": 1.3894153952653432,
+   "win_rate_pct": 35.03649635036496,
+   "trades": 274,
+   "avg_r": 0.39109600959322466
+  },
+  "pruefung": {
+   "cagr_pct": 9.965759914004746,
+   "max_drawdown_pct": -20.39964973898394,
+   "profit_factor": 1.9751877828651545,
+   "win_rate_pct": 39.06976744186046,
+   "trades": 215,
+   "avg_r": 0.6327991424385387
+  },
+  "suche_stress_cagr": 2.5063752417611385,
+  "pruefung_stress_cagr": 7.281254611894394,
+  "trades_mit_nachkauf": 0,
+  "top5_r": [
+   14.8,
+   14.9,
+   18.0,
+   18.9,
+   21.9
+  ],
+  "schlimmster_r": -7.45
+ },
+ {
+  "symbol": "SI=F",
+  "setup": "4h_nachbau",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 1,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 5.3998923059391135,
+   "max_drawdown_pct": -17.63487457495554,
+   "profit_factor": 1.446130359035927,
+   "win_rate_pct": 30.656934306569344,
+   "trades": 274,
+   "avg_r": 0.4579458809947244
+  },
+  "pruefung": {
+   "cagr_pct": 10.944240882232892,
+   "max_drawdown_pct": -24.968351086032637,
+   "profit_factor": 1.9775814627981079,
+   "win_rate_pct": 33.95348837209302,
+   "trades": 215,
+   "avg_r": 0.6984239385970883
+  },
+  "suche_stress_cagr": 2.95441323034622,
+  "pruefung_stress_cagr": 8.055263093617015,
+  "trades_mit_nachkauf": 122,
+  "top5_r": [
+   18.3,
+   18.8,
+   18.9,
+   25.9,
+   26.8
+  ],
+  "schlimmster_r": -7.45
+ },
+ {
+  "symbol": "SI=F",
+  "setup": "4h_nachbau",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 2,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 6.234953043015334,
+   "max_drawdown_pct": -18.479927038001854,
+   "profit_factor": 1.5114285385871928,
+   "win_rate_pct": 30.656934306569344,
+   "trades": 274,
+   "avg_r": 0.5147301439592972
+  },
+  "pruefung": {
+   "cagr_pct": 10.663114405208685,
+   "max_drawdown_pct": -27.50411236187601,
+   "profit_factor": 1.9239844511180912,
+   "win_rate_pct": 33.95348837209302,
+   "trades": 215,
+   "avg_r": 0.6880445932705616
+  },
+  "suche_stress_cagr": 3.7865666116304375,
+  "pruefung_stress_cagr": 7.762350824727027,
+  "trades_mit_nachkauf": 122,
+  "top5_r": [
+   20.8,
+   23.5,
+   24.3,
+   28.1,
+   28.4
+  ],
+  "schlimmster_r": -7.45
+ },
+ {
+  "symbol": "SI=F",
+  "setup": "4h_nachbau",
+  "stop_anteil": 0.67,
+  "nachkaeufe_max": 3,
+  "max_position": 1,
+  "suche": {
+   "cagr_pct": 6.295462129343599,
+   "max_drawdown_pct": -18.47992703800202,
+   "profit_factor": 1.517544011856396,
+   "win_rate_pct": 30.656934306569344,
+   "trades": 274,
+   "avg_r": 0.5191291418733545
+  },
+  "pruefung": {
+   "cagr_pct": 10.57080138543438,
+   "max_drawdown_pct": -27.50411236187602,
+   "profit_factor": 1.918751964481257,
+   "win_rate_pct": 33.95348837209302,
+   "trades": 215,
+   "avg_r": 0.6834583936148002
+  },
+  "suche_stress_cagr": 3.871200102973682,
+  "pruefung_stress_cagr": 7.658450355971125,
+  "trades_mit_nachkauf": 122,
+  "top5_r": [
+   20.8,
+   23.5,
+   26.0,
+   28.1,
+   28.4
+  ],
+  "schlimmster_r": -7.45
  }
 ]
