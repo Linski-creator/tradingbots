@@ -36,6 +36,7 @@ riskPct = modus == "Sicher" ? rskS : rskV
 // Wert eines Punktes in Kontowährung: bei Micro-Gold (MGC) 10 $, bei Gold-CFD 1 $.
 // Ohne diesen Faktor wäre die Position bei Futures um ein Vielfaches zu groß.
 pv = syminfo.pointvalue
+isFut = syminfo.type == "futures"
 maxLev  = modus == "Sicher" ? levS : levV
 
 ema50  = ta.ema(close, 50)
@@ -108,13 +109,17 @@ if flat and not noEntry
     if (longSig or reLong) and time > pauseL and close - sLong >= 0.5 * atr and close - sLong <= maxStop * atr
         dist = close - sLong
         qty  = math.min(strategy.equity * riskPct / 100 / (dist * pv), strategy.equity * maxLev / (close * pv))
-        strategy.entry("Long", strategy.long, qty = qty, comment = "Rücksetzer Long")
-        entryPx := close, riskR := dist, stopPx := sLong, bestPx := high, initQty := qty, reSide := 0
+        qty  := isFut ? math.floor(qty) : qty   // Futures nur in ganzen Kontrakten, abgerundet
+        if qty > 0
+            strategy.entry("Long", strategy.long, qty = qty, comment = "Rücksetzer Long")
+            entryPx := close, riskR := dist, stopPx := sLong, bestPx := high, initQty := qty, reSide := 0
     else if (shortSig or reShort) and time > pauseS and sShort - close >= 0.5 * atr and sShort - close <= maxStop * atr
         dist = sShort - close
         qty  = math.min(strategy.equity * riskPct / 100 / (dist * pv), strategy.equity * maxLev / (close * pv))
-        strategy.entry("Short", strategy.short, qty = qty, comment = "Rücksetzer Short")
-        entryPx := close, riskR := dist, stopPx := sShort, bestPx := low, initQty := qty, reSide := 0
+        qty  := isFut ? math.floor(qty) : qty   // Futures nur in ganzen Kontrakten, abgerundet
+        if qty > 0
+            strategy.entry("Short", strategy.short, qty = qty, comment = "Rücksetzer Short")
+            entryPx := close, riskR := dist, stopPx := sShort, bestPx := low, initQty := qty, reSide := 0
 
 // nach dem Teilgewinn: Stop mindestens auf Einstieg
 partDone = strategy.position_size != 0 and math.abs(strategy.position_size) < initQty * 0.75
