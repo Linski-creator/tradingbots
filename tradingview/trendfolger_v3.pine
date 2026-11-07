@@ -1,5 +1,6 @@
 //@version=5
-// Trendfolger v3.1 – Rücksetzer im einseitigen Trend, Long und Short, Traum-Trade-Ausstieg.
+// Trendfolger v3.2 – Rücksetzer im einseitigen Trend, Long und Short, Traum-Trade-Ausstieg.
+// v3.2: Positionsgröße berücksichtigt den Punktwert (z. B. 10 $ je Punkt bei Micro-Gold).
 // v3.1: Stop mit mehr Luft (1 ATR hinter dem Rücksetzer), Teilgewinn (Hälfte bei +1R),
 //       Montags-Wiedereinstieg nach Wochenend-Schluss im Gewinn.
 // Höhere Zeitebene einstellen: 4h-Chart -> "D", 1h-Chart -> "240", 15m-Chart -> "60".
@@ -15,7 +16,7 @@
 //            Raus bei Trendbruch (Schluss jenseits EMA 200 oder höhere Zeitebene kippt).
 // Schutz:    nach 2 Verlusten in Folge in dieselbe Richtung 24 h Pause;
 //            Freitag ab 14 Uhr UTC keine Einstiege, offene Trades ab 19 Uhr UTC schließen.
-strategy("Trendfolger v3.1", overlay = true, initial_capital = 10000, currency = currency.USD,
+strategy("Trendfolger v3.2", overlay = true, initial_capital = 100000, currency = currency.USD,
      pyramiding = 0, commission_type = strategy.commission.percent, commission_value = 0.01,
      slippage = 2, process_orders_on_close = false)
 
@@ -32,6 +33,9 @@ usePart = input.bool(true, "Teilgewinn: Hälfte bei +1R")
 useReEn = input.bool(true, "Montags wieder einsteigen")
 
 riskPct = modus == "Sicher" ? rskS : rskV
+// Wert eines Punktes in Kontowährung: bei Micro-Gold (MGC) 10 $, bei Gold-CFD 1 $.
+// Ohne diesen Faktor wäre die Position bei Futures um ein Vielfaches zu groß.
+pv = syminfo.pointvalue
 maxLev  = modus == "Sicher" ? levS : levV
 
 ema50  = ta.ema(close, 50)
@@ -103,12 +107,12 @@ if flat and not noEntry
     sShort = ta.highest(high, 5) + stopPad * atr
     if (longSig or reLong) and time > pauseL and close - sLong >= 0.5 * atr and close - sLong <= maxStop * atr
         dist = close - sLong
-        qty  = math.min(strategy.equity * riskPct / 100 / dist, strategy.equity * maxLev / close)
+        qty  = math.min(strategy.equity * riskPct / 100 / (dist * pv), strategy.equity * maxLev / (close * pv))
         strategy.entry("Long", strategy.long, qty = qty, comment = "Rücksetzer Long")
         entryPx := close, riskR := dist, stopPx := sLong, bestPx := high, initQty := qty, reSide := 0
     else if (shortSig or reShort) and time > pauseS and sShort - close >= 0.5 * atr and sShort - close <= maxStop * atr
         dist = sShort - close
-        qty  = math.min(strategy.equity * riskPct / 100 / dist, strategy.equity * maxLev / close)
+        qty  = math.min(strategy.equity * riskPct / 100 / (dist * pv), strategy.equity * maxLev / (close * pv))
         strategy.entry("Short", strategy.short, qty = qty, comment = "Rücksetzer Short")
         entryPx := close, riskR := dist, stopPx := sShort, bestPx := low, initQty := qty, reSide := 0
 
