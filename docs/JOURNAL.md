@@ -1,6 +1,6 @@
 # 📒 Trading-Journal
 
-Stand: **07.11.2026 11:20 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
+Stand: **07.11.2026 12:44 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
 
 ## Kennzahlen je Bot
 
@@ -10,10 +10,10 @@ Stand: **07.11.2026 11:20 UTC** · automatisch bei jedem Lauf erstellt · [Dashb
 | sicher-silber | 0 | 0 % | 0,00 € | – | – | – |
 | sicher-platin | 0 | 0 % | 0,00 € | – | – | – |
 | sicher-yen | 0 | 0 % | 0,00 € | – | – | – |
-| vollgas-gold | 0 | 0 % | 0,00 € | – | – | – |
-| vollgas-silber | 0 | 0 % | 0,00 € | – | – | – |
-| vollgas-platin | 0 | 0 % | 0,00 € | – | – | – |
-| vollgas-yen | 0 | 0 % | 0,00 € | – | – | – |
+| krass-gold | 0 | 0 % | 0,00 € | – | – | – |
+| krass-silber | 0 | 0 % | 0,00 € | – | – | – |
+| krass-platin | 0 | 0 % | 0,00 € | – | – | – |
+| krass-yen | 0 | 0 % | 0,00 € | – | – | – |
 
 R = Ergebnis im Verhältnis zum eingeplanten Risiko (1 R = Verlust bis zum Stop).
 
