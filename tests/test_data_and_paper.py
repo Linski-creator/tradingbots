@@ -315,6 +315,9 @@ def test_fx_metal_bots_paper_run(tmp_path, monkeypatch):
         return full[sym].iloc[:400 + clock["n"]]
 
     monkeypatch.setattr(D, "yahoo_daily", fake_daily)
+    hourly = {s: pd.concat([make_ohlc(4000, seed=i + 20, freq="1h", vol=0.003, drift=0.0006, start=p)])
+              for i, (s, p) in enumerate(base.items())}
+    monkeypatch.setattr(D, "yahoo_hourly", lambda sym: hourly[sym].iloc[:2000 + 2 * clock["n"]])
     from bots import news
     monkeypatch.setattr(news, "fetch_events", lambda: None)
     monkeypatch.setattr(paper, "STATE", tmp_path / "state")

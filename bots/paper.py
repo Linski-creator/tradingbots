@@ -186,7 +186,11 @@ def run_daily_bot(bot: dict, cfg: dict, ctx: dict) -> dict:
     from .metals.daily import DailyTrend, tidy
     strat = DailyTrend(bot.get("rule", "sma"), shorts=bot.get("shorts", False),
                        flat_weekend=bot.get("flat_weekend", False))
-    df = tidy(yahoo_daily(bot["symbol"], start="2023-01-01"))
+    if bot.get("timeframe") == "4h":
+        from .metals.trend3 import load
+        df = tidy(load(bot["symbol"], "4h"))   # Yahoo-1h zu 4h zusammengefasst
+    else:
+        df = tidy(yahoo_daily(bot["symbol"], start="2023-01-01"))
     if len(df) < 300:
         raise RuntimeError(f"zu wenig Daten für {bot['id']}: {len(df)} Tage")
     prepared = strat.prepare(df)
@@ -201,7 +205,8 @@ def run_daily_bot(bot: dict, cfg: dict, ctx: dict) -> dict:
                   min_stop=0.002, halt_drawdown=bot["halt_drawdown"])
     st = FxSimulator(strat, COSTS[bot["symbol"]], risk, state=st).run(prepared)
     _save(path, st.to_dict())
-    return {"bot": bot, "label": f"Tagestrend ({bot['group']})", "state": st.to_dict(),
+    tf = "4h-Trend" if bot.get("timeframe") == "4h" else "Tagestrend"
+    return {"bot": bot, "label": f"{tf} ({bot['group']})", "state": st.to_dict(),
             "price": float(df["close"].iloc[-1])}
 
 
