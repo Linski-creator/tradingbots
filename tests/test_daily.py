@@ -42,3 +42,20 @@ def test_gap_stats():
     g = weekend_gaps(make())
     assert g["anzahl_wochenenden"] > 100 and g["median_pct"] >= 0
     assert gap_damage([{"reason": "stop", "r_multiple": -2.5}])["schlechter_als_-2R"] == 1
+
+
+def test_pyramid_adds_only_in_profit_and_limits_loss():
+    from bots.metals.pyramid import Pyramid
+    from bots.metals.stop_study import TightStart
+    df = make(n=2500, drift=0.0006, seed=4)
+    risk = FxRisk(risk_per_trade=0.01, max_leverage=5, min_stop=0.002)
+    base = FxSimulator(TightStart(50, 200, 3, 20, 2 / 3), risk=risk)
+    s0 = Pyramid(50, 200, 3, 20, 2 / 3, 0)
+    a = base.run(base.s.prepare(df))
+    b = FxSimulator(s0, risk=FxRisk(risk_per_trade=0.01, max_leverage=5, min_stop=0.002)).run(s0.prepare(df))
+    assert a.equity[-1][1] == b.equity[-1][1]          # 0 Nachkäufe = unverändert
+    s2 = Pyramid(50, 200, 3, 20, 2 / 3, 2)
+    c = FxSimulator(s2, risk=FxRisk(risk_per_trade=0.01, max_leverage=5, min_stop=0.002)).run(s2.prepare(df))
+    added = [t for t in c.trades if t.get("adds")]
+    assert added and max(t["adds"] for t in added) <= 2
+    assert min(t["pnl"] for t in added) > -0.015 * 2000   # Zukäufe riskieren nie mehr als ~1 % zusätzlich
