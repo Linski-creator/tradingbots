@@ -1,6 +1,6 @@
 //@version=5
-// Gold-Tagestrend v2 – Grundregeln wie der Python-Test (bots/metals/daily.py, Regel "sma")
-// und die Paper-Bots, dazu 4 Reparaturen als Schalter (alle AUS = altes Ergebnis).
+// Gold-Tagestrend v3 – Grundregeln wie der Python-Test (bots/metals/daily.py, Regel "sma")
+// und die Paper-Bots, dazu Reparaturen als Schalter (B ist an, Rest aus).
 // Chart: OANDA:XAUUSD, 4h oder 1D, normale Kerzen (kein Heikin Ashi).
 //
 // Einstieg: Schluss über der 200er-Linie UND 50er-Linie über der 200er-Linie -> Kauf zum nächsten Open.
