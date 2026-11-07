@@ -1,0 +1,488 @@
+{
+ "lang": [
+  {
+   "symbol": "GC=F",
+   "setup": "tageschart",
+   "filter": "ohne",
+   "suche": {
+    "cagr_pct": 3.38,
+    "max_drawdown_pct": -10.61,
+    "profit_factor": 1.82,
+    "win_rate_pct": 37.98,
+    "trades": 129
+   },
+   "pruefung": {
+    "cagr_pct": 3.33,
+    "max_drawdown_pct": -10.05,
+    "profit_factor": 2.29,
+    "win_rate_pct": 32.47,
+    "trades": 77
+   },
+   "stress_cagr": [
+    2.07206376046265,
+    1.9399226024240157
+   ],
+   "volle_verluste_pro_jahr": 2.1
+  },
+  {
+   "symbol": "GC=F",
+   "setup": "tageschart",
+   "filter": "F",
+   "suche": {
+    "cagr_pct": 2.66,
+    "max_drawdown_pct": -12.14,
+    "profit_factor": 1.77,
+    "win_rate_pct": 37.23,
+    "trades": 94
+   },
+   "pruefung": {
+    "cagr_pct": 1.63,
+    "max_drawdown_pct": -10.23,
+    "profit_factor": 1.62,
+    "win_rate_pct": 33.87,
+    "trades": 62
+   },
+   "stress_cagr": [
+    1.6365659280021205,
+    0.6585625974229847
+   ],
+   "volle_verluste_pro_jahr": 2.3
+  },
+  {
+   "symbol": "GC=F",
+   "setup": "4h_nachbau",
+   "filter": "ohne",
+   "suche": {
+    "cagr_pct": 5.13,
+    "max_drawdown_pct": -12.61,
+    "profit_factor": 1.49,
+    "win_rate_pct": 32.89,
+    "trades": 304
+   },
+   "pruefung": {
+    "cagr_pct": 5.37,
+    "max_drawdown_pct": -15.11,
+    "profit_factor": 1.51,
+    "win_rate_pct": 35.19,
+    "trades": 233
+   },
+   "stress_cagr": [
+    3.2160381418360418,
+    3.1871146827134655
+   ],
+   "volle_verluste_pro_jahr": 9.5
+  },
+  {
+   "symbol": "GC=F",
+   "setup": "4h_nachbau",
+   "filter": "F",
+   "suche": {
+    "cagr_pct": 4.82,
+    "max_drawdown_pct": -12.49,
+    "profit_factor": 1.71,
+    "win_rate_pct": 34.45,
+    "trades": 209
+   },
+   "pruefung": {
+    "cagr_pct": 4.01,
+    "max_drawdown_pct": -15.46,
+    "profit_factor": 1.54,
+    "win_rate_pct": 34.64,
+    "trades": 179
+   },
+   "stress_cagr": [
+    3.3981937014308183,
+    2.3782301078163703
+   ],
+   "volle_verluste_pro_jahr": 7.1
+  },
+  {
+   "symbol": "SI=F",
+   "setup": "tageschart",
+   "filter": "ohne",
+   "suche": {
+    "cagr_pct": 1.29,
+    "max_drawdown_pct": -19.19,
+    "profit_factor": 1.29,
+    "win_rate_pct": 35.16,
+    "trades": 128
+   },
+   "pruefung": {
+    "cagr_pct": 4.49,
+    "max_drawdown_pct": -8.24,
+    "profit_factor": 2.43,
+    "win_rate_pct": 41.98,
+    "trades": 81
+   },
+   "stress_cagr": [
+    0.5660521148050268,
+    3.5220983576708553
+   ],
+   "volle_verluste_pro_jahr": 2.8
+  },
+  {
+   "symbol": "SI=F",
+   "setup": "tageschart",
+   "filter": "F",
+   "suche": {
+    "cagr_pct": 1.2,
+    "max_drawdown_pct": -20.77,
+    "profit_factor": 1.28,
+    "win_rate_pct": 31.52,
+    "trades": 92
+   },
+   "pruefung": {
+    "cagr_pct": 4.4,
+    "max_drawdown_pct": -10.14,
+    "profit_factor": 2.82,
+    "win_rate_pct": 37.93,
+    "trades": 58
+   },
+   "stress_cagr": [
+    0.5607609216883302,
+    3.5197884088578935
+   ],
+   "volle_verluste_pro_jahr": 2.5
+  },
+  {
+   "symbol": "SI=F",
+   "setup": "4h_nachbau",
+   "filter": "ohne",
+   "suche": {
+    "cagr_pct": 4.27,
+    "max_drawdown_pct": -15.62,
+    "profit_factor": 1.37,
+    "win_rate_pct": 34.66,
+    "trades": 277
+   },
+   "pruefung": {
+    "cagr_pct": 9.75,
+    "max_drawdown_pct": -20.55,
+    "profit_factor": 1.94,
+    "win_rate_pct": 38.18,
+    "trades": 220
+   },
+   "stress_cagr": [
+    2.1862216541961965,
+    7.007745103870477
+   ],
+   "volle_verluste_pro_jahr": 8.6
+  },
+  {
+   "symbol": "SI=F",
+   "setup": "4h_nachbau",
+   "filter": "F",
+   "suche": {
+    "cagr_pct": 2.57,
+    "max_drawdown_pct": -13.66,
+    "profit_factor": 1.33,
+    "win_rate_pct": 36.5,
+    "trades": 200
+   },
+   "pruefung": {
+    "cagr_pct": 7.72,
+    "max_drawdown_pct": -14.3,
+    "profit_factor": 1.85,
+    "win_rate_pct": 36.69,
+    "trades": 169
+   },
+   "stress_cagr": [
+    1.017653282404063,
+    5.696413800286693
+   ],
+   "volle_verluste_pro_jahr": 6.8
+  }
+ ],
+ "echt": [
+  {
+   "daten": "echt",
+   "kerzen": "3h",
+   "filter": "ohne",
+   "zeitraum": [
+    "2024-06-16",
+    "2026-11-06"
+   ],
+   "ergebnis": {
+    "cagr_pct": 13.74,
+    "max_drawdown_pct": -9.99,
+    "profit_factor": 1.63,
+    "win_rate_pct": 35.34,
+    "trades": 116
+   },
+   "stress_cagr": 10.057536794205667,
+   "volle_verluste_pro_jahr": 16.3
+  },
+  {
+   "daten": "echt",
+   "kerzen": "3h",
+   "filter": "F",
+   "zeitraum": [
+    "2024-06-16",
+    "2026-11-06"
+   ],
+   "ergebnis": {
+    "cagr_pct": 11.95,
+    "max_drawdown_pct": -9.46,
+    "profit_factor": 1.71,
+    "win_rate_pct": 41.98,
+    "trades": 81
+   },
+   "stress_cagr": 9.116288997070242,
+   "volle_verluste_pro_jahr": 14.6
+  },
+  {
+   "daten": "echt",
+   "kerzen": "3h",
+   "filter": "H",
+   "zeitraum": [
+    "2024-06-16",
+    "2026-11-06"
+   ],
+   "ergebnis": {
+    "cagr_pct": 15.36,
+    "max_drawdown_pct": -8.52,
+    "profit_factor": 1.89,
+    "win_rate_pct": 37.5,
+    "trades": 96
+   },
+   "stress_cagr": 11.911640342785113,
+   "volle_verluste_pro_jahr": 13.4
+  },
+  {
+   "daten": "echt",
+   "kerzen": "3h",
+   "filter": "FH",
+   "zeitraum": [
+    "2024-06-16",
+    "2026-11-06"
+   ],
+   "ergebnis": {
+    "cagr_pct": 14.23,
+    "max_drawdown_pct": -9.4,
+    "profit_factor": 2.1,
+    "win_rate_pct": 45.07,
+    "trades": 71
+   },
+   "stress_cagr": 11.50847170003777,
+   "volle_verluste_pro_jahr": 11.3
+  },
+  {
+   "daten": "echt",
+   "kerzen": "4h",
+   "filter": "ohne",
+   "zeitraum": [
+    "2024-06-16",
+    "2026-11-06"
+   ],
+   "ergebnis": {
+    "cagr_pct": 11.65,
+    "max_drawdown_pct": -11.42,
+    "profit_factor": 1.59,
+    "win_rate_pct": 34.34,
+    "trades": 99
+   },
+   "stress_cagr": 8.32996355657334,
+   "volle_verluste_pro_jahr": 13.4
+  },
+  {
+   "daten": "echt",
+   "kerzen": "4h",
+   "filter": "F",
+   "zeitraum": [
+    "2024-06-16",
+    "2026-11-06"
+   ],
+   "ergebnis": {
+    "cagr_pct": 13.5,
+    "max_drawdown_pct": -8.49,
+    "profit_factor": 2.07,
+    "win_rate_pct": 46.03,
+    "trades": 63
+   },
+   "stress_cagr": 10.78841529757797,
+   "volle_verluste_pro_jahr": 9.2
+  },
+  {
+   "daten": "echt",
+   "kerzen": "4h",
+   "filter": "H",
+   "zeitraum": [
+    "2024-06-16",
+    "2026-11-06"
+   ],
+   "ergebnis": {
+    "cagr_pct": 15.56,
+    "max_drawdown_pct": -8.09,
+    "profit_factor": 2.08,
+    "win_rate_pct": 37.65,
+    "trades": 85
+   },
+   "stress_cagr": 12.311633058191962,
+   "volle_verluste_pro_jahr": 9.6
+  },
+  {
+   "daten": "echt",
+   "kerzen": "4h",
+   "filter": "FH",
+   "zeitraum": [
+    "2024-06-16",
+    "2026-11-06"
+   ],
+   "ergebnis": {
+    "cagr_pct": 14.49,
+    "max_drawdown_pct": -6.13,
+    "profit_factor": 2.5,
+    "win_rate_pct": 48.21,
+    "trades": 56
+   },
+   "stress_cagr": 11.942705002653398,
+   "volle_verluste_pro_jahr": 7.9
+  }
+ ],
+ "paxg": [
+  {
+   "daten": "paxg",
+   "kerzen": "3h",
+   "filter": "ohne",
+   "zeitraum": [
+    "2020-08-28",
+    "2024-06-16"
+   ],
+   "ergebnis": {
+    "cagr_pct": -4.72,
+    "max_drawdown_pct": -27.14,
+    "profit_factor": 0.74,
+    "win_rate_pct": 27.75,
+    "trades": 173
+   },
+   "stress_cagr": -7.918911735098899,
+   "volle_verluste_pro_jahr": 14.2
+  },
+  {
+   "daten": "paxg",
+   "kerzen": "3h",
+   "filter": "F",
+   "zeitraum": [
+    "2020-08-28",
+    "2024-06-16"
+   ],
+   "ergebnis": {
+    "cagr_pct": -3.23,
+    "max_drawdown_pct": -22.89,
+    "profit_factor": 0.77,
+    "win_rate_pct": 32.26,
+    "trades": 124
+   },
+   "stress_cagr": -5.843258826417175,
+   "volle_verluste_pro_jahr": 12.1
+  },
+  {
+   "daten": "paxg",
+   "kerzen": "3h",
+   "filter": "H",
+   "zeitraum": [
+    "2020-08-28",
+    "2024-06-16"
+   ],
+   "ergebnis": {
+    "cagr_pct": -2.34,
+    "max_drawdown_pct": -18.93,
+    "profit_factor": 0.85,
+    "win_rate_pct": 30.97,
+    "trades": 155
+   },
+   "stress_cagr": -5.504070757574331,
+   "volle_verluste_pro_jahr": 11.6
+  },
+  {
+   "daten": "paxg",
+   "kerzen": "3h",
+   "filter": "FH",
+   "zeitraum": [
+    "2020-08-28",
+    "2024-06-16"
+   ],
+   "ergebnis": {
+    "cagr_pct": -0.74,
+    "max_drawdown_pct": -15.73,
+    "profit_factor": 0.93,
+    "win_rate_pct": 35.78,
+    "trades": 109
+   },
+   "stress_cagr": -3.2568644195514085,
+   "volle_verluste_pro_jahr": 8.9
+  },
+  {
+   "daten": "paxg",
+   "kerzen": "4h",
+   "filter": "ohne",
+   "zeitraum": [
+    "2020-08-28",
+    "2024-06-16"
+   ],
+   "ergebnis": {
+    "cagr_pct": -1.52,
+    "max_drawdown_pct": -16.23,
+    "profit_factor": 0.88,
+    "win_rate_pct": 27.35,
+    "trades": 117
+   },
+   "stress_cagr": -4.241232226039382,
+   "volle_verluste_pro_jahr": 8.4
+  },
+  {
+   "daten": "paxg",
+   "kerzen": "4h",
+   "filter": "F",
+   "zeitraum": [
+    "2020-08-28",
+    "2024-06-16"
+   ],
+   "ergebnis": {
+    "cagr_pct": -0.78,
+    "max_drawdown_pct": -13.28,
+    "profit_factor": 0.92,
+    "win_rate_pct": 29.41,
+    "trades": 85
+   },
+   "stress_cagr": -3.017567199304516,
+   "volle_verluste_pro_jahr": 8.2
+  },
+  {
+   "daten": "paxg",
+   "kerzen": "4h",
+   "filter": "H",
+   "zeitraum": [
+    "2020-08-28",
+    "2024-06-16"
+   ],
+   "ergebnis": {
+    "cagr_pct": 0.06,
+    "max_drawdown_pct": -14.19,
+    "profit_factor": 1.01,
+    "win_rate_pct": 30.77,
+    "trades": 104
+   },
+   "stress_cagr": -2.5710762668421205,
+   "volle_verluste_pro_jahr": 7.1
+  },
+  {
+   "daten": "paxg",
+   "kerzen": "4h",
+   "filter": "FH",
+   "zeitraum": [
+    "2020-08-28",
+    "2024-06-16"
+   ],
+   "ergebnis": {
+    "cagr_pct": 1.01,
+    "max_drawdown_pct": -9.9,
+    "profit_factor": 1.12,
+    "win_rate_pct": 32.89,
+    "trades": 76
+   },
+   "stress_cagr": -1.0989877935903336,
+   "volle_verluste_pro_jahr": 5.8
+  }
+ ]
+}
