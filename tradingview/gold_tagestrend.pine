@@ -13,18 +13,21 @@
 //  B  Nur bei steigender Trendlinie: 200er-Linie höher als vor 20 Kerzen.
 //  C  Stop auf Einstieg, sobald das Hoch einer Kerze +1 R erreicht.
 //  D  Stop folgt dem höchsten HOCH statt dem höchsten Schlusskurs.
-strategy("Gold-Tagestrend v2", overlay = true, initial_capital = 100000, currency = currency.USD,
+//  E  Engerer Start-Stop: "Start-Stop × ATR" kleiner als 3 (z. B. 2); der nachgezogene Stop bleibt 3 ATR.
+// Ergebnis der Tests (Woche 2/3): B hilft überall -> jetzt standardmäßig AN. C und D bringen nichts.
+strategy("Gold-Tagestrend v3", overlay = true, initial_capital = 100000, currency = currency.USD,
      pyramiding = 0, commission_type = strategy.commission.percent, commission_value = 0.01,
      slippage = 2, process_orders_on_close = false)
 
 modus  = input.string("Sicher", "Modus", options = ["Sicher", "Vollgas"])
 useA   = input.bool(false, "A: Rücksetzer abwarten (50er-Linie berührt + Wende)")
-useB   = input.bool(false, "B: Nur bei steigender 200er-Linie")
+useB   = input.bool(true, "B: Nur bei steigender 200er-Linie (Standard)")
 useC   = input.bool(false, "C: Stop auf Einstieg ab +1 R (Hoch)")
 useD   = input.bool(false, "D: Stop folgt dem Hoch statt dem Schlusskurs")
 useSh  = input.bool(false, "Auch Short handeln (im Test schlechter)")
 wkFlat = input.bool(false, "Vor dem Wochenende schließen (im Test schlechter)")
-atrK   = input.float(3.0, "Stop-Abstand × ATR")
+atrK   = input.float(3.0, "Nachzieh-Abstand × ATR")
+atrS   = input.float(3.0, "E: Start-Stop × ATR (enger = z. B. 2)")
 
 riskPct = modus == "Sicher" ? 1.0 : 3.0
 maxLev  = modus == "Sicher" ? 5.0 : 10.0
@@ -81,15 +84,15 @@ if strategy.position_size < 0
 // Einstieg
 if strategy.position_size == 0 and not (wkFlat and thu) and atr > 0
     if longOK
-        q = calcQty(atrK * atr)
+        q = calcQty(atrS * atr)
         if q > 0
             strategy.entry("Long", strategy.long, qty = q, comment = "Trend Long")
-            stopPx := close - atrK * atr, bestPx := close, riskR := atrK * atr
+            stopPx := close - atrS * atr, bestPx := close, riskR := atrS * atr
     else if shortOK
-        q = calcQty(atrK * atr)
+        q = calcQty(atrS * atr)
         if q > 0
             strategy.entry("Short", strategy.short, qty = q, comment = "Trend Short")
-            stopPx := close + atrK * atr, bestPx := close, riskR := atrK * atr
+            stopPx := close + atrS * atr, bestPx := close, riskR := atrS * atr
 
 strategy.exit("Stop L", "Long", stop = stopPx, comment = "Stop")
 strategy.exit("Stop S", "Short", stop = stopPx, comment = "Stop")
