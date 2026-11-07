@@ -1,5 +1,5 @@
 //@version=5
-// Gold-Tagestrend v3 – Grundregeln wie der Python-Test (bots/metals/daily.py, Regel "sma")
+// Gold-Tagestrend v4 – Grundregeln wie der Python-Test (bots/metals/daily.py, Regel "sma")
 // und die Paper-Bots, dazu Reparaturen als Schalter (B ist an, Rest aus).
 // Chart: OANDA:XAUUSD, 4h oder 1D, normale Kerzen (kein Heikin Ashi).
 //
@@ -14,9 +14,13 @@
 //  C  Stop auf Einstieg, sobald das Hoch einer Kerze +1 R erreicht.
 //  D  Stop folgt dem höchsten HOCH statt dem höchsten Schlusskurs.
 //  E  Engerer Start-Stop: "Start-Stop × ATR" kleiner als 3 (z. B. 2); der nachgezogene Stop bleibt 3 ATR.
-// Ergebnis der Tests (Woche 2/3): B hilft überall -> jetzt standardmäßig AN. C und D bringen nichts.
-strategy("Gold-Tagestrend v3", overlay = true, initial_capital = 100000, currency = currency.USD,
-     pyramiding = 0, commission_type = strategy.commission.percent, commission_value = 0.01,
+//  P  Gewinner ausbauen: Nachkauf nur, wenn die ganze Position schon risikofrei ist (Stop über dem
+//     Durchschnitts-Einstieg) und der Kurs 1 R über dem letzten Kauf schließt. Jeder Nachkauf riskiert
+//     bis zum gemeinsamen Stop wieder höchstens das eingestellte Risiko.
+// Ergebnis der Tests (Woche 2/3): B hilft überall -> standardmäßig AN, Start-Stop 2 ATR (E) als Standard.
+// C und D bringen nichts.
+strategy("Gold-Tagestrend v4", overlay = true, initial_capital = 100000, currency = currency.USD,
+     pyramiding = 3, commission_type = strategy.commission.percent, commission_value = 0.01,
      slippage = 2, process_orders_on_close = false)
 
 modus  = input.string("Sicher", "Modus", options = ["Sicher", "Vollgas"])
@@ -27,7 +31,8 @@ useD   = input.bool(false, "D: Stop folgt dem Hoch statt dem Schlusskurs")
 useSh  = input.bool(false, "Auch Short handeln (im Test schlechter)")
 wkFlat = input.bool(false, "Vor dem Wochenende schließen (im Test schlechter)")
 atrK   = input.float(3.0, "Nachzieh-Abstand × ATR")
-atrS   = input.float(3.0, "E: Start-Stop × ATR (enger = z. B. 2)")
+atrS   = input.float(2.0, "E: Start-Stop × ATR (Standard 2, vorher 3)")
+maxAdd = input.int(0, "P: Gewinner ausbauen – max. Nachkäufe (0 = aus)", minval = 0, maxval = 3)
 
 riskPct = modus == "Sicher" ? 1.0 : 3.0
 maxLev  = modus == "Sicher" ? 5.0 : 10.0
@@ -54,6 +59,8 @@ shortOK = useSh and dn and (not useA or pullS) and (not useB or falling)
 var float stopPx = na
 var float bestPx = na
 var float riskR  = na
+var int   adds   = 0
+var float lastBuy = na
 
 calcQty(dist) =>
     q = math.min(strategy.equity * riskPct / 100 / (dist * pv), strategy.equity * maxLev / (close * pv))
@@ -70,6 +77,14 @@ if strategy.position_size > 0
         strategy.close("Long", comment = "Trendbruch")
     else if wkFlat and thu
         strategy.close("Long", comment = "Wochenende")
+    else if adds < maxAdd and stopPx >= strategy.position_avg_price and close >= lastBuy + riskR
+        dist2 = close - stopPx
+        room  = strategy.equity * maxLev / (close * pv) - strategy.position_size
+        q2    = dist2 > 0 ? math.min(strategy.equity * riskPct / 100 / (dist2 * pv), room) : 0.0
+        q2   := isFut ? math.floor(q2) : q2
+        if q2 > 0
+            strategy.entry("Long", strategy.long, qty = q2, comment = "Nachkauf")
+            adds += 1, lastBuy := close
 if strategy.position_size < 0
     ep = strategy.opentrades.entry_price(0)
     bestPx := math.min(bestPx, useD ? low : close)
@@ -80,6 +95,14 @@ if strategy.position_size < 0
         strategy.close("Short", comment = "Trendbruch")
     else if wkFlat and thu
         strategy.close("Short", comment = "Wochenende")
+    else if adds < maxAdd and stopPx <= strategy.position_avg_price and close <= lastBuy - riskR
+        dist2 = stopPx - close
+        room  = strategy.equity * maxLev / (close * pv) + strategy.position_size
+        q2    = dist2 > 0 ? math.min(strategy.equity * riskPct / 100 / (dist2 * pv), room) : 0.0
+        q2   := isFut ? math.floor(q2) : q2
+        if q2 > 0
+            strategy.entry("Short", strategy.short, qty = q2, comment = "Nachkauf")
+            adds += 1, lastBuy := close
 
 // Einstieg
 if strategy.position_size == 0 and not (wkFlat and thu) and atr > 0
@@ -87,15 +110,15 @@ if strategy.position_size == 0 and not (wkFlat and thu) and atr > 0
         q = calcQty(atrS * atr)
         if q > 0
             strategy.entry("Long", strategy.long, qty = q, comment = "Trend Long")
-            stopPx := close - atrS * atr, bestPx := close, riskR := atrS * atr
+            stopPx := close - atrS * atr, bestPx := close, riskR := atrS * atr, adds := 0, lastBuy := close
     else if shortOK
         q = calcQty(atrS * atr)
         if q > 0
             strategy.entry("Short", strategy.short, qty = q, comment = "Trend Short")
-            stopPx := close + atrS * atr, bestPx := close, riskR := atrS * atr
+            stopPx := close + atrS * atr, bestPx := close, riskR := atrS * atr, adds := 0, lastBuy := close
 
-strategy.exit("Stop L", "Long", stop = stopPx, comment = "Stop")
-strategy.exit("Stop S", "Short", stop = stopPx, comment = "Stop")
+// ein gemeinsamer Stop für alle offenen Käufe (inkl. Nachkäufe)
+strategy.exit("Stop", stop = stopPx, comment = "Stop")
 
 plot(s50, "SMA 50", color.new(color.orange, 0))
 plot(s200, "SMA 200", color.new(color.blue, 0), 2)
