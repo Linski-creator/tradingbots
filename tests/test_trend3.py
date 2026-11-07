@@ -92,3 +92,52 @@ def test_trend_break_does_not_close_fresh_pullback_entries():
     st = FxSimulator(s, FxCosts(), FxRisk(min_stop=0.0005, max_leverage=5)).run(s.prepare(trending(seed=21, n=6000)))
     quick = [t for t in st.trades if t["reason"] == "trendbruch" and t["bars_held"] <= 2]
     assert len(quick) < 0.3 * len(st.trades), (len(quick), len(st.trades))
+
+
+@pytest.mark.parametrize("flags", [dict(wide_stop=True), dict(reentry=True), dict(levels=True),
+                                   dict(wide_stop=True, reentry=True, levels=True)])
+def test_options_causal_and_trade(flags):
+    s = T3.TrendFollowerV3("1h", **flags)
+    df = trending(seed=31, n=5000)
+    p = s.prepare(df)
+    pd.testing.assert_frame_equal(s.prepare(df.iloc[:3500]), p.iloc[:3500])
+    st = FxSimulator(s, FxCosts(), FxRisk(min_stop=0.0005, max_leverage=5)).run(p)
+    assert st.trades
+    for t in st.trades:
+        assert t["mfe_r"] is not None and t["mfe_r"] >= t["mae_r"]
+
+
+def test_levels_filter_only_removes_signals():
+    df = trending(seed=32, n=5000)
+    base = T3.TrendFollowerV3("1h").prepare(df)
+    lvl = T3.TrendFollowerV3("1h", levels=True).prepare(df)
+    assert (lvl["long"] <= base["long"]).all() and (lvl["short"] <= base["short"]).all()
+    assert lvl["long"].sum() + lvl["short"].sum() < base["long"].sum() + base["short"].sum()
+
+
+def test_wide_stop_keeps_euro_risk_but_more_room():
+    df = trending(seed=33, n=5000)
+    for flags in (dict(), dict(wide_stop=True)):
+        s = T3.TrendFollowerV3("1h", **flags)
+        st = FxSimulator(s, FxCosts(0, 0, 0, 0), FxRisk(min_stop=0.0005, max_leverage=50)).run(s.prepare(df))
+        losses = [t["pnl"] for t in st.trades if t["reason"] == "stop" and t["r_multiple"] < 0]
+        if losses:
+            assert min(losses) > -0.05 * 3000  # nie mehr als ein Bruchteil vom Konto pro Stop
+
+
+def test_diagnose_runs(tmp_path, monkeypatch):
+    from bots.metals import diagnose as DG
+
+    def fake(sym, tf):
+        df = trending(seed=len(sym) + len(tf), freq=T3.TF[tf], n=3000)
+        df["volume"] = 1.0
+        return df
+
+    monkeypatch.setattr(DG, "load", fake)
+    monkeypatch.setattr(DG, "OUT", tmp_path)
+    monkeypatch.setattr(DG, "JOBS", [("GC=F", "1h", None)])
+    DG.main()
+    rows = json.loads((tmp_path / "diagnose.json").read_text())
+    assert len(rows) == len(DG.VARIANTS)
+    a = rows[0]["anatomy"]
+    assert a["trades"] > 0 and a["stop_losses_vorher_1R_im_plus"] <= a["stop_losses"]

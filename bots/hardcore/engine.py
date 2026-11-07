@@ -124,6 +124,9 @@ class FxSimulator:
         # 3. Stop-Loss / Take-Profit
         pos = st.position
         if pos:
+            # Bester/schlechtester Kurs während des Trades (für die Auswertung MFE/MAE)
+            pos["hi"] = max(pos.get("hi", h), h)
+            pos["lo"] = min(pos.get("lo", l), l)
             side, sl, tp = pos["side"], pos["sl"], pos["tp"]
             hit_sl = (l <= sl) if side == 1 else (h >= sl)
             if hit_sl:
@@ -233,8 +236,19 @@ class FxSimulator:
             "r_multiple": pnl / risk if risk > 0 else None, "bars_held": p["bars_held"],
             "reason": reason, "initial_stop": p["initial_sl"], "tp": p["tp"],
             "fees": p["fees"] + exit_fee, "tag": p["tag"], "context": p["context"],
+            # wie weit der Trade zwischendurch im Plus (mfe) bzw. Minus (mae) war, in R
+            "mfe_r": self._excursion(p, best=True), "mae_r": self._excursion(p, best=False),
         })
         st.position = None
+
+    @staticmethod
+    def _excursion(p: dict, best: bool):
+        r = abs(p["entry_price"] - p["initial_sl"])
+        if r <= 0 or "hi" not in p:
+            return None
+        if p["side"] == 1:
+            return ((p["hi"] if best else p["lo"]) - p["entry_price"]) / r
+        return (p["entry_price"] - (p["lo"] if best else p["hi"])) / r
 
     def _equity(self, price) -> float:
         p = self.st.position

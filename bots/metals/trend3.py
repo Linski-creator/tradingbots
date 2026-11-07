@@ -48,9 +48,16 @@ PAUSE = pd.Timedelta(hours=24)
 class TrendFollowerV3:
     wants_history = True
 
-    def __init__(self, tf: str = "1h"):
+    def __init__(self, tf: str = "1h", wide_stop: bool = False, reentry: bool = False, levels: bool = False):
+        """wide_stop: Stop 1 ATR hinter dem Rücksetzer (statt 0,2), Position entsprechend kleiner.
+        reentry:   Wurde Freitag mit Gewinn geschlossen und der Trend steht noch, am Montag
+                   direkt wieder einsteigen.
+        levels:    Einstieg nur, wenn der Rücksetzer an einer früheren Umkehr-Marke endet
+                   ("auf ähnlicher Höhe wie vorher")."""
         self.tf = tf
         self.step = pd.Timedelta(TF[tf])
+        self.wide_stop, self.reentry, self.levels = wide_stop, reentry, levels
+        self.stop_pad, self.max_stop = (1.0, 4.0) if wide_stop else (0.2, 3.0)
 
     def prepare(self, df: pd.DataFrame) -> pd.DataFrame:
         out = df.copy()
@@ -71,15 +78,46 @@ class TrendFollowerV3:
         out["short"] = (dn & (rsi.rolling(5, min_periods=5).max() > 60) & (c < l.shift(1))).fillna(False)
         out["swing_low"] = l.rolling(5, min_periods=5).min()
         out["swing_high"] = h.rolling(5, min_periods=5).max()
+        out["trend_up"], out["trend_dn"] = up.fillna(False), dn.fillna(False)
+        if self.levels:
+            near_l, near_s = self._near_levels(out)
+            out["long"] &= near_l
+            out["short"] &= near_s
+        # erste Kerzen nach einer Handelspause (Wochenbeginn)
+        gap = pd.Series(out.index, index=out.index).diff() > pd.Timedelta(hours=24)
+        out["week_open"] = gap.rolling(3, min_periods=1).max().astype(bool)
         close_t = out.index + self.step                      # Zeitpunkt, an dem die Kerze schließt
         fri = close_t.weekday == 4
         cutoff = close_t.normalize() + pd.Timedelta(hours=20)
         out["weekend_exit"] = (fri & (close_t + self.step >= cutoff)) | (close_t.weekday >= 5)
         out["no_entry"] = (fri & (close_t.hour >= 14)) | (close_t.weekday >= 5)
         out["ts_ns"] = out.index.as_unit("ns").asi8  # Index kann us-Auflösung haben
-        for k in ("long", "short", "weekend_exit", "no_entry"):
+        for k in ("long", "short", "weekend_exit", "no_entry", "trend_up", "trend_dn"):
             out[k] = out[k].astype(bool)
         return out
+
+    @staticmethod
+    def _near_levels(df: pd.DataFrame, look: int = 100, k: int = 3, tol: float = 0.5):
+        """Liegt das Rücksetzer-Tief (-Hoch) bis 0,5 ATR an einer früheren Umkehr-Marke?
+        Umkehr-Marken = Hochs/Tiefs, die 3 Kerzen links und rechts überragen. Sie gelten
+        erst 3 Kerzen später als bestätigt (kein Blick in die Zukunft)."""
+        h, l = df["high"].to_numpy(), df["low"].to_numpy()
+        n = len(df)
+        piv = np.full(n, np.nan)  # Wert der bei Bar i bestätigten Marke
+        for j in range(k, n - k):
+            if h[j] == h[j - k:j + k + 1].max() or l[j] == l[j - k:j + k + 1].min():
+                piv[j + k] = h[j] if h[j] == h[j - k:j + k + 1].max() else l[j]
+        sl, sh, atr = df["swing_low"].to_numpy(), df["swing_high"].to_numpy(), df["atr"].to_numpy()
+        near_l, near_s = np.zeros(n, bool), np.zeros(n, bool)
+        for i in range(n):
+            if not np.isfinite(atr[i]):
+                continue
+            w = piv[max(0, i - look):max(0, i - 5)]
+            w = w[np.isfinite(w)]
+            if w.size:
+                near_l[i] = np.abs(w - sl[i]).min() <= tol * atr[i]
+                near_s[i] = np.abs(w - sh[i]).min() <= tol * atr[i]
+        return pd.Series(near_l, index=df.index), pd.Series(near_s, index=df.index)
 
     # ------------------------------------------------------------------
     def _paused(self, side: str, trades: list, now: pd.Timestamp) -> bool:
@@ -116,11 +154,18 @@ class TrendFollowerV3:
         if a["no_entry"][i] or not (math.isfinite(atr) and atr > 0):
             return []
         now = pd.Timestamp(int(a["ts_ns"][i]), tz="UTC")
-        for side, name, flag, stop in ((1, "long", "long", a["swing_low"][i] - 0.2 * atr),
-                                       (-1, "short", "short", a["swing_high"][i] + 0.2 * atr)):
-            if not a[flag][i] or not math.isfinite(stop) or self._paused(name, trades, now):
+        pad = self.stop_pad
+        for side, name, flag, stop in ((1, "long", "long", a["swing_low"][i] - pad * atr),
+                                       (-1, "short", "short", a["swing_high"][i] + pad * atr)):
+            signal = a[flag][i]
+            if not signal and self.reentry and a["week_open"][i] and trades:
+                last = trades[-1]
+                fresh = now - pd.Timestamp(last["exit_time"]) < pd.Timedelta(hours=80)
+                signal = (last["reason"] == "wochenende" and last["side"] == name and last["pnl"] > 0
+                          and fresh and a["trend_up" if side == 1 else "trend_dn"][i])
+            if not signal or not math.isfinite(stop) or self._paused(name, trades, now):
                 continue
-            if 0.5 * atr <= abs(c - stop) <= 3 * atr:
+            if 0.5 * atr <= abs(c - stop) <= self.max_stop * atr:
                 return [("order", {"side": side, "type": "market", "sl": stop,
                                    "tag": "trend_rücksetzer_v3",
                                    "context": {"close": float(c), "atr": float(atr), "ema50": float(a["ema50"][i])}})]
