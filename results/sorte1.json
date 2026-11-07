@@ -1,0 +1,927 @@
+{
+ "echt_3h": {
+  "trades": 117,
+  "anteile": {
+   "sorte_0": 24.8,
+   "sorte_1": 27.4,
+   "sorte_2": 18.8,
+   "sorte_3": 29.1
+  },
+  "summe_r": 32.6,
+  "merkmale": {
+   "abstand_200er_atr": [
+    {
+     "gruppe": "(0.010599999999999998, 1.667]",
+     "n": 39,
+     "sorte1_pct": 41.0,
+     "schnitt_r": 0.26,
+     "summe_r": 10.2
+    },
+    {
+     "gruppe": "(1.667, 4.429]",
+     "n": 39,
+     "sorte1_pct": 25.6,
+     "schnitt_r": 0.09,
+     "summe_r": 3.7
+    },
+    {
+     "gruppe": "(4.429, 10.061]",
+     "n": 39,
+     "sorte1_pct": 15.4,
+     "schnitt_r": 0.48,
+     "summe_r": 18.7
+    }
+   ],
+   "abstand_50er_atr": [
+    {
+     "gruppe": "(-5.6000000000000005, -1.325]",
+     "n": 39,
+     "sorte1_pct": 41.0,
+     "schnitt_r": 0.06,
+     "summe_r": 2.5
+    },
+    {
+     "gruppe": "(-1.325, 0.852]",
+     "n": 39,
+     "sorte1_pct": 23.1,
+     "schnitt_r": 0.26,
+     "summe_r": 10.3
+    },
+    {
+     "gruppe": "(0.852, 5.356]",
+     "n": 39,
+     "sorte1_pct": 17.9,
+     "schnitt_r": 0.51,
+     "summe_r": 19.8
+    }
+   ],
+   "steigung_200er_atr": [
+    {
+     "gruppe": "(0.00081, 0.689]",
+     "n": 39,
+     "sorte1_pct": 38.5,
+     "schnitt_r": 0.19,
+     "summe_r": 7.6
+    },
+    {
+     "gruppe": "(0.689, 1.092]",
+     "n": 39,
+     "sorte1_pct": 23.1,
+     "schnitt_r": 0.19,
+     "summe_r": 7.5
+    },
+    {
+     "gruppe": "(1.092, 2.192]",
+     "n": 39,
+     "sorte1_pct": 20.5,
+     "schnitt_r": 0.45,
+     "summe_r": 17.6
+    }
+   ],
+   "rsi": [
+    {
+     "gruppe": "(24.834999999999997, 39.484]",
+     "n": 39,
+     "sorte1_pct": 28.2,
+     "schnitt_r": 0.27,
+     "summe_r": 10.5
+    },
+    {
+     "gruppe": "(39.484, 47.852]",
+     "n": 39,
+     "sorte1_pct": 35.9,
+     "schnitt_r": 0.23,
+     "summe_r": 9.2
+    },
+    {
+     "gruppe": "(47.852, 77.509]",
+     "n": 39,
+     "sorte1_pct": 17.9,
+     "schnitt_r": 0.33,
+     "summe_r": 12.9
+    }
+   ],
+   "adx": [
+    {
+     "gruppe": "(11.213000000000001, 21.628]",
+     "n": 39,
+     "sorte1_pct": 25.6,
+     "schnitt_r": 0.18,
+     "summe_r": 7.2
+    },
+    {
+     "gruppe": "(21.628, 31.118]",
+     "n": 39,
+     "sorte1_pct": 28.2,
+     "schnitt_r": 0.35,
+     "summe_r": 13.8
+    },
+    {
+     "gruppe": "(31.118, 54.512]",
+     "n": 39,
+     "sorte1_pct": 28.2,
+     "schnitt_r": 0.3,
+     "summe_r": 11.6
+    }
+   ],
+   "schwankung_rang": [
+    {
+     "gruppe": "(0.095, 0.465]",
+     "n": 39,
+     "sorte1_pct": 28.2,
+     "schnitt_r": 0.38,
+     "summe_r": 14.8
+    },
+    {
+     "gruppe": "(0.465, 0.841]",
+     "n": 39,
+     "sorte1_pct": 20.5,
+     "schnitt_r": 0.15,
+     "summe_r": 5.7
+    },
+    {
+     "gruppe": "(0.841, 1.0]",
+     "n": 39,
+     "sorte1_pct": 33.3,
+     "schnitt_r": 0.31,
+     "summe_r": 12.1
+    }
+   ],
+   "kerze_groesse_atr": [
+    {
+     "gruppe": "(0.27, 1.287]",
+     "n": 39,
+     "sorte1_pct": 38.5,
+     "schnitt_r": 0.34,
+     "summe_r": 13.1
+    },
+    {
+     "gruppe": "(1.287, 2.198]",
+     "n": 39,
+     "sorte1_pct": 23.1,
+     "schnitt_r": -0.02,
+     "summe_r": -0.8
+    },
+    {
+     "gruppe": "(2.198, 4.794]",
+     "n": 39,
+     "sorte1_pct": 20.5,
+     "schnitt_r": 0.52,
+     "summe_r": 20.3
+    }
+   ],
+   "schluss_in_kerze": [
+    {
+     "gruppe": "(0.00523, 0.314]",
+     "n": 39,
+     "sorte1_pct": 20.5,
+     "schnitt_r": 0.48,
+     "summe_r": 18.8
+    },
+    {
+     "gruppe": "(0.314, 0.653]",
+     "n": 39,
+     "sorte1_pct": 25.6,
+     "schnitt_r": 0.19,
+     "summe_r": 7.2
+    },
+    {
+     "gruppe": "(0.653, 0.995]",
+     "n": 39,
+     "sorte1_pct": 35.9,
+     "schnitt_r": 0.17,
+     "summe_r": 6.6
+    }
+   ],
+   "gruene_kerzen_folge": [
+    {
+     "gruppe": "(-0.001, 6.0]",
+     "n": 117,
+     "sorte1_pct": 27.4,
+     "schnitt_r": 0.28,
+     "summe_r": 32.6
+    }
+   ],
+   "abstand_20er_hoch_atr": [
+    {
+     "gruppe": "(0.193, 2.501]",
+     "n": 39,
+     "sorte1_pct": 25.6,
+     "schnitt_r": 0.44,
+     "summe_r": 17.0
+    },
+    {
+     "gruppe": "(2.501, 3.659]",
+     "n": 39,
+     "sorte1_pct": 30.8,
+     "schnitt_r": -0.02,
+     "summe_r": -0.8
+    },
+    {
+     "gruppe": "(3.659, 7.286]",
+     "n": 39,
+     "sorte1_pct": 25.6,
+     "schnitt_r": 0.42,
+     "summe_r": 16.4
+    }
+   ],
+   "wochentag": [
+    {
+     "gruppe": "0.0",
+     "n": 18,
+     "sorte1_pct": 27.8,
+     "schnitt_r": 0.06,
+     "summe_r": 1.1
+    },
+    {
+     "gruppe": "1.0",
+     "n": 25,
+     "sorte1_pct": 32.0,
+     "schnitt_r": 0.27,
+     "summe_r": 6.7
+    },
+    {
+     "gruppe": "2.0",
+     "n": 23,
+     "sorte1_pct": 17.4,
+     "schnitt_r": 0.69,
+     "summe_r": 16.0
+    },
+    {
+     "gruppe": "3.0",
+     "n": 23,
+     "sorte1_pct": 21.7,
+     "schnitt_r": 0.43,
+     "summe_r": 9.9
+    },
+    {
+     "gruppe": "4.0",
+     "n": 27,
+     "sorte1_pct": 33.3,
+     "schnitt_r": -0.0,
+     "summe_r": -0.0
+    },
+    {
+     "gruppe": "6.0",
+     "n": 1,
+     "sorte1_pct": 100.0,
+     "schnitt_r": -1.02,
+     "summe_r": -1.0
+    }
+   ],
+   "stunde_utc": [
+    {
+     "gruppe": "0-5",
+     "n": 22,
+     "sorte1_pct": 45.5,
+     "schnitt_r": 0.16,
+     "summe_r": 3.4
+    },
+    {
+     "gruppe": "6-11",
+     "n": 20,
+     "sorte1_pct": 35.0,
+     "schnitt_r": -0.51,
+     "summe_r": -10.2
+    },
+    {
+     "gruppe": "12-17",
+     "n": 55,
+     "sorte1_pct": 16.4,
+     "schnitt_r": 0.49,
+     "summe_r": 27.1
+    },
+    {
+     "gruppe": "18-23",
+     "n": 20,
+     "sorte1_pct": 30.0,
+     "schnitt_r": 0.62,
+     "summe_r": 12.3
+    }
+   ],
+   "vorher_verlust": [
+    {
+     "gruppe": "0",
+     "n": 42,
+     "sorte1_pct": 11.9,
+     "schnitt_r": 0.48,
+     "summe_r": 20.1
+    },
+    {
+     "gruppe": "1",
+     "n": 75,
+     "sorte1_pct": 36.0,
+     "schnitt_r": 0.17,
+     "summe_r": 12.5
+    }
+   ]
+  },
+  "zeitraum": [
+   "2024-06-16 21:00:00+00:00",
+   "2026-11-06 21:00:00+00:00"
+  ]
+ },
+ "echt_4h": {
+  "trades": 99,
+  "anteile": {
+   "sorte_0": 22.2,
+   "sorte_1": 32.3,
+   "sorte_2": 17.2,
+   "sorte_3": 28.3
+  },
+  "summe_r": 28.6,
+  "merkmale": {
+   "abstand_200er_atr": [
+    {
+     "gruppe": "(0.0126, 1.329]",
+     "n": 33,
+     "sorte1_pct": 45.5,
+     "schnitt_r": 0.1,
+     "summe_r": 3.2
+    },
+    {
+     "gruppe": "(1.329, 4.589]",
+     "n": 33,
+     "sorte1_pct": 27.3,
+     "schnitt_r": 0.31,
+     "summe_r": 10.2
+    },
+    {
+     "gruppe": "(4.589, 10.187]",
+     "n": 33,
+     "sorte1_pct": 24.2,
+     "schnitt_r": 0.46,
+     "summe_r": 15.2
+    }
+   ],
+   "abstand_50er_atr": [
+    {
+     "gruppe": "(-6.3950000000000005, -1.392]",
+     "n": 33,
+     "sorte1_pct": 36.4,
+     "schnitt_r": -0.01,
+     "summe_r": -0.4
+    },
+    {
+     "gruppe": "(-1.392, 0.631]",
+     "n": 33,
+     "sorte1_pct": 33.3,
+     "schnitt_r": 0.65,
+     "summe_r": 21.3
+    },
+    {
+     "gruppe": "(0.631, 6.044]",
+     "n": 33,
+     "sorte1_pct": 27.3,
+     "schnitt_r": 0.23,
+     "summe_r": 7.7
+    }
+   ],
+   "steigung_200er_atr": [
+    {
+     "gruppe": "(0.0018, 0.554]",
+     "n": 33,
+     "sorte1_pct": 45.5,
+     "schnitt_r": 0.17,
+     "summe_r": 5.6
+    },
+    {
+     "gruppe": "(0.554, 1.091]",
+     "n": 33,
+     "sorte1_pct": 30.3,
+     "schnitt_r": 0.12,
+     "summe_r": 3.9
+    },
+    {
+     "gruppe": "(1.091, 2.141]",
+     "n": 33,
+     "sorte1_pct": 21.2,
+     "schnitt_r": 0.58,
+     "summe_r": 19.1
+    }
+   ],
+   "rsi": [
+    {
+     "gruppe": "(20.904, 39.228]",
+     "n": 33,
+     "sorte1_pct": 30.3,
+     "schnitt_r": -0.1,
+     "summe_r": -3.3
+    },
+    {
+     "gruppe": "(39.228, 48.099]",
+     "n": 33,
+     "sorte1_pct": 39.4,
+     "schnitt_r": 0.68,
+     "summe_r": 22.4
+    },
+    {
+     "gruppe": "(48.099, 79.502]",
+     "n": 33,
+     "sorte1_pct": 27.3,
+     "schnitt_r": 0.29,
+     "summe_r": 9.5
+    }
+   ],
+   "adx": [
+    {
+     "gruppe": "(9.739, 24.533]",
+     "n": 33,
+     "sorte1_pct": 33.3,
+     "schnitt_r": 0.14,
+     "summe_r": 4.7
+    },
+    {
+     "gruppe": "(24.533, 33.055]",
+     "n": 33,
+     "sorte1_pct": 36.4,
+     "schnitt_r": 0.45,
+     "summe_r": 14.9
+    },
+    {
+     "gruppe": "(33.055, 56.556]",
+     "n": 33,
+     "sorte1_pct": 27.3,
+     "schnitt_r": 0.27,
+     "summe_r": 9.1
+    }
+   ],
+   "schwankung_rang": [
+    {
+     "gruppe": "(0.015, 0.483]",
+     "n": 33,
+     "sorte1_pct": 36.4,
+     "schnitt_r": 0.66,
+     "summe_r": 21.8
+    },
+    {
+     "gruppe": "(0.483, 0.78]",
+     "n": 34,
+     "sorte1_pct": 20.6,
+     "schnitt_r": 0.1,
+     "summe_r": 3.4
+    },
+    {
+     "gruppe": "(0.78, 1.0]",
+     "n": 32,
+     "sorte1_pct": 40.6,
+     "schnitt_r": 0.1,
+     "summe_r": 3.4
+    }
+   ],
+   "kerze_groesse_atr": [
+    {
+     "gruppe": "(0.33, 1.256]",
+     "n": 33,
+     "sorte1_pct": 42.4,
+     "schnitt_r": 0.05,
+     "summe_r": 1.6
+    },
+    {
+     "gruppe": "(1.256, 2.279]",
+     "n": 33,
+     "sorte1_pct": 33.3,
+     "schnitt_r": -0.09,
+     "summe_r": -3.0
+    },
+    {
+     "gruppe": "(2.279, 5.193]",
+     "n": 33,
+     "sorte1_pct": 21.2,
+     "schnitt_r": 0.91,
+     "summe_r": 30.0
+    }
+   ],
+   "schluss_in_kerze": [
+    {
+     "gruppe": "(-0.001, 0.295]",
+     "n": 33,
+     "sorte1_pct": 24.2,
+     "schnitt_r": 0.17,
+     "summe_r": 5.6
+    },
+    {
+     "gruppe": "(0.295, 0.622]",
+     "n": 33,
+     "sorte1_pct": 27.3,
+     "schnitt_r": 0.75,
+     "summe_r": 24.9
+    },
+    {
+     "gruppe": "(0.622, 0.972]",
+     "n": 33,
+     "sorte1_pct": 45.5,
+     "schnitt_r": -0.06,
+     "summe_r": -1.9
+    }
+   ],
+   "gruene_kerzen_folge": [
+    {
+     "gruppe": "(-0.001, 5.0]",
+     "n": 99,
+     "sorte1_pct": 32.3,
+     "schnitt_r": 0.29,
+     "summe_r": 28.6
+    }
+   ],
+   "abstand_20er_hoch_atr": [
+    {
+     "gruppe": "(0.0764, 2.748]",
+     "n": 33,
+     "sorte1_pct": 30.3,
+     "schnitt_r": 0.54,
+     "summe_r": 17.9
+    },
+    {
+     "gruppe": "(2.748, 3.691]",
+     "n": 33,
+     "sorte1_pct": 30.3,
+     "schnitt_r": 0.37,
+     "summe_r": 12.3
+    },
+    {
+     "gruppe": "(3.691, 8.401]",
+     "n": 33,
+     "sorte1_pct": 36.4,
+     "schnitt_r": -0.05,
+     "summe_r": -1.6
+    }
+   ],
+   "wochentag": [
+    {
+     "gruppe": "0.0",
+     "n": 12,
+     "sorte1_pct": 33.3,
+     "schnitt_r": 0.72,
+     "summe_r": 8.6
+    },
+    {
+     "gruppe": "1.0",
+     "n": 22,
+     "sorte1_pct": 36.4,
+     "schnitt_r": 0.01,
+     "summe_r": 0.2
+    },
+    {
+     "gruppe": "2.0",
+     "n": 18,
+     "sorte1_pct": 22.2,
+     "schnitt_r": 0.41,
+     "summe_r": 7.3
+    },
+    {
+     "gruppe": "3.0",
+     "n": 20,
+     "sorte1_pct": 25.0,
+     "schnitt_r": 0.17,
+     "summe_r": 3.5
+    },
+    {
+     "gruppe": "4.0",
+     "n": 25,
+     "sorte1_pct": 40.0,
+     "schnitt_r": 0.31,
+     "summe_r": 7.8
+    },
+    {
+     "gruppe": "6.0",
+     "n": 2,
+     "sorte1_pct": 50.0,
+     "schnitt_r": 0.6,
+     "summe_r": 1.2
+    }
+   ],
+   "stunde_utc": [
+    {
+     "gruppe": "0-5",
+     "n": 26,
+     "sorte1_pct": 42.3,
+     "schnitt_r": -0.15,
+     "summe_r": -3.9
+    },
+    {
+     "gruppe": "6-11",
+     "n": 11,
+     "sorte1_pct": 27.3,
+     "schnitt_r": -0.46,
+     "summe_r": -5.1
+    },
+    {
+     "gruppe": "12-17",
+     "n": 51,
+     "sorte1_pct": 25.5,
+     "schnitt_r": 0.68,
+     "summe_r": 34.8
+    },
+    {
+     "gruppe": "18-23",
+     "n": 11,
+     "sorte1_pct": 45.5,
+     "schnitt_r": 0.26,
+     "summe_r": 2.8
+    }
+   ],
+   "vorher_verlust": [
+    {
+     "gruppe": "0",
+     "n": 35,
+     "sorte1_pct": 17.1,
+     "schnitt_r": 0.91,
+     "summe_r": 31.8
+    },
+    {
+     "gruppe": "1",
+     "n": 64,
+     "sorte1_pct": 40.6,
+     "schnitt_r": -0.05,
+     "summe_r": -3.1
+    }
+   ]
+  },
+  "zeitraum": [
+   "2024-06-16 20:00:00+00:00",
+   "2026-11-06 20:00:00+00:00"
+  ]
+ },
+ "nachbau_4h_2000_2015": {
+  "trades": 304,
+  "anteile": {
+   "sorte_0": 23.7,
+   "sorte_1": 25.0,
+   "sorte_2": 23.7,
+   "sorte_3": 27.6
+  },
+  "summe_r": 140.9,
+  "merkmale": {
+   "abstand_200er_atr": [
+    {
+     "gruppe": "(0.0037400000000000003, 1.042]",
+     "n": 102,
+     "sorte1_pct": 28.4,
+     "schnitt_r": 0.59,
+     "summe_r": 60.5
+    },
+    {
+     "gruppe": "(1.042, 2.583]",
+     "n": 101,
+     "sorte1_pct": 23.8,
+     "schnitt_r": 0.48,
+     "summe_r": 48.5
+    },
+    {
+     "gruppe": "(2.583, 7.117]",
+     "n": 101,
+     "sorte1_pct": 22.8,
+     "schnitt_r": 0.32,
+     "summe_r": 31.9
+    }
+   ],
+   "abstand_50er_atr": [
+    {
+     "gruppe": "(-2.956, -0.569]",
+     "n": 102,
+     "sorte1_pct": 25.5,
+     "schnitt_r": 0.03,
+     "summe_r": 3.4
+    },
+    {
+     "gruppe": "(-0.569, 0.287]",
+     "n": 101,
+     "sorte1_pct": 32.7,
+     "schnitt_r": 0.37,
+     "summe_r": 37.3
+    },
+    {
+     "gruppe": "(0.287, 6.047]",
+     "n": 101,
+     "sorte1_pct": 16.8,
+     "schnitt_r": 0.99,
+     "summe_r": 100.2
+    }
+   ],
+   "steigung_200er_atr": [
+    {
+     "gruppe": "(-3.161, 1.084]",
+     "n": 102,
+     "sorte1_pct": 26.5,
+     "schnitt_r": 0.65,
+     "summe_r": 65.8
+    },
+    {
+     "gruppe": "(1.084, 2.87]",
+     "n": 101,
+     "sorte1_pct": 25.7,
+     "schnitt_r": 0.54,
+     "summe_r": 54.2
+    },
+    {
+     "gruppe": "(2.87, 6.286]",
+     "n": 101,
+     "sorte1_pct": 22.8,
+     "schnitt_r": 0.21,
+     "summe_r": 20.9
+    }
+   ],
+   "rsi": [
+    {
+     "gruppe": "(44.905, 53.195]",
+     "n": 102,
+     "sorte1_pct": 32.4,
+     "schnitt_r": 0.27,
+     "summe_r": 27.7
+    },
+    {
+     "gruppe": "(53.195, 60.704]",
+     "n": 101,
+     "sorte1_pct": 19.8,
+     "schnitt_r": 1.05,
+     "summe_r": 106.1
+    },
+    {
+     "gruppe": "(60.704, 78.026]",
+     "n": 101,
+     "sorte1_pct": 22.8,
+     "schnitt_r": 0.07,
+     "summe_r": 7.0
+    }
+   ],
+   "adx": [
+    {
+     "gruppe": "(8.589, 18.845]",
+     "n": 102,
+     "sorte1_pct": 27.5,
+     "schnitt_r": 0.5,
+     "summe_r": 51.1
+    },
+    {
+     "gruppe": "(18.845, 29.19]",
+     "n": 101,
+     "sorte1_pct": 23.8,
+     "schnitt_r": 1.03,
+     "summe_r": 103.7
+    },
+    {
+     "gruppe": "(29.19, 55.643]",
+     "n": 101,
+     "sorte1_pct": 23.8,
+     "schnitt_r": -0.14,
+     "summe_r": -13.9
+    }
+   ],
+   "schwankung_rang": [
+    {
+     "gruppe": "(0.003, 0.349]",
+     "n": 100,
+     "sorte1_pct": 24.0,
+     "schnitt_r": 1.21,
+     "summe_r": 120.9
+    },
+    {
+     "gruppe": "(0.349, 0.712]",
+     "n": 100,
+     "sorte1_pct": 25.0,
+     "schnitt_r": -0.03,
+     "summe_r": -3.0
+    },
+    {
+     "gruppe": "(0.712, 1.0]",
+     "n": 99,
+     "sorte1_pct": 25.3,
+     "schnitt_r": 0.27,
+     "summe_r": 26.9
+    }
+   ],
+   "kerze_groesse_atr": [
+    {
+     "gruppe": "(-0.001, 0.698]",
+     "n": 102,
+     "sorte1_pct": 36.3,
+     "schnitt_r": 0.5,
+     "summe_r": 50.8
+    },
+    {
+     "gruppe": "(0.698, 1.333]",
+     "n": 101,
+     "sorte1_pct": 22.8,
+     "schnitt_r": 0.58,
+     "summe_r": 58.5
+    },
+    {
+     "gruppe": "(1.333, 3.668]",
+     "n": 101,
+     "sorte1_pct": 15.8,
+     "schnitt_r": 0.31,
+     "summe_r": 31.6
+    }
+   ],
+   "schluss_in_kerze": [
+    {
+     "gruppe": "(-0.001, 0.263]",
+     "n": 86,
+     "sorte1_pct": 20.9,
+     "schnitt_r": 0.79,
+     "summe_r": 68.1
+    },
+    {
+     "gruppe": "(0.263, 0.688]",
+     "n": 86,
+     "sorte1_pct": 23.3,
+     "schnitt_r": 0.45,
+     "summe_r": 38.8
+    },
+    {
+     "gruppe": "(0.688, 1.0]",
+     "n": 86,
+     "sorte1_pct": 24.4,
+     "schnitt_r": 0.22,
+     "summe_r": 18.9
+    }
+   ],
+   "gruene_kerzen_folge": [
+    {
+     "gruppe": "(-0.001, 7.0]",
+     "n": 304,
+     "sorte1_pct": 25.0,
+     "schnitt_r": 0.46,
+     "summe_r": 140.9
+    }
+   ],
+   "abstand_20er_hoch_atr": [
+    {
+     "gruppe": "(-0.001, 1.448]",
+     "n": 102,
+     "sorte1_pct": 14.7,
+     "schnitt_r": 0.56,
+     "summe_r": 57.0
+    },
+    {
+     "gruppe": "(1.448, 2.397]",
+     "n": 101,
+     "sorte1_pct": 30.7,
+     "schnitt_r": 0.43,
+     "summe_r": 43.7
+    },
+    {
+     "gruppe": "(2.397, 5.912]",
+     "n": 101,
+     "sorte1_pct": 29.7,
+     "schnitt_r": 0.4,
+     "summe_r": 40.2
+    }
+   ],
+   "wochentag": [
+    {
+     "gruppe": "0.0",
+     "n": 56,
+     "sorte1_pct": 23.2,
+     "schnitt_r": 0.73,
+     "summe_r": 40.9
+    },
+    {
+     "gruppe": "1.0",
+     "n": 68,
+     "sorte1_pct": 26.5,
+     "schnitt_r": 0.85,
+     "summe_r": 57.8
+    },
+    {
+     "gruppe": "2.0",
+     "n": 62,
+     "sorte1_pct": 14.5,
+     "schnitt_r": 0.3,
+     "summe_r": 18.8
+    },
+    {
+     "gruppe": "3.0",
+     "n": 61,
+     "sorte1_pct": 36.1,
+     "schnitt_r": 0.09,
+     "summe_r": 5.4
+    },
+    {
+     "gruppe": "4.0",
+     "n": 57,
+     "sorte1_pct": 24.6,
+     "schnitt_r": 0.31,
+     "summe_r": 17.9
+    }
+   ],
+   "vorher_verlust": [
+    {
+     "gruppe": "0",
+     "n": 101,
+     "sorte1_pct": 21.8,
+     "schnitt_r": 0.2,
+     "summe_r": 20.2
+    },
+    {
+     "gruppe": "1",
+     "n": 203,
+     "sorte1_pct": 26.6,
+     "schnitt_r": 0.59,
+     "summe_r": 120.7
+    }
+   ]
+  }
+ }
+}
