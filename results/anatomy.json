@@ -1,0 +1,363 @@
+{
+ "tageschart": {
+  "trades": 140,
+  "treffer_pct": 37.1,
+  "summe_r": 34.2,
+  "groesster_gewinn_r": 6.6,
+  "anteil_gewinn_aus_top10pct": 63.3,
+  "verlierer": {
+   "anzahl": 88,
+   "schnitt_r": -0.53,
+   "vorher_mind_0_5R_im_plus_pct": 37.5,
+   "vorher_mind_1R_im_plus_pct": 3.4,
+   "median_tage_gehalten": 11.0,
+   "ausstieg": {
+    "stop": 58,
+    "trendbruch": 30
+   }
+  },
+  "gewinner_median_tage": 49.0,
+  "nach_merkmal": {
+   "wiedereinstieg_5t": [
+    {
+     "gruppe": "0",
+     "trades": 18,
+     "treffer_pct": 11.1,
+     "summe_r": -4.0,
+     "schnitt_r": -0.22
+    },
+    {
+     "gruppe": "1",
+     "trades": 122,
+     "treffer_pct": 41.0,
+     "summe_r": 38.2,
+     "schnitt_r": 0.31
+    }
+   ],
+   "nach_stop": [
+    {
+     "gruppe": "0",
+     "trades": 38,
+     "treffer_pct": 28.9,
+     "summe_r": -1.6,
+     "schnitt_r": -0.04
+    },
+    {
+     "gruppe": "1",
+     "trades": 102,
+     "treffer_pct": 40.2,
+     "summe_r": 35.8,
+     "schnitt_r": 0.35
+    }
+   ],
+   "abstand_atr": [
+    {
+     "gruppe": "(0.0167, 1.131]",
+     "trades": 47,
+     "treffer_pct": 38.3,
+     "summe_r": 12.5,
+     "schnitt_r": 0.27
+    },
+    {
+     "gruppe": "(1.131, 4.438]",
+     "trades": 46,
+     "treffer_pct": 43.5,
+     "summe_r": 22.1,
+     "schnitt_r": 0.48
+    },
+    {
+     "gruppe": "(4.438, 12.6]",
+     "trades": 47,
+     "treffer_pct": 29.8,
+     "summe_r": -0.4,
+     "schnitt_r": -0.01
+    }
+   ],
+   "steigung_atr": [
+    {
+     "gruppe": "(-0.675, 0.687]",
+     "trades": 45,
+     "treffer_pct": 26.7,
+     "summe_r": -0.2,
+     "schnitt_r": -0.0
+    },
+    {
+     "gruppe": "(0.687, 1.202]",
+     "trades": 45,
+     "treffer_pct": 37.8,
+     "summe_r": 17.9,
+     "schnitt_r": 0.4
+    },
+    {
+     "gruppe": "(1.202, 1.993]",
+     "trades": 45,
+     "treffer_pct": 44.4,
+     "summe_r": 17.2,
+     "schnitt_r": 0.38
+    }
+   ],
+   "trendalter": [
+    {
+     "gruppe": "(0.999, 13.333]",
+     "trades": 47,
+     "treffer_pct": 31.9,
+     "summe_r": -0.0,
+     "schnitt_r": -0.0
+    },
+    {
+     "gruppe": "(13.333, 158.0]",
+     "trades": 46,
+     "treffer_pct": 34.8,
+     "summe_r": 13.4,
+     "schnitt_r": 0.29
+    },
+    {
+     "gruppe": "(158.0, 649.0]",
+     "trades": 47,
+     "treffer_pct": 44.7,
+     "summe_r": 20.8,
+     "schnitt_r": 0.44
+    }
+   ],
+   "neues_hoch": [
+    {
+     "gruppe": "0.0",
+     "trades": 139,
+     "treffer_pct": 37.4,
+     "summe_r": 34.9,
+     "schnitt_r": 0.25
+    },
+    {
+     "gruppe": "1.0",
+     "trades": 1,
+     "treffer_pct": 0.0,
+     "summe_r": -0.7,
+     "schnitt_r": -0.7
+    }
+   ],
+   "adx": [
+    {
+     "gruppe": "(9.903, 17.455]",
+     "trades": 47,
+     "treffer_pct": 42.6,
+     "summe_r": 23.6,
+     "schnitt_r": 0.5
+    },
+    {
+     "gruppe": "(17.455, 26.444]",
+     "trades": 46,
+     "treffer_pct": 41.3,
+     "summe_r": 8.2,
+     "schnitt_r": 0.18
+    },
+    {
+     "gruppe": "(26.444, 53.382]",
+     "trades": 47,
+     "treffer_pct": 27.7,
+     "summe_r": 2.3,
+     "schnitt_r": 0.05
+    }
+   ],
+   "schwankung_rang": [
+    {
+     "gruppe": "(0.003, 0.345]",
+     "trades": 47,
+     "treffer_pct": 29.8,
+     "summe_r": 15.6,
+     "schnitt_r": 0.33
+    },
+    {
+     "gruppe": "(0.345, 0.784]",
+     "trades": 47,
+     "treffer_pct": 44.7,
+     "summe_r": 18.6,
+     "schnitt_r": 0.4
+    },
+    {
+     "gruppe": "(0.784, 1.0]",
+     "trades": 46,
+     "treffer_pct": 37.0,
+     "summe_r": -0.1,
+     "schnitt_r": -0.0
+    }
+   ]
+  }
+ },
+ "4h_nachbau": {
+  "trades": 316,
+  "treffer_pct": 37.0,
+  "summe_r": 55.8,
+  "groesster_gewinn_r": 11.1,
+  "anteil_gewinn_aus_top10pct": 65.2,
+  "verlierer": {
+   "anzahl": 199,
+   "schnitt_r": -0.81,
+   "vorher_mind_0_5R_im_plus_pct": 42.7,
+   "vorher_mind_1R_im_plus_pct": 17.1,
+   "median_tage_gehalten": 3.0,
+   "ausstieg": {
+    "stop": 171,
+    "trendbruch": 28
+   }
+  },
+  "gewinner_median_tage": 11.0,
+  "nach_merkmal": {
+   "wiedereinstieg_5t": [
+    {
+     "gruppe": "0",
+     "trades": 74,
+     "treffer_pct": 41.9,
+     "summe_r": 25.3,
+     "schnitt_r": 0.34
+    },
+    {
+     "gruppe": "1",
+     "trades": 242,
+     "treffer_pct": 35.5,
+     "summe_r": 30.4,
+     "schnitt_r": 0.13
+    }
+   ],
+   "nach_stop": [
+    {
+     "gruppe": "0",
+     "trades": 40,
+     "treffer_pct": 50.0,
+     "summe_r": 13.0,
+     "schnitt_r": 0.32
+    },
+    {
+     "gruppe": "1",
+     "trades": 276,
+     "treffer_pct": 35.1,
+     "summe_r": 42.8,
+     "schnitt_r": 0.15
+    }
+   ],
+   "abstand_atr": [
+    {
+     "gruppe": "(0.0037400000000000003, 0.788]",
+     "trades": 106,
+     "treffer_pct": 39.6,
+     "summe_r": 25.0,
+     "schnitt_r": 0.24
+    },
+    {
+     "gruppe": "(0.788, 2.193]",
+     "trades": 105,
+     "treffer_pct": 39.0,
+     "summe_r": 35.9,
+     "schnitt_r": 0.34
+    },
+    {
+     "gruppe": "(2.193, 7.117]",
+     "trades": 105,
+     "treffer_pct": 32.4,
+     "summe_r": -5.1,
+     "schnitt_r": -0.05
+    }
+   ],
+   "steigung_atr": [
+    {
+     "gruppe": "(-0.548, 0.156]",
+     "trades": 106,
+     "treffer_pct": 37.7,
+     "summe_r": 10.2,
+     "schnitt_r": 0.1
+    },
+    {
+     "gruppe": "(0.156, 0.434]",
+     "trades": 105,
+     "treffer_pct": 40.0,
+     "summe_r": 38.6,
+     "schnitt_r": 0.37
+    },
+    {
+     "gruppe": "(0.434, 1.165]",
+     "trades": 105,
+     "treffer_pct": 33.3,
+     "summe_r": 7.0,
+     "schnitt_r": 0.07
+    }
+   ],
+   "trendalter": [
+    {
+     "gruppe": "(0.999, 17.0]",
+     "trades": 214,
+     "treffer_pct": 37.4,
+     "summe_r": 59.3,
+     "schnitt_r": 0.28
+    },
+    {
+     "gruppe": "(17.0, 70.0]",
+     "trades": 102,
+     "treffer_pct": 36.3,
+     "summe_r": -3.6,
+     "schnitt_r": -0.03
+    }
+   ],
+   "neues_hoch": [
+    {
+     "gruppe": "0.0",
+     "trades": 286,
+     "treffer_pct": 37.8,
+     "summe_r": 60.9,
+     "schnitt_r": 0.21
+    },
+    {
+     "gruppe": "1.0",
+     "trades": 30,
+     "treffer_pct": 30.0,
+     "summe_r": -5.2,
+     "schnitt_r": -0.17
+    }
+   ],
+   "adx": [
+    {
+     "gruppe": "(8.589, 18.166]",
+     "trades": 106,
+     "treffer_pct": 42.5,
+     "summe_r": 39.1,
+     "schnitt_r": 0.37
+    },
+    {
+     "gruppe": "(18.166, 27.818]",
+     "trades": 105,
+     "treffer_pct": 36.2,
+     "summe_r": 21.4,
+     "schnitt_r": 0.2
+    },
+    {
+     "gruppe": "(27.818, 55.643]",
+     "trades": 105,
+     "treffer_pct": 32.4,
+     "summe_r": -4.7,
+     "schnitt_r": -0.05
+    }
+   ],
+   "schwankung_rang": [
+    {
+     "gruppe": "(0.003, 0.348]",
+     "trades": 105,
+     "treffer_pct": 38.1,
+     "summe_r": 39.2,
+     "schnitt_r": 0.37
+    },
+    {
+     "gruppe": "(0.348, 0.711]",
+     "trades": 102,
+     "treffer_pct": 34.3,
+     "summe_r": -8.5,
+     "schnitt_r": -0.08
+    },
+    {
+     "gruppe": "(0.711, 1.0]",
+     "trades": 104,
+     "treffer_pct": 38.5,
+     "summe_r": 25.2,
+     "schnitt_r": 0.24
+    }
+   ]
+  }
+ }
+}
