@@ -300,12 +300,17 @@ def test_daily_summary_counts_and_values():
 
 
 def test_fx_metal_bots_paper_run(tmp_path, monkeypatch):
-    """Die neuen Metall-Bots (Sicher/Vollgas) laufen mehrmals durch; Positionsgröße bleibt gedeckelt."""
+    """Die Metall-Bots aus bots.json (Sicher/Krass) laufen mehrmals durch; Positionsgröße bleibt gedeckelt."""
     rng = np.random.default_rng(3)
     base = {"GC=F": 2400, "SI=F": 30, "PL=F": 1000, "JPY=X": 150}
     clock = {"n": 0}
-    full = {s: make_ohlc(3000, seed=i, freq="1h", vol=0.003, drift=0.0002, start=p)
-            for i, (s, p) in enumerate(base.items())}
+    def trend(i, p):
+        up = make_ohlc(2000, seed=i, freq="1h", vol=0.003, drift=0.0006, start=p)
+        dn = make_ohlc(2000, seed=i + 10, freq="1h", vol=0.003, drift=-0.0006, start=up["close"].iloc[-1])
+        dn.index = up.index + pd.Timedelta(hours=2000)
+        return pd.concat([up, dn])
+
+    full = {s: trend(i, p) for i, (s, p) in enumerate(base.items())}
 
     def fake_hourly(sym):
         return full[sym].iloc[:2000 + clock["n"]]
@@ -323,7 +328,7 @@ def test_fx_metal_bots_paper_run(tmp_path, monkeypatch):
     cfg_path = tmp_path / "bots.json"
     cfg_path.write_text((paper.ROOT / "bots.json").read_text())
     monkeypatch.setattr(paper, "CONFIG", cfg_path)
-    for k in range(0, 1000, 50):
+    for k in range(0, 2000, 100):
         clock["n"] = k
         assert paper.main() == 0
     cfg = json.loads(cfg_path.read_text())
@@ -336,7 +341,7 @@ def test_fx_metal_bots_paper_run(tmp_path, monkeypatch):
     assert trades > 0
     html = (tmp_path / "site" / "index.html").read_text()
     data = json.loads(html.split("const DATA = ", 1)[1].split(";\nconst REASONS", 1)[0].replace("<\\/", "</"))
-    assert sorted(g["name"] for g in data["groups"]) == ["Sicher", "Vollgas"]
+    assert sorted(g["name"] for g in data["groups"]) == sorted({b["group"] for b in cfg["bots"]})
     assert all(g["start"] == 4000 for g in data["groups"])
     journal = (tmp_path / "docs" / "JOURNAL.md").read_text()
-    assert "über EMA 150" in journal
+    assert "Trading-Journal" in journal

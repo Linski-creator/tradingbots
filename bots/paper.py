@@ -152,8 +152,34 @@ def run_fx_bot(bot: dict, cfg: dict, ctx: dict) -> dict:
             "price": float(df["close"].iloc[-1])}
 
 
+def run_trend_v3_bot(bot: dict, cfg: dict, ctx: dict) -> dict:
+    """Trendfolger v3 (4h) mit Stop-Luft, Montags-Wiedereinstieg und Teilgewinn."""
+    from .hardcore.engine import FxRisk, FxSimulator, FxState
+    from .metals.backtest import COSTS
+    from .metals.trend3 import TrendFollowerV3, load
+    tf = bot.get("timeframe", "4h")
+    strat = TrendFollowerV3(tf, wide_stop=True, reentry=True, partial=True)
+    df = load(bot["symbol"], tf)
+    if len(df) < 400:
+        raise RuntimeError(f"zu wenig Daten für {bot['id']}: {len(df)} Kerzen")
+    prepared = strat.prepare(df)
+    path = STATE / f"{bot['id']}.json"
+    raw = _load(path)
+    if raw is None:
+        st = FxState(cash=cfg["start_cash"], peak=cfg["start_cash"], last_ts=df.index[-1].isoformat())
+        log.info("%s: neu gestartet ab %s", bot["id"], st.last_ts)
+    else:
+        st = FxState.from_dict(raw)
+    risk = FxRisk(risk_per_trade=bot["risk_per_trade"], max_leverage=bot["max_leverage"],
+                  min_stop=0.0005, halt_drawdown=bot["halt_drawdown"])
+    st = FxSimulator(strat, COSTS[bot["symbol"]], risk, state=st, entry_block=ctx.get("blocker")).run(prepared)
+    _save(path, st.to_dict())
+    return {"bot": bot, "label": f"Trendfolger v3 ({bot['group']})", "state": st.to_dict(),
+            "price": float(df["close"].iloc[-1])}
+
+
 RUNNERS = {"single": run_single_bot, "rotation": run_rotation_bot, "funding": run_funding_bot,
-           "fx": run_fx_bot}
+           "fx": run_fx_bot, "fx3": run_trend_v3_bot}
 TEAM_KINDS = {"single", "rotation", "funding"}
 
 

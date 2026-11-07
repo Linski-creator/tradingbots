@@ -86,7 +86,7 @@ def _position_text(r: dict) -> str:
         return txt
     if kind == "rotation":
         return f"hält {st['holding']}" if st.get("holding") else "Cash"
-    if kind == "fx":
+    if kind in ("fx", "fx3"):
         p = st.get("position")
         if not p:
             return "wartet auf Rücksetzer"

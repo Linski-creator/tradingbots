@@ -66,7 +66,8 @@ const DATA = /*__DATA__*/null;
 const REASONS = {stop: "Stop-Loss", take_profit: "Ziel erreicht", kanal_tief: "10-Tage-Tief",
   unter_sma: "unter 200-Tage-Linie", momentum_negativ: "Momentum negativ", rsi_hoch: "RSI hoch",
   zeitstop: "Zeitlimit", death_cross: "EMA kreuzt nach unten", rotation: "Wechsel",
-  funding_negativ: "Funding negativ", notbremse: "Notbremse", team_notbremse: "Team-Notbremse"};
+  funding_negativ: "Funding negativ", notbremse: "Notbremse", team_notbremse: "Team-Notbremse", teilgewinn: "Teilgewinn", wochenende: "Wochenende",
+  trendbruch: "Trendbruch"};
 const MONTHS = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
 const eur = (x, sign) => (sign && x > 0 ? "+" : "") + x.toLocaleString("de-DE", {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " €";
 const narrow = () => window.innerWidth < 600;

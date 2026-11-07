@@ -30,6 +30,9 @@ EXIT_REASONS = {
     "rotation": "Wochenwechsel: anderer Markt stärker oder Cash",
     "funding_negativ": "Funding-Durchschnitt nicht mehr positiv",
     "notbremse": "Notbremse (Einbruch zu groß)",
+    "teilgewinn": "Teilgewinn bei +1R (Hälfte geschlossen, Stop auf Einstieg)",
+    "wochenende": "Vor dem Wochenende geschlossen",
+    "trendbruch": "Trendbruch (Schluss jenseits EMA 200 oder höhere Zeitebene gekippt)",
     "team_notbremse": "Team-Notbremse (Team-Einbruch zu groß)",
 }
 
@@ -61,6 +64,9 @@ def entry_reason(strategy: str, c: dict) -> str:
             moms = {k[4:]: v for k, v in c.items() if k.startswith("mom_")}
             return "Stärkster Markt (90 Tage): " + ", ".join(
                 f"{k} {_n(v * 100, 1)} %" for k, v in sorted(moms.items(), key=lambda kv: -kv[1]))
+        if strategy == "trend_v3":
+            return (f"Rücksetzer im Trend bestätigt, Schluss {_n(g('close'))} "
+                    f"(EMA 50 {_n(g('ema50'))}, ATR {_n(g('atr'))})")
         if strategy == "trend_dip":
             return (f"Kurs {_n(g('close'))} über EMA 150 ({_n(g('ema'))}), "
                     f"RSI zurück über 35 ({_n(g('rsi'), 1)})")
