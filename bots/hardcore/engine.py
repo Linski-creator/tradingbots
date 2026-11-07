@@ -164,6 +164,11 @@ class FxSimulator:
                 st.order = order
             elif kind == "cancel":
                 st.order = None
+            elif kind == "stop" and st.position:
+                # Stop nur in Gewinnrichtung nachziehen, nie lockern
+                p, new = st.position, float(act[1])
+                if (p["side"] == 1 and new > p["sl"]) or (p["side"] == -1 and new < p["sl"]):
+                    p["sl"] = new
 
     # --------------------------------------------------------------------
     def _try_fill(self, od, o, h, l):

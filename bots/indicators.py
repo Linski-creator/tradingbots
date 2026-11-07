@@ -85,3 +85,21 @@ def realized_vol(close: pd.Series, n: int, bars_per_year: float) -> pd.Series:
     """Annualisierte Volatilität der Log-Renditen der letzten n Bars."""
     r = np.log(close).diff()
     return r.rolling(n, min_periods=n).std(ddof=1) * np.sqrt(bars_per_year)
+
+
+def adx(df: pd.DataFrame, n: int = 14) -> pd.Series:
+    """Average Directional Index nach Wilder (Trendstärke 0-100, richtungslos)."""
+    up = df["high"].diff()
+    dn = -df["low"].diff()
+    plus_dm = up.where((up > dn) & (up > 0), 0.0)
+    minus_dm = dn.where((dn > up) & (dn > 0), 0.0)
+    plus_dm.iloc[0] = minus_dm.iloc[0] = np.nan
+    tr = true_range(df)
+    tr.iloc[0] = np.nan
+    atr_w = wilder(tr, n)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        pdi = 100 * wilder(plus_dm, n) / atr_w
+        mdi = 100 * wilder(minus_dm, n) / atr_w
+        dx = (100 * (pdi - mdi).abs() / (pdi + mdi)).where((pdi + mdi) > 0, 0.0)
+    dx = dx.where(pdi.notna())
+    return wilder(dx, n)
