@@ -8,7 +8,7 @@ Gleiche Schalter wie im TradingView-Skript tradingview/gold_tagestrend.pine (v2)
   W  Wochenende flach (Donnerstag-Schluss -> Freitag-Open raus, nur Tageschart sinnvoll)
 Ausgewertet: Suche 2000-2015 und Prüfung 2016+ getrennt, normal und Stress-Kosten.
 
-Aufruf: python -m bots.metals.variants   (schreibt results/variants.json)
+Aufruf: python -m bots.metals.variants [SYMBOL]   (Gold: results/variants.json, sonst results/variants_<SYMBOL>.json)
 """
 
 from __future__ import annotations
@@ -77,8 +77,10 @@ class Variant(DailyTrend):
 
 
 def main():
+    import sys
     logging.basicConfig(level=logging.INFO, format="%(message)s")
-    df = tidy(D.yahoo_daily("GC=F", start="2000-01-01"))
+    sym = sys.argv[1] if len(sys.argv) > 1 else "GC=F"
+    df = tidy(D.yahoo_daily(sym, start="2000-01-01"))
     rows = []
     for setup, (fast, slow, k, lag) in SETUPS.items():
         for flags in COMBOS:
@@ -87,8 +89,8 @@ def main():
             strat = Variant(fast, slow, k, lag, flags)
             p = strat.prepare(df)
             risk = FxRisk(risk_per_trade=0.01, max_leverage=5, min_stop=0.002)
-            st = FxSimulator(strat, COSTS["GC=F"], risk).run(p)
-            st_s = FxSimulator(strat, stress(COSTS["GC=F"]), risk).run(p)
+            st = FxSimulator(strat, COSTS[sym], risk).run(p)
+            st_s = FxSimulator(strat, stress(COSTS[sym]), risk).run(p)
             m, ms = split(st, CUT), split(st_s, CUT)
             keep = ("cagr_pct", "max_drawdown_pct", "profit_factor", "win_rate_pct", "trades", "avg_r")
             row = {"setup": setup, "variante": flags or "basis",
@@ -102,7 +104,8 @@ def main():
                      "Treffer %4.1f PF %.2f n=%d", setup, row["variante"], s["cagr_pct"], s["max_drawdown_pct"],
                      s["win_rate_pct"], s["profit_factor"], s["trades"], v["cagr_pct"], v["max_drawdown_pct"],
                      v["win_rate_pct"], v["profit_factor"], v["trades"])
-    (OUT / "variants.json").write_text(json.dumps(rows, indent=1, default=str), encoding="utf-8")
+    name = "variants.json" if sym == "GC=F" else f"variants_{sym.replace('=F', '')}.json"
+    (OUT / name).write_text(json.dumps(rows, indent=1, default=str), encoding="utf-8")
 
 
 if __name__ == "__main__":
