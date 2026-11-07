@@ -34,6 +34,8 @@ VARIANTS = {
     "einstieg_an_marken": dict(levels=True),
     "luft_plus_montag": dict(wide_stop=True, reentry=True),
     "alles": dict(wide_stop=True, reentry=True, levels=True),
+    "luft_montag_teilgewinn": dict(wide_stop=True, reentry=True, partial=True),
+    "luft_teilgewinn": dict(wide_stop=True, partial=True),
 }
 JOBS = [("PAXGUSDT", "4h", "2024-01-01"), ("PAXGUSDT", "1h", "2024-01-01")] + \
        [(s, tf, None) for s in ("GC=F", "SI=F", "PL=F", "JPY=X") for tf in ("4h", "1h")]

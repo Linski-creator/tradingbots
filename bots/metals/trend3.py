@@ -48,15 +48,17 @@ PAUSE = pd.Timedelta(hours=24)
 class TrendFollowerV3:
     wants_history = True
 
-    def __init__(self, tf: str = "1h", wide_stop: bool = False, reentry: bool = False, levels: bool = False):
+    def __init__(self, tf: str = "1h", wide_stop: bool = False, reentry: bool = False, levels: bool = False,
+                 partial: bool = False):
         """wide_stop: Stop 1 ATR hinter dem Rücksetzer (statt 0,2), Position entsprechend kleiner.
         reentry:   Wurde Freitag mit Gewinn geschlossen und der Trend steht noch, am Montag
                    direkt wieder einsteigen.
         levels:    Einstieg nur, wenn der Rücksetzer an einer früheren Umkehr-Marke endet
-                   ("auf ähnlicher Höhe wie vorher")."""
+                   ("auf ähnlicher Höhe wie vorher").
+        partial:   bei +1R die Hälfte schließen (Teilgewinn), Rest läuft als Traum-Trade."""
         self.tf = tf
         self.step = pd.Timedelta(TF[tf])
-        self.wide_stop, self.reentry, self.levels = wide_stop, reentry, levels
+        self.wide_stop, self.reentry, self.levels, self.partial = wide_stop, reentry, levels, partial
         self.stop_pad, self.max_stop = (1.0, 4.0) if wide_stop else (0.2, 3.0)
 
     def prepare(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -166,7 +168,8 @@ class TrendFollowerV3:
             if not signal or not math.isfinite(stop) or self._paused(name, trades, now):
                 continue
             if 0.5 * atr <= abs(c - stop) <= self.max_stop * atr:
-                return [("order", {"side": side, "type": "market", "sl": stop,
+                extra = {"tp1_r": 1.0, "tp1_frac": 0.5} if self.partial else {}
+                return [("order", {"side": side, "type": "market", "sl": stop, **extra,
                                    "tag": "trend_rücksetzer_v3",
                                    "context": {"close": float(c), "atr": float(atr), "ema50": float(a["ema50"][i])}})]
         return []

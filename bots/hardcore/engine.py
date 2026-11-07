@@ -133,11 +133,16 @@ class FxSimulator:
                 gap = (o <= sl) if side == 1 else (o >= sl)
                 price = (o if gap and not opened_now else sl) * (1 - side * self.c.slippage)
                 self._close(ts, price, self.c.taker, "stop")
-            elif tp is not None and not opened_now:
-                hit_tp = (h >= tp) if side == 1 else (l <= tp)
-                if hit_tp:
-                    gap = (o >= tp) if side == 1 else (o <= tp)
-                    self._close(ts, o if gap else tp, self.c.maker, "take_profit")
+            else:
+                tp1 = pos.get("tp1")
+                if tp1 is not None and not opened_now and ((h >= tp1) if side == 1 else (l <= tp1)):
+                    gap = (o >= tp1) if side == 1 else (o <= tp1)
+                    self._partial(ts, o if gap else tp1, pos["tp1_frac"])
+                if tp is not None and not opened_now and st.position:
+                    hit_tp = (h >= tp) if side == 1 else (l <= tp)
+                    if hit_tp:
+                        gap = (o >= tp) if side == 1 else (o <= tp)
+                        self._close(ts, o if gap else tp, self.c.maker, "take_profit")
 
         # 4. Haltekosten, Bewertung, Notbremse
         pos = st.position
@@ -219,6 +224,10 @@ class FxSimulator:
                        "sl": sl, "tp": tp, "initial_sl": sl, "fees": entry_fee, "funding": 0.0,
                        "bars_held": 0, "max_bars": od.get("max_bars"), "tag": od.get("tag", ""),
                        "context": od.get("context", {})}
+        if od.get("tp1_r"):
+            # Teilgewinn: bei +tp1_r x Risiko wird tp1_frac der Position geschlossen
+            st.position["tp1"] = fill + side * od["tp1_r"] * abs(fill - sl)
+            st.position["tp1_frac"] = od.get("tp1_frac", 0.5)
         return True
 
     def _close(self, ts, price, fee, reason):
@@ -240,6 +249,31 @@ class FxSimulator:
             "mfe_r": self._excursion(p, best=True), "mae_r": self._excursion(p, best=False),
         })
         st.position = None
+
+    def _partial(self, ts, price: float, frac: float) -> None:
+        """Schließt einen Teil der Position (Limit, Maker) und zieht den Stop auf den Einstieg."""
+        st, p = self.st, self.st.position
+        q = p["qty"] * frac
+        gross = q * (price - p["entry_price"]) * p["side"]
+        fee = q * price * self.c.maker
+        fees_part, fund_part = p["fees"] * frac, p["funding"] * frac
+        st.cash += gross - fee
+        pnl = gross - fee - fees_part - fund_part
+        risk = q * abs(p["entry_price"] - p["initial_sl"])
+        st.trades.append({
+            "side": "long" if p["side"] == 1 else "short", "entry_time": p["entry_time"],
+            "exit_time": ts.isoformat(), "entry_price": p["entry_price"], "exit_price": price,
+            "qty": q, "pnl": pnl, "return_pct": pnl / (q * p["entry_price"]) * 100,
+            "r_multiple": pnl / risk if risk > 0 else None, "bars_held": p["bars_held"],
+            "reason": "teilgewinn", "initial_stop": p["initial_sl"], "tp": p["tp1"],
+            "fees": fees_part + fee, "tag": p["tag"], "context": p["context"],
+            "mfe_r": self._excursion(p, best=True), "mae_r": self._excursion(p, best=False),
+        })
+        p["qty"] -= q
+        p["fees"] -= fees_part
+        p["funding"] -= fund_part
+        p["tp1"] = None
+        p["sl"] = max(p["sl"], p["entry_price"]) if p["side"] == 1 else min(p["sl"], p["entry_price"])
 
     @staticmethod
     def _excursion(p: dict, best: bool):

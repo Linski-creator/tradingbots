@@ -271,3 +271,24 @@ def test_search_main_runs(tmp_path, monkeypatch):
     res = json.loads((tmp_path / "search.json").read_text())
     assert len(res["verdicts"]) == len(S.SIGNALS) * len(S.TIMEFRAMES) * len(S.ATR_MULTS)
     assert len(res["rows"]) == len(res["verdicts"]) * len(S.SYMBOLS) * len(S.COSTS)
+
+
+def test_partial_take_profit_closes_half_and_moves_stop():
+    # Einstieg 100, Stop 90 (1R = 10) -> Teilgewinn bei 110, Rest später am Breakeven-Stop
+    st = run([FLAT, FLAT, (100, 111, 99, 108), (108, 109, 99.5, 100)],
+             {0: [("order", {"side": 1, "type": "market", "sl": 90, "tp1_r": 1.0, "tp1_frac": 0.5})]})
+    part, rest = st.trades
+    assert part["reason"] == "teilgewinn" and part["exit_price"] == 110
+    assert part["qty"] == pytest.approx(rest["qty"])                  # halbe/halbe
+    assert rest["reason"] == "stop" and rest["exit_price"] == 100     # Stop auf Einstieg gezogen
+    assert st.cash == pytest.approx(1000 + part["pnl"] + rest["pnl"])
+    assert part["r_multiple"] == pytest.approx(1.0)
+
+
+def test_partial_not_on_entry_bar_and_stop_has_priority():
+    st = run([FLAT, (100, 115, 99, 100), FLAT],
+             {0: [("order", {"side": 1, "type": "market", "sl": 90, "tp1_r": 1.0})]})
+    assert not st.trades and st.position["qty"] > 0  # Einstiegs-Bar zählt nicht
+    st = run([FLAT, FLAT, (100, 115, 85, 100)],
+             {0: [("order", {"side": 1, "type": "market", "sl": 90, "tp1_r": 1.0})]})
+    assert [t["reason"] for t in st.trades] == ["stop"]
