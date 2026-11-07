@@ -1,0 +1,242 @@
+[
+ {
+  "symbol": "GC=F",
+  "setup": "tageschart",
+  "teilgewinn": false,
+  "suche": {
+   "cagr_pct": 3.3794935605398813,
+   "max_drawdown_pct": -10.611283005569494,
+   "profit_factor": 1.823785427094176,
+   "win_rate_pct": 37.98449612403101,
+   "trades": 129
+  },
+  "pruefung": {
+   "cagr_pct": 3.3320486958959172,
+   "max_drawdown_pct": -10.045020738633436,
+   "profit_factor": 2.2911576595897922,
+   "win_rate_pct": 32.467532467532465,
+   "trades": 77
+  },
+  "suche_stress_cagr": 2.07206376046265,
+  "pruefung_stress_cagr": 1.9399226024240157,
+  "volle_verluste_pro_jahr": {
+   "suche": 2.4,
+   "pruefung": 1.6
+  },
+  "gewinn_trades_pro_jahr": {
+   "suche": 3.1,
+   "pruefung": 2.3
+  },
+  "groesster_r": 16.6
+ },
+ {
+  "symbol": "GC=F",
+  "setup": "tageschart",
+  "teilgewinn": true,
+  "suche": {
+   "cagr_pct": 2.3001027279985653,
+   "max_drawdown_pct": -7.789710604007372,
+   "profit_factor": 1.60032097042903,
+   "win_rate_pct": 56.34517766497462,
+   "trades": 197
+  },
+  "pruefung": {
+   "cagr_pct": 2.4451654318860205,
+   "max_drawdown_pct": -6.302978590024855,
+   "profit_factor": 1.9859386963883219,
+   "win_rate_pct": 54.330708661417326,
+   "trades": 127
+  },
+  "suche_stress_cagr": 1.3665247799296676,
+  "pruefung_stress_cagr": 1.4641553344589164,
+  "volle_verluste_pro_jahr": {
+   "suche": 2.4,
+   "pruefung": 1.7
+  },
+  "gewinn_trades_pro_jahr": {
+   "suche": 6.9,
+   "pruefung": 6.4
+  },
+  "groesster_r": 16.6
+ },
+ {
+  "symbol": "GC=F",
+  "setup": "4h_nachbau",
+  "teilgewinn": false,
+  "suche": {
+   "cagr_pct": 5.20813184998683,
+   "max_drawdown_pct": -12.608665244214269,
+   "profit_factor": 1.49896322812328,
+   "win_rate_pct": 33.557046979865774,
+   "trades": 298
+  },
+  "pruefung": {
+   "cagr_pct": 5.379040636294419,
+   "max_drawdown_pct": -14.976704530313324,
+   "profit_factor": 1.5154574942569596,
+   "win_rate_pct": 35.4978354978355,
+   "trades": 231
+  },
+  "suche_stress_cagr": 3.2992896861016474,
+  "pruefung_stress_cagr": 3.2039975098433704,
+  "volle_verluste_pro_jahr": {
+   "suche": 8.2,
+   "pruefung": 10.1
+  },
+  "gewinn_trades_pro_jahr": {
+   "suche": 6.2,
+   "pruefung": 7.6
+  },
+  "groesster_r": 13.4
+ },
+ {
+  "symbol": "GC=F",
+  "setup": "4h_nachbau",
+  "teilgewinn": true,
+  "suche": {
+   "cagr_pct": 2.8550962273175884,
+   "max_drawdown_pct": -10.605311024317643,
+   "profit_factor": 1.2937096352666777,
+   "win_rate_pct": 52.328159645232816,
+   "trades": 451
+  },
+  "pruefung": {
+   "cagr_pct": 2.2016289082388285,
+   "max_drawdown_pct": -15.438355387035651,
+   "profit_factor": 1.2056736952429514,
+   "win_rate_pct": 53.03867403314917,
+   "trades": 362
+  },
+  "suche_stress_cagr": 1.4219921020155235,
+  "pruefung_stress_cagr": 0.6450469227030853,
+  "volle_verluste_pro_jahr": {
+   "suche": 8.4,
+   "pruefung": 10.8
+  },
+  "gewinn_trades_pro_jahr": {
+   "suche": 14.8,
+   "pruefung": 17.7
+  },
+  "groesster_r": 12.9
+ },
+ {
+  "symbol": "SI=F",
+  "setup": "tageschart",
+  "teilgewinn": false,
+  "suche": {
+   "cagr_pct": 0.549952357875072,
+   "max_drawdown_pct": -19.21645033388173,
+   "profit_factor": 1.1262942291698455,
+   "win_rate_pct": 35.15625,
+   "trades": 128
+  },
+  "pruefung": {
+   "cagr_pct": 4.487291774583491,
+   "max_drawdown_pct": -8.235745679917372,
+   "profit_factor": 2.4272309735766733,
+   "win_rate_pct": 41.9753086419753,
+   "trades": 81
+  },
+  "suche_stress_cagr": 0.5660521148050268,
+  "pruefung_stress_cagr": 3.5220983576708553,
+  "volle_verluste_pro_jahr": {
+   "suche": 3.0,
+   "pruefung": 2.3
+  },
+  "gewinn_trades_pro_jahr": {
+   "suche": 2.8,
+   "pruefung": 3.1
+  },
+  "groesster_r": 23.4
+ },
+ {
+  "symbol": "SI=F",
+  "setup": "tageschart",
+  "teilgewinn": true,
+  "suche": {
+   "cagr_pct": 0.14118984849782468,
+   "max_drawdown_pct": -17.109754162466718,
+   "profit_factor": 1.0342287340373968,
+   "win_rate_pct": 52.71739130434783,
+   "trades": 184
+  },
+  "pruefung": {
+   "cagr_pct": 2.3327752539378688,
+   "max_drawdown_pct": -4.656826968570327,
+   "profit_factor": 1.7401847996514495,
+   "win_rate_pct": 59.375,
+   "trades": 128
+  },
+  "suche_stress_cagr": -0.1082930878978261,
+  "pruefung_stress_cagr": 1.6513364026599087,
+  "volle_verluste_pro_jahr": {
+   "suche": 3.1,
+   "pruefung": 2.4
+  },
+  "gewinn_trades_pro_jahr": {
+   "suche": 6.1,
+   "pruefung": 7.0
+  },
+  "groesster_r": 23.4
+ },
+ {
+  "symbol": "SI=F",
+  "setup": "4h_nachbau",
+  "teilgewinn": false,
+  "suche": {
+   "cagr_pct": 4.49374177518842,
+   "max_drawdown_pct": -15.618259563495352,
+   "profit_factor": 1.3894153952653432,
+   "win_rate_pct": 35.03649635036496,
+   "trades": 274
+  },
+  "pruefung": {
+   "cagr_pct": 9.965759914004746,
+   "max_drawdown_pct": -20.39964973898394,
+   "profit_factor": 1.9751877828651545,
+   "win_rate_pct": 39.06976744186046,
+   "trades": 215
+  },
+  "suche_stress_cagr": 2.5063752417611385,
+  "pruefung_stress_cagr": 7.281254611894394,
+  "volle_verluste_pro_jahr": {
+   "suche": 7.9,
+   "pruefung": 8.4
+  },
+  "gewinn_trades_pro_jahr": {
+   "suche": 6.0,
+   "pruefung": 7.7
+  },
+  "groesster_r": 21.9
+ },
+ {
+  "symbol": "SI=F",
+  "setup": "4h_nachbau",
+  "teilgewinn": true,
+  "suche": {
+   "cagr_pct": 4.011251709466901,
+   "max_drawdown_pct": -9.786940623689656,
+   "profit_factor": 1.3847836285363722,
+   "win_rate_pct": 55.1219512195122,
+   "trades": 410
+  },
+  "pruefung": {
+   "cagr_pct": 5.58264628663514,
+   "max_drawdown_pct": -16.13154932436529,
+   "profit_factor": 1.5588574760897027,
+   "win_rate_pct": 56.875,
+   "trades": 320
+  },
+  "suche_stress_cagr": 2.3147460122399766,
+  "pruefung_stress_cagr": 3.490936804550282,
+  "volle_verluste_pro_jahr": {
+   "suche": 7.6,
+   "pruefung": 8.4
+  },
+  "gewinn_trades_pro_jahr": {
+   "suche": 14.1,
+   "pruefung": 16.8
+  },
+  "groesster_r": 22.0
+ }
+]
