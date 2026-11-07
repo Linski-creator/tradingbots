@@ -1,5 +1,5 @@
 //@version=5
-// Gold-Tagestrend v4.1 – Grundregeln wie der Python-Test (bots/metals/daily.py, Regel "sma")
+// Gold-Tagestrend v4.2 – Grundregeln wie der Python-Test (bots/metals/daily.py, Regel "sma")
 // und die Paper-Bots, dazu Reparaturen als Schalter (B ist an, Rest aus).
 // Chart: OANDA:XAUUSD, 4h oder 1D, normale Kerzen (kein Heikin Ashi).
 //
@@ -21,7 +21,8 @@
 //     bis zum gemeinsamen Stop wieder höchstens das eingestellte Risiko.
 // Ergebnis der Tests (Woche 2/3): B hilft überall -> standardmäßig AN, Start-Stop 2 ATR (E) als Standard.
 // C und D bringen nichts.
-strategy("Gold-Tagestrend v4.1", overlay = true, initial_capital = 100000, currency = currency.USD,
+//  T  Teilgewinn: bei +1 R die Hälfte verkaufen, für den Rest rückt der Stop auf den Einstieg.
+strategy("Gold-Tagestrend v4.2", overlay = true, initial_capital = 100000, currency = currency.USD,
      pyramiding = 3, commission_type = strategy.commission.percent, commission_value = 0.01,
      slippage = 2, process_orders_on_close = false)
 
@@ -36,6 +37,7 @@ atrK   = input.float(3.0, "Nachzieh-Abstand × ATR")
 atrS   = input.float(2.0, "E: Start-Stop × ATR (Standard 2, vorher 3)")
 maxAdd = input.int(0, "P: Gewinner ausbauen – max. Nachkäufe (0 = aus)", minval = 0, maxval = 3)
 posCap = input.float(1.0, "Crash-Schutz: Gesamtposition max. × Konto", minval = 0.1)
+usePT  = input.bool(false, "T: Teilgewinn – Hälfte bei +1 R verkaufen")
 
 riskPct = modus == "Sicher" ? 1.0 : 3.0
 maxLev  = math.min(modus == "Sicher" ? 5.0 : 10.0, posCap)
@@ -64,14 +66,23 @@ var float bestPx = na
 var float riskR  = na
 var int   adds   = 0
 var float lastBuy = na
+var bool  partDone = false
+var float peakQty  = 0.0
 
 calcQty(dist) =>
     q = math.min(strategy.equity * riskPct / 100 / (dist * pv), strategy.equity * maxLev / (close * pv))
     isFut ? math.floor(q) : q
 
+// Teilgewinn erkannt: Position ist um mindestens ein Viertel kleiner als ihr Höchststand
+peakQty := strategy.position_size == 0 ? 0.0 : math.max(peakQty, math.abs(strategy.position_size))
+if usePT and strategy.position_size != 0 and math.abs(strategy.position_size) < peakQty * 0.75
+    partDone := true
+
 // Positionsführung
 if strategy.position_size > 0
     ep = strategy.opentrades.entry_price(0)
+    if partDone
+        stopPx := math.max(stopPx, ep)
     bestPx := math.max(bestPx, useD ? high : close)
     stopPx := math.max(stopPx, bestPx - atrK * atr)
     if useC and high - ep >= riskR
@@ -90,6 +101,8 @@ if strategy.position_size > 0
             adds += 1, lastBuy := close
 if strategy.position_size < 0
     ep = strategy.opentrades.entry_price(0)
+    if partDone
+        stopPx := math.min(stopPx, ep)
     bestPx := math.min(bestPx, useD ? low : close)
     stopPx := math.min(stopPx, bestPx + atrK * atr)
     if useC and ep - low >= riskR
@@ -113,14 +126,18 @@ if strategy.position_size == 0 and not (wkFlat and thu) and atr > 0
         q = calcQty(atrS * atr)
         if q > 0
             strategy.entry("Long", strategy.long, qty = q, comment = "Trend Long")
-            stopPx := close - atrS * atr, bestPx := close, riskR := atrS * atr, adds := 0, lastBuy := close
+            stopPx := close - atrS * atr, bestPx := close, riskR := atrS * atr, adds := 0, lastBuy := close, partDone := false
     else if shortOK
         q = calcQty(atrS * atr)
         if q > 0
             strategy.entry("Short", strategy.short, qty = q, comment = "Trend Short")
-            stopPx := close + atrS * atr, bestPx := close, riskR := atrS * atr, adds := 0, lastBuy := close
+            stopPx := close + atrS * atr, bestPx := close, riskR := atrS * atr, adds := 0, lastBuy := close, partDone := false
 
-// ein gemeinsamer Stop für alle offenen Käufe (inkl. Nachkäufe)
+// Teilgewinn: eigene Ausstiegs-Order für die Hälfte (mit Ziel UND Stop, damit diese Hälfte auch geschützt ist)
+if usePT and not partDone and strategy.position_size != 0
+    tp = strategy.position_size > 0 ? strategy.opentrades.entry_price(0) + riskR : strategy.opentrades.entry_price(0) - riskR
+    strategy.exit("Teil", qty_percent = 50, limit = tp, stop = stopPx, comment = "Teilgewinn")
+// ein gemeinsamer Stop für alle (übrigen) offenen Käufe inkl. Nachkäufe
 strategy.exit("Stop", stop = stopPx, comment = "Stop")
 
 plot(s50, "SMA 50", color.new(color.orange, 0))
