@@ -61,7 +61,7 @@ shortSig = dnTrend and ta.highest(rsi, 5) > 60 and close < low[1]
 // Wochenende (UTC)
 isFri   = dayofweek(time_close, "UTC") == dayofweek.friday
 hClose  = hour(time_close, "UTC")
-noEntry = wkFlat and (isFri and hClose >= 14) or dayofweek(time_close, "UTC") == dayofweek.saturday or dayofweek(time_close, "UTC") == dayofweek.sunday)
+noEntry = wkFlat and ((isFri and hClose >= 14) or dayofweek(time_close, "UTC") == dayofweek.saturday or dayofweek(time_close, "UTC") == dayofweek.sunday)
 wkExit  = wkFlat and isFri and hClose >= 19
 
 // Verlust-Pause: 2 Verluste in Folge je Richtung -> 24 h Pause
