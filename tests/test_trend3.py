@@ -83,3 +83,12 @@ def test_main_runs(tmp_path, monkeypatch):
     T3.main()
     rows = json.loads((tmp_path / "trend3.json").read_text())
     assert len(rows) == 2 * len(T3.MODES) * 2
+
+
+def test_trend_break_does_not_close_fresh_pullback_entries():
+    """Regression: Der Ausstieg darf nicht gegen die Einstiegsregel arbeiten
+    (früher: Schluss unter EMA 50 schloss fast jeden Trade sofort wieder)."""
+    s = T3.TrendFollowerV3("1h")
+    st = FxSimulator(s, FxCosts(), FxRisk(min_stop=0.0005, max_leverage=5)).run(s.prepare(trending(seed=21, n=6000)))
+    quick = [t for t in st.trades if t["reason"] == "trendbruch" and t["bars_held"] <= 2]
+    assert len(quick) < 0.3 * len(st.trades), (len(quick), len(st.trades))

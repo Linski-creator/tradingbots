@@ -3,7 +3,8 @@
 Gegenüber v2:
   - Ausstieg ohne festes Ziel ("Traum-Trade"): ab +1R Stop auf Einstieg, danach
     nachgezogener Stop 2,5 ATR unter dem höchsten Hoch seit Einstieg (Short gespiegelt)
-  - Trendbruch: Schluss auf der falschen Seite der EMA 50 -> raus (auch früh, kleiner Verlust)
+  - Trendbruch: Schluss auf der falschen Seite der EMA 200 oder höhere Zeitebene kippt
+    -> raus (auch früh, kleiner Verlust)
   - Verlust-Pause: nach 2 Verlusten in Folge in dieselbe Richtung 24 h keine Trades
     in diese Richtung (kein Nachkaufen, kein "jetzt erst recht")
   - Wochenende: ab Freitag 14 Uhr UTC keine neuen Trades, offene Trades werden vor
@@ -58,7 +59,9 @@ class TrendFollowerV3:
         rsi = ind.rsi(c, 14)
         out["atr"] = ind.atr(out, 14)
         out["ema50"] = e50
+        out["ema200"] = e200
         slope = higher_tf_slope(out, rule=HTF[self.tf])
+        out["htf_slope"] = slope
         a = ind.adx(out, 14)
         fading = ((a < a.shift(1)).astype(int).rolling(5, min_periods=5).sum() == 5) & (a < 25)
         strong = (a > 20) & ~fading
@@ -91,7 +94,11 @@ class TrendFollowerV3:
             side = pos["side"]
             if a["weekend_exit"][i]:
                 return [("exit", "wochenende")]
-            if (side == 1 and c < a["ema50"][i]) or (side == -1 and c > a["ema50"][i]):
+            # Trendbruch: Schluss jenseits der EMA 200 oder die höhere Zeitebene kippt.
+            # (Nicht EMA 50: im Rücksetzer liegt der Kurs oft genau dort, das würde
+            # Trades direkt nach dem Einstieg wieder schließen.)
+            hs = a["htf_slope"][i]
+            if (side == 1 and (c < a["ema200"][i] or hs < 0)) or (side == -1 and (c > a["ema200"][i] or hs > 0)):
                 return [("exit", "trendbruch")]
             if not (math.isfinite(atr) and atr > 0):
                 return []
