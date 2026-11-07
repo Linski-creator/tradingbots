@@ -4,6 +4,7 @@
  "position": null,
  "order": null,
  "pending_exit": null,
+ "pending_add": false,
  "halted": false,
  "last_ts": "2026-11-06T00:00:00+00:00",
  "trades": [],
