@@ -1,0 +1,74 @@
+//@version=5
+// Gold-Tagestrend – gleiche Regeln wie der Python-Test (bots/metals/daily.py, Regel "sma")
+// und die Paper-Bots. Chart: OANDA:XAUUSD, Zeitebene 1D (Tag), normale Kerzen.
+//
+// Einstieg: Tagesschluss über der 200-Tage-Linie UND 50-Tage-Linie über der 200-Tage-Linie
+//           -> Kauf zum nächsten Open (nur Long, Shorts optional).
+// Stop:     3 ATR unter dem Einstieg, danach 3 ATR unter dem höchsten Schluss nachgezogen
+//           (nur nach oben, nie zurück).
+// Ausstieg: Stop oder Tagesschluss unter der 200-Tage-Linie (raus zum nächsten Open).
+// Größe:    1 % Risiko je Trade (Vollgas 3 %), Hebel höchstens 5 (Vollgas 10).
+strategy("Gold-Tagestrend", overlay = true, initial_capital = 100000, currency = currency.USD,
+     pyramiding = 0, commission_type = strategy.commission.percent, commission_value = 0.01,
+     slippage = 2, process_orders_on_close = false)
+
+modus  = input.string("Sicher", "Modus", options = ["Sicher", "Vollgas"])
+useSh  = input.bool(false, "Auch Short handeln (im Test schlechter)")
+wkFlat = input.bool(false, "Vor dem Wochenende schließen (im Test schlechter)")
+atrK   = input.float(3.0, "Stop-Abstand × ATR")
+
+riskPct = modus == "Sicher" ? 1.0 : 3.0
+maxLev  = modus == "Sicher" ? 5.0 : 10.0
+pv      = syminfo.pointvalue
+isFut   = syminfo.type == "futures"
+
+s50  = ta.sma(close, 50)
+s200 = ta.sma(close, 200)
+atr  = ta.atr(20)
+up   = close > s200 and s50 > s200
+dn   = close < s200 and s50 < s200
+thu  = dayofweek(time, "UTC") == dayofweek.thursday   // Donnerstag-Schluss -> Freitag-Open raus
+
+var float stopPx = na
+var float bestPx = na
+
+calcQty(dist) =>
+    q = math.min(strategy.equity * riskPct / 100 / (dist * pv), strategy.equity * maxLev / (close * pv))
+    isFut ? math.floor(q) : q
+
+// Positionsführung
+if strategy.position_size > 0
+    bestPx := math.max(bestPx, close)
+    stopPx := math.max(stopPx, bestPx - atrK * atr)
+    if close < s200
+        strategy.close("Long", comment = "Trendbruch")
+    else if wkFlat and thu
+        strategy.close("Long", comment = "Wochenende")
+if strategy.position_size < 0
+    bestPx := math.min(bestPx, close)
+    stopPx := math.min(stopPx, bestPx + atrK * atr)
+    if close > s200
+        strategy.close("Short", comment = "Trendbruch")
+    else if wkFlat and thu
+        strategy.close("Short", comment = "Wochenende")
+
+// Einstieg
+if strategy.position_size == 0 and not (wkFlat and thu) and atr > 0
+    if up
+        q = calcQty(atrK * atr)
+        if q > 0
+            strategy.entry("Long", strategy.long, qty = q, comment = "Trend Long")
+            stopPx := close - atrK * atr, bestPx := close
+    else if useSh and dn
+        q = calcQty(atrK * atr)
+        if q > 0
+            strategy.entry("Short", strategy.short, qty = q, comment = "Trend Short")
+            stopPx := close + atrK * atr, bestPx := close
+
+strategy.exit("Stop L", "Long", stop = stopPx, comment = "Stop")
+strategy.exit("Stop S", "Short", stop = stopPx, comment = "Stop")
+
+plot(s50, "SMA 50", color.new(color.orange, 0))
+plot(s200, "SMA 200", color.new(color.blue, 0), 2)
+plot(strategy.position_size != 0 ? stopPx : na, "Stop", color.new(color.red, 0), style = plot.style_linebr)
+bgcolor(up ? color.new(color.green, 92) : dn and useSh ? color.new(color.red, 92) : na)
