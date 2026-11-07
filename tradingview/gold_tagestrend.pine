@@ -1,5 +1,5 @@
 //@version=5
-// Gold-Tagestrend v4 – Grundregeln wie der Python-Test (bots/metals/daily.py, Regel "sma")
+// Gold-Tagestrend v4.1 – Grundregeln wie der Python-Test (bots/metals/daily.py, Regel "sma")
 // und die Paper-Bots, dazu Reparaturen als Schalter (B ist an, Rest aus).
 // Chart: OANDA:XAUUSD, 4h oder 1D, normale Kerzen (kein Heikin Ashi).
 //
