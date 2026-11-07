@@ -72,8 +72,10 @@ def _finite(*v) -> bool:
 
 class FxSimulator:
     def __init__(self, strategy, costs: Optional[FxCosts] = None, risk: Optional[FxRisk] = None,
-                 start_cash: float = 1000.0, state: Optional[FxState] = None):
+                 start_cash: float = 1000.0, state: Optional[FxState] = None, entry_block=None):
         self.s = strategy
+        # News-Filter: liefert True, wenn zu diesem Zeitpunkt kein Einstieg erlaubt ist
+        self.entry_block = entry_block
         self.c = costs or FxCosts()
         self.r = risk or FxRisk()
         self.st = state or FxState(cash=start_cash, peak=start_cash)
@@ -107,6 +109,8 @@ class FxSimulator:
 
         # 2. Einstiegs-Order
         opened_now = False
+        if st.order and self.entry_block is not None and self.entry_block(ts):
+            st.order = None  # Einstieg verworfen; die Strategie prüft zum Close neu
         if st.order and not st.position and not st.halted:
             fill, fee = self._try_fill(st.order, o, h, l)
             if fill is not None:
@@ -154,7 +158,10 @@ class FxSimulator:
         if pos and pos.get("max_bars") and pos["bars_held"] >= pos["max_bars"]:
             st.pending_exit = "zeitstop"
             return
-        for act in self.s.on_bar(i, a, st.position) or []:
+        # Strategien mit ``wants_history`` sehen zusätzlich die bisherigen Trades
+        acts = (self.s.on_bar(i, a, st.position, st.trades) if getattr(self.s, "wants_history", False)
+                else self.s.on_bar(i, a, st.position))
+        for act in acts or []:
             kind = act[0]
             if kind == "exit" and st.position:
                 st.pending_exit = act[1]
