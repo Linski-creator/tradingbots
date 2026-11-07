@@ -1,0 +1,121 @@
+//@version=5
+// Trendfolger v3 – Rücksetzer im einseitigen Trend, Long und Short, Traum-Trade-Ausstieg.
+// Gleiche Regeln wie im Python-Backtest (bots/metals/trend3.py). Empfohlen: 4-Stunden-Chart,
+// z. B. OANDA:XAUUSD, OANDA:XAGUSD, OANDA:XPTUSD, OANDA:USDJPY.
+//
+// Trend:     Kurs > EMA 200, EMA 50 > EMA 200, höhere Zeitebene (Standard: Tag) steigt,
+//            ADX > 20 und kein auslaufender Trend (ADX 5x fallend und < 25). Short gespiegelt.
+// Einstieg:  RSI(14) war in den letzten 5 Kerzen unter 40 (über 60 bei Short)
+//            und die Kerze schließt über dem Hoch (unter dem Tief) der Vorkerze.
+// Stop:      hinter dem Rücksetzer (5-Kerzen-Tief/-Hoch ± 0,2 ATR), 0,5 bis 3 ATR entfernt.
+// Ausstieg:  kein festes Ziel. Ab +1R Stop auf Einstieg, danach 2,5 ATR hinter dem besten Kurs.
+//            Raus bei Trendbruch (Schluss jenseits EMA 200 oder höhere Zeitebene kippt).
+// Schutz:    nach 2 Verlusten in Folge in dieselbe Richtung 24 h Pause;
+//            Freitag ab 14 Uhr UTC keine Einstiege, offene Trades ab 19 Uhr UTC schließen.
+strategy("Trendfolger v3", overlay = true, initial_capital = 10000, currency = currency.USD,
+     pyramiding = 0, commission_type = strategy.commission.percent, commission_value = 0.01,
+     slippage = 2, process_orders_on_close = false)
+
+modus   = input.string("Sicher", "Modus", options = ["Sicher", "Vollgas"])
+htfRes  = input.timeframe("D", "Höhere Zeitebene (für 1h-Chart: 240)")
+rskS    = input.float(1.0, "Risiko % (Sicher)")
+levS    = input.float(5.0, "Max. Hebel (Sicher)")
+rskV    = input.float(3.0, "Risiko % (Vollgas)")
+levV    = input.float(10.0, "Max. Hebel (Vollgas)")
+trailK  = input.float(2.5, "Nachzieh-Abstand × ATR")
+
+riskPct = modus == "Sicher" ? rskS : rskV
+maxLev  = modus == "Sicher" ? levS : levV
+
+ema50  = ta.ema(close, 50)
+ema200 = ta.ema(close, 200)
+rsi    = ta.rsi(close, 14)
+atr    = ta.atr(14)
+[diP, diM, adx] = ta.dmi(14, 14)
+
+// Höhere Zeitebene ohne Blick in die Zukunft: Wert der letzten ABGESCHLOSSENEN Kerze
+htfSlope = request.security(syminfo.tickerid, htfRes, (ta.ema(close, 50) - ta.ema(close, 50)[3])[1],
+     lookahead = barmerge.lookahead_on)
+
+adxFalling5 = adx < adx[1] and adx[1] < adx[2] and adx[2] < adx[3] and adx[3] < adx[4] and adx[4] < adx[5]
+strong  = adx > 20 and not (adxFalling5 and adx < 25)
+upTrend = close > ema200 and ema50 > ema200 and htfSlope > 0 and strong
+dnTrend = close < ema200 and ema50 < ema200 and htfSlope < 0 and strong
+
+longSig  = upTrend and ta.lowest(rsi, 5) < 40 and close > high[1]
+shortSig = dnTrend and ta.highest(rsi, 5) > 60 and close < low[1]
+
+// Wochenende (UTC)
+isFri   = dayofweek(time_close, "UTC") == dayofweek.friday
+hClose  = hour(time_close, "UTC")
+noEntry = (isFri and hClose >= 14) or dayofweek(time_close, "UTC") == dayofweek.saturday or dayofweek(time_close, "UTC") == dayofweek.sunday
+wkExit  = isFri and hClose >= 19
+
+// Verlust-Pause: 2 Verluste in Folge je Richtung -> 24 h Pause
+var int   lossL = 0
+var int   lossS = 0
+var int   pauseL = 0
+var int   pauseS = 0
+var int   seen = 0
+if strategy.closedtrades > seen
+    for k = seen to strategy.closedtrades - 1
+        isLong = strategy.closedtrades.size(k) > 0
+        lost   = strategy.closedtrades.profit(k) < 0
+        if isLong
+            lossL := lost ? lossL + 1 : 0
+            if lossL >= 2
+                pauseL := strategy.closedtrades.exit_time(k) + 24 * 60 * 60 * 1000
+        else
+            lossS := lost ? lossS + 1 : 0
+            if lossS >= 2
+                pauseS := strategy.closedtrades.exit_time(k) + 24 * 60 * 60 * 1000
+    seen := strategy.closedtrades
+
+// Positionsführung
+var float entryPx = na
+var float riskR   = na
+var float stopPx  = na
+var float bestPx  = na
+
+flat = strategy.position_size == 0
+if flat and not noEntry
+    sLong  = ta.lowest(low, 5) - 0.2 * atr
+    sShort = ta.highest(high, 5) + 0.2 * atr
+    if longSig and time > pauseL and close - sLong >= 0.5 * atr and close - sLong <= 3 * atr
+        dist = close - sLong
+        qty  = math.min(strategy.equity * riskPct / 100 / dist, strategy.equity * maxLev / close)
+        strategy.entry("Long", strategy.long, qty = qty, comment = "Rücksetzer Long")
+        entryPx := close, riskR := dist, stopPx := sLong, bestPx := high
+    else if shortSig and time > pauseS and sShort - close >= 0.5 * atr and sShort - close <= 3 * atr
+        dist = sShort - close
+        qty  = math.min(strategy.equity * riskPct / 100 / dist, strategy.equity * maxLev / close)
+        strategy.entry("Short", strategy.short, qty = qty, comment = "Rücksetzer Short")
+        entryPx := close, riskR := dist, stopPx := sShort, bestPx := low
+
+if strategy.position_size > 0
+    bestPx := math.max(bestPx, high)
+    if bestPx - entryPx >= riskR
+        stopPx := math.max(stopPx, math.max(entryPx, bestPx - trailK * atr))
+    if close < ema200 or htfSlope < 0
+        strategy.close("Long", comment = "Trendbruch")
+    else if wkExit
+        strategy.close("Long", comment = "Wochenende")
+if strategy.position_size < 0
+    bestPx := math.min(bestPx, low)
+    if entryPx - bestPx >= riskR
+        stopPx := math.min(stopPx, math.min(entryPx, bestPx + trailK * atr))
+    if close > ema200 or htfSlope > 0
+        strategy.close("Short", comment = "Trendbruch")
+    else if wkExit
+        strategy.close("Short", comment = "Wochenende")
+
+strategy.exit("Stop L", "Long", stop = stopPx)
+strategy.exit("Stop S", "Short", stop = stopPx)
+
+plot(ema50, "EMA 50", color.new(color.orange, 0))
+plot(ema200, "EMA 200", color.new(color.blue, 0), 2)
+plot(strategy.position_size != 0 ? stopPx : na, "Stop", color.new(color.red, 0), style = plot.style_linebr)
+plotshape(longSig and flat, "Long-Signal", shape.triangleup, location.belowbar, color.new(color.green, 0), size = size.small)
+plotshape(shortSig and flat, "Short-Signal", shape.triangledown, location.abovebar, color.new(color.red, 0), size = size.small)
+alertcondition(longSig and flat and not noEntry, "Long-Signal", "Trendfolger v3: Long auf {{ticker}} bei {{close}}")
+alertcondition(shortSig and flat and not noEntry, "Short-Signal", "Trendfolger v3: Short auf {{ticker}} bei {{close}}")
