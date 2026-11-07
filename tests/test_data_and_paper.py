@@ -98,7 +98,8 @@ def sandbox(tmp_path, monkeypatch):
     monkeypatch.setattr(jour, "DOCS", tmp_path / "docs")
     import bots.webpage as web
     monkeypatch.setattr(web, "SITE", tmp_path / "site")
-    cfg = json.loads((paper.ROOT / "bots.json").read_text())
+    # feste Test-Konfiguration (die alten Krypto-Bots), unabhängig von bots.json
+    cfg = json.loads((paper.ROOT / "tests" / "fixtures" / "bots_crypto.json").read_text())
     # Tagesstrategien brauchen lange Historie; im Test kurze Fenster
     from bots import strategies as S
     monkeypatch.setitem(S.SINGLE_MARKET, "sma200", lambda: S.SMA200Filter(n=20))
@@ -128,9 +129,10 @@ def test_paper_runs_repeatedly_and_writes_dashboard(sandbox):
     html = (tmp / "site" / "index.html").read_text()
     raw = html.split("const DATA = ", 1)[1].split(";\nconst REASONS", 1)[0]
     data = json.loads(raw.replace("<\\/", "</"))
-    assert len(data["bots"]) == 8 and data["team"]["start"] == 7000
+    team = data["groups"][0]
+    assert len(data["bots"]) == 8 and team["name"] == "Team" and team["start"] == 7000
     team_bots = [b for b in data["bots"] if not b["compare"]]
-    assert data["team"]["current"] == pytest.approx(sum(b["current"] for b in team_bots), abs=0.05)
+    assert team["current"] == pytest.approx(sum(b["current"] for b in team_bots), abs=0.05)
     for b in data["bots"]:
         days = sorted(b["days"])
         if days:  # Tagesgewinne summieren sich zum Gesamtergebnis
@@ -295,3 +297,46 @@ def test_daily_summary_counts_and_values():
     assert d["2026-10-03"]["trades"] == 1 and d["2026-10-03"]["value"] == 1010.0  # Lücke: Vortageswert
     assert d["2026-10-04"]["opened"] == 1 and d["2026-10-04"]["pnl"] == -5.0
     assert sum(v["pnl"] for v in d.values()) == pytest.approx(5.0)
+
+
+def test_fx_metal_bots_paper_run(tmp_path, monkeypatch):
+    """Die neuen Metall-Bots (Sicher/Vollgas) laufen mehrmals durch; Positionsgröße bleibt gedeckelt."""
+    rng = np.random.default_rng(3)
+    base = {"GC=F": 2400, "SI=F": 30, "PL=F": 1000, "JPY=X": 150}
+    clock = {"n": 0}
+    full = {s: make_ohlc(3000, seed=i, freq="1h", vol=0.003, drift=0.0002, start=p)
+            for i, (s, p) in enumerate(base.items())}
+
+    def fake_hourly(sym):
+        return full[sym].iloc[:2000 + clock["n"]]
+
+    monkeypatch.setattr(D, "yahoo_hourly", fake_hourly)
+    from bots import news
+    monkeypatch.setattr(news, "fetch_events", lambda: None)
+    monkeypatch.setattr(paper, "STATE", tmp_path / "state")
+    import bots.dashboard as dash
+    import bots.journal as jour
+    import bots.webpage as web
+    monkeypatch.setattr(dash, "DOCS", tmp_path / "docs")
+    monkeypatch.setattr(jour, "DOCS", tmp_path / "docs")
+    monkeypatch.setattr(web, "SITE", tmp_path / "site")
+    cfg_path = tmp_path / "bots.json"
+    cfg_path.write_text((paper.ROOT / "bots.json").read_text())
+    monkeypatch.setattr(paper, "CONFIG", cfg_path)
+    for k in range(0, 1000, 50):
+        clock["n"] = k
+        assert paper.main() == 0
+    cfg = json.loads(cfg_path.read_text())
+    trades = 0
+    for bot in cfg["bots"]:
+        st = json.loads((tmp_path / "state" / f"{bot['id']}.json").read_text())
+        trades += len(st["trades"])
+        for t in st["trades"]:
+            assert t["qty"] * t["entry_price"] <= bot["max_leverage"] * 1000 * 3  # nie riesige Position
+    assert trades > 0
+    html = (tmp_path / "site" / "index.html").read_text()
+    data = json.loads(html.split("const DATA = ", 1)[1].split(";\nconst REASONS", 1)[0].replace("<\\/", "</"))
+    assert sorted(g["name"] for g in data["groups"]) == ["Sicher", "Vollgas"]
+    assert all(g["start"] == 4000 for g in data["groups"])
+    journal = (tmp_path / "docs" / "JOURNAL.md").read_text()
+    assert "über EMA 150" in journal

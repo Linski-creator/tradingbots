@@ -61,6 +61,9 @@ def entry_reason(strategy: str, c: dict) -> str:
             moms = {k[4:]: v for k, v in c.items() if k.startswith("mom_")}
             return "Stärkster Markt (90 Tage): " + ", ".join(
                 f"{k} {_n(v * 100, 1)} %" for k, v in sorted(moms.items(), key=lambda kv: -kv[1]))
+        if strategy == "trend_dip":
+            return (f"Kurs {_n(g('close'))} über EMA 150 ({_n(g('ema'))}), "
+                    f"RSI zurück über 35 ({_n(g('rsi'), 1)})")
         if strategy == "funding":
             return f"Ø Funding {_n(g('avg_rate') * 100, 4)} % pro 8 h (≈ {_n(g('avg_rate') * 3 * 365 * 100, 1)} % p. a.)"
     except (TypeError, KeyError):
@@ -100,7 +103,7 @@ def write_journal(reports: list[dict], cfg: dict) -> None:
         pos = st.get("position")
         if pos:
             opens.append(f"| {name} | {_ts(pos['entry_time'])} | {_n(pos['entry_price'])} | "
-                         f"{_n(pos['stop']) if pos.get('stop') else '–'} | {_n(pos['tp']) if pos.get('tp') else '–'} | "
+                         f"{_n(pos.get('stop') or pos.get('sl')) if (pos.get('stop') or pos.get('sl')) else '–'} | {_n(pos['tp']) if pos.get('tp') else '–'} | "
                          f"{entry_reason(bot['strategy'], pos.get('context') or {})} |")
         elif st.get("holding"):
             opens.append(f"| {name} | {_ts(st['entry_time'])} | {st['holding']} | – | – | "

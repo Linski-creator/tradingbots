@@ -55,7 +55,8 @@ def _open_entry(st: dict) -> list:
 
 def build_data(reports: list[dict], cfg: dict, errors: list = ()) -> dict:
     start_cash = cfg["start_cash"]
-    bots, team_days = [], defaultdict(lambda: {"pnl": 0.0, "trades": 0, "opened": 0})
+    bots = []
+    groups: dict[str, dict] = {}
     for r in reports:
         bot, st = r["bot"], r["state"]
         eq = st.get("equity") or []
@@ -64,24 +65,36 @@ def build_data(reports: list[dict], cfg: dict, errors: list = ()) -> dict:
         trades = [{"entry": t["entry_time"][:16].replace("T", " "), "exit": t["exit_time"][:16].replace("T", " "),
                    "pnl": round(t["pnl"], 2), "reason": t["reason"]}
                   for t in sorted(st.get("trades", []), key=lambda t: t["exit_time"], reverse=True)[:20]]
+        group = None if bot.get("compare") else bot.get("group", "Team")
         bots.append({
             "id": bot["id"], "label": r["label"], "market": bot.get("symbol", "/".join(bot.get("universe", []))),
-            "compare": bool(bot.get("compare")), "start": start_cash, "current": round(cur, 2),
+            "compare": bool(bot.get("compare")), "group": group, "start": start_cash, "current": round(cur, 2),
             "halted": bool(st.get("halted")), "position": _position_text(r), "days": days, "trades": trades,
         })
-        if not bot.get("compare"):
-            for d, v in days.items():
-                team_days[d]["pnl"] += v["pnl"]
-                team_days[d]["trades"] += v["trades"]
-                team_days[d]["opened"] += v["opened"]
-    team = [b for b in bots if not b["compare"]]
+        if group is None:
+            continue
+        g = groups.setdefault(group, {"name": group, "start": 0.0, "current": 0.0, "count": 0, "members": [],
+                                      "days": defaultdict(lambda: {"pnl": 0.0, "trades": 0, "opened": 0})})
+        g["start"] += start_cash
+        g["current"] += cur
+        g["count"] += 1
+        g["members"].append(bool(st.get("halted")))
+        for d, v in days.items():
+            for k in ("pnl", "trades", "opened"):
+                g["days"][d][k] += v[k]
+    team_halted = bool(cfg.get("_team", {}).get("halted"))
+    out_groups = []
+    for g in groups.values():
+        out_groups.append({
+            "name": g["name"], "start": g["start"], "current": round(g["current"], 2), "count": g["count"],
+            "halted": all(g["members"]) or (g["name"] == "Team" and team_halted),
+            "days": {d: {"pnl": round(v["pnl"], 2), "trades": v["trades"], "opened": v["opened"]}
+                     for d, v in g["days"].items()},
+        })
     return {
         "updated": datetime.now(timezone.utc).strftime("%d.%m.%Y %H:%M UTC"),
         "level": cfg.get("level", ""),
-        "team": {"start": start_cash * len(team), "current": round(sum(b["current"] for b in team), 2),
-                 "count": len(team), "halted": bool(cfg.get("_team", {}).get("halted")),
-                 "days": {d: {"pnl": round(v["pnl"], 2), "trades": v["trades"], "opened": v["opened"]}
-                          for d, v in team_days.items()}},
+        "groups": out_groups,
         "errors": [e["bot"] for e in errors],
         "news": [{"time": e["time"].isoformat(), "title": e["title"]} for e in (cfg.get("_news") or [])
                  if e["time"] >= datetime.now(timezone.utc) - pd.Timedelta(hours=1)][:5],

@@ -126,16 +126,44 @@ def run_funding_bot(bot: dict, cfg: dict, ctx: dict) -> dict:
     return {"bot": bot, "label": fa.label, "state": asdict(st)}
 
 
-RUNNERS = {"single": run_single_bot, "rotation": run_rotation_bot, "funding": run_funding_bot}
+def run_fx_bot(bot: dict, cfg: dict, ctx: dict) -> dict:
+    """Rücksetzer-Strategie (TikTok-Nachbau) auf Metallen/Yen, 1h-Kerzen von Yahoo."""
+    from .hardcore.engine import FxRisk, FxSimulator, FxState
+    from .metals.backtest import COSTS, TrendDip
+    strat = TrendDip(bot["sl_atr"], bot["tp_atr"])
+    df = D.yahoo_hourly(bot["symbol"])
+    if len(df) < 300:
+        raise RuntimeError(f"zu wenig Daten für {bot['id']}: {len(df)} Kerzen")
+    prepared = strat.prepare(df)
+    path = STATE / f"{bot['id']}.json"
+    raw = _load(path)
+    if raw is None:
+        st = FxState(cash=cfg["start_cash"], peak=cfg["start_cash"], last_ts=df.index[-1].isoformat())
+        log.info("%s: neu gestartet ab %s", bot["id"], st.last_ts)
+    else:
+        st = FxState.from_dict(raw)
+    # Harte Obergrenze für die Positionsgröße (max_leverage): verhindert z. B. eine
+    # viel zu große Gold-Position, auch bei sehr engem Stop.
+    risk = FxRisk(risk_per_trade=bot["risk_per_trade"], max_leverage=bot["max_leverage"],
+                  min_stop=0.0005, halt_drawdown=bot["halt_drawdown"])
+    st = FxSimulator(strat, COSTS[bot["symbol"]], risk, state=st).run(prepared)
+    _save(path, st.to_dict())
+    return {"bot": bot, "label": f"Rücksetzer im Trend ({bot['group']})", "state": st.to_dict(),
+            "price": float(df["close"].iloc[-1])}
+
+
+RUNNERS = {"single": run_single_bot, "rotation": run_rotation_bot, "funding": run_funding_bot,
+           "fx": run_fx_bot}
+TEAM_KINDS = {"single", "rotation", "funding"}
 
 
 def update_team(reports: list[dict], cfg: dict, team: dict) -> dict:
     """Team-Notbremse: fällt die Summe der Team-Bots um ``team_halt_drawdown``
     unter ihren Höchststand, werden ab dem nächsten Lauf alle Team-Bots
     geschlossen und gestoppt. Aufheben: state/team.json löschen."""
-    team_bots = [b for b in cfg["bots"] if not b.get("compare")]
-    team_reports = [r for r in reports if not r["bot"].get("compare")]
-    if len(team_reports) != len(team_bots):
+    team_bots = [b for b in cfg["bots"] if not b.get("compare") and b.get("kind", "single") in TEAM_KINDS]
+    team_reports = [r for r in reports if not r["bot"].get("compare") and r["bot"].get("kind", "single") in TEAM_KINDS]
+    if not team_bots or len(team_reports) != len(team_bots):
         return team  # unvollständige Daten: lieber nichts entscheiden
     total = sum((r["state"]["equity"][-1][1] if r["state"].get("equity") else cfg["start_cash"])
                 for r in team_reports)

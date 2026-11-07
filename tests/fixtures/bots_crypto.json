@@ -1,0 +1,16 @@
+{
+  "start_cash": 1000,
+  "level": "mutig",
+  "team_halt_drawdown": 0.20,
+  "risk": {"risk_per_trade": 0.02, "target_vol": 0.40, "halt_drawdown": 0.30},
+  "bots": [
+    {"id": "donchian-btc",   "kind": "single",   "strategy": "donchian",   "symbol": "BTCUSDT"},
+    {"id": "donchian-bnb",   "kind": "single",   "strategy": "donchian",   "symbol": "BNBUSDT"},
+    {"id": "chandelier-btc", "kind": "single",   "strategy": "chandelier", "symbol": "BTCUSDT"},
+    {"id": "tsmom-btc",      "kind": "single",   "strategy": "tsmom",      "symbol": "BTCUSDT"},
+    {"id": "sma200-gold",    "kind": "single",   "strategy": "sma200",     "symbol": "PAXGUSDT"},
+    {"id": "dualmom",        "kind": "rotation", "strategy": "dualmom",    "universe": ["BTCUSDT", "ETHUSDT", "PAXGUSDT"]},
+    {"id": "funding-btc",    "kind": "funding",  "strategy": "funding",    "symbol": "BTCUSDT"},
+    {"id": "video-ema-btc",  "kind": "single",   "strategy": "emacross",   "symbol": "BTCUSDT", "risk": "ohne", "compare": true}
+  ]
+}

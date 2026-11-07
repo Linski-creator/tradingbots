@@ -86,7 +86,28 @@ def _position_text(r: dict) -> str:
         return txt
     if kind == "rotation":
         return f"hält {st['holding']}" if st.get("holding") else "Cash"
+    if kind == "fx":
+        p = st.get("position")
+        if not p:
+            return "wartet auf Rücksetzer"
+        side = "Long" if p["side"] == 1 else "Short"
+        txt = f"{side} ab {p['entry_price']:,.2f}, Stop {p['sl']:,.2f}"
+        return txt + (f", Ziel {p['tp']:,.2f}" if p.get("tp") else "")
     return "Absicherung aktiv" if st.get("active") else "wartet (Funding zu niedrig)"
+
+
+def group_totals(reports: list[dict], start_cash: float) -> dict:
+    """Summe Start/aktuell je Gruppe (Vergleichs-Bots ausgenommen)."""
+    out: dict[str, dict] = {}
+    for r in reports:
+        if r["bot"].get("compare"):
+            continue
+        eq = r["state"].get("equity") or []
+        g = out.setdefault(r["bot"].get("group", "Team"), {"start": 0.0, "cur": 0.0, "n": 0})
+        g["start"] += start_cash
+        g["cur"] += eq[-1][1] if eq else start_cash
+        g["n"] += 1
+    return out
 
 
 def team_average(curves: list[list], start_cash: float) -> list:
@@ -139,10 +160,11 @@ def write_dashboard(reports: list[dict], errors: list[dict], cfg: dict) -> None:
         "",
         f"Stand: **{now}** · Spielgeld, keine echten Trades · Start je Bot: {_fmt_eur(start_cash)}",
         "",
-        f"**Team: {_fmt_eur(total)}** ({_pct((total / (start_cash * n) - 1) * 100)} auf {n} Bots) · "
-        f"größter Team-Einbruch: **{team_dd:.1f} %** · Risikostufe: **{cfg.get('level', '-')}**",
+        *[f"**{g}: {_fmt_eur(v['cur'])}** ({_pct((v['cur'] / v['start'] - 1) * 100)} auf {v['n']} Bots)  "
+          for g, v in group_totals(reports, start_cash).items()],
+        f"größter Einbruch (Durchschnitt aller Gruppen-Bots): **{team_dd:.1f} %**",
         "",
-        "Der Vergleichs-Bot (Strategie aus einem YouTube-Video) zählt nicht zum Team.",
+        "Vergleichs-Bots zählen in keiner Gruppe mit.",
         *([f"", f"⛔ **TEAM-NOTBREMSE AKTIV** seit {cfg['_team'].get('halted_at', '')[:16].replace('T', ' ')} UTC: "
            "alle Team-Bots geschlossen und gestoppt. Wieder einschalten: `state/team.json` löschen."]
           if cfg.get("_team", {}).get("halted") else []),

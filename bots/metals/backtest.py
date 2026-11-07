@@ -88,7 +88,9 @@ class TrendDip:
         if not (math.isfinite(atr) and atr > 0):
             return []
         return [("order", {"side": 1, "type": "market", "sl": c - self.sl_atr * atr,
-                           "tp": c + self.tp_atr * atr, "tag": "rücksetzer"})]
+                           "tp": c + self.tp_atr * atr, "tag": "rücksetzer",
+                           "context": {"close": float(c), "ema": float(a["ema"][i]),
+                                       "rsi": float(a["rsi"][i]), "atr": float(atr)}})]
 
 
 def yearly(equity: list) -> dict:

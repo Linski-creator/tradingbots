@@ -1,16 +1,102 @@
 {
-  "start_cash": 1000,
-  "level": "mutig",
-  "team_halt_drawdown": 0.20,
-  "risk": {"risk_per_trade": 0.02, "target_vol": 0.40, "halt_drawdown": 0.30},
-  "bots": [
-    {"id": "donchian-btc",   "kind": "single",   "strategy": "donchian",   "symbol": "BTCUSDT"},
-    {"id": "donchian-bnb",   "kind": "single",   "strategy": "donchian",   "symbol": "BNBUSDT"},
-    {"id": "chandelier-btc", "kind": "single",   "strategy": "chandelier", "symbol": "BTCUSDT"},
-    {"id": "tsmom-btc",      "kind": "single",   "strategy": "tsmom",      "symbol": "BTCUSDT"},
-    {"id": "sma200-gold",    "kind": "single",   "strategy": "sma200",     "symbol": "PAXGUSDT"},
-    {"id": "dualmom",        "kind": "rotation", "strategy": "dualmom",    "universe": ["BTCUSDT", "ETHUSDT", "PAXGUSDT"]},
-    {"id": "funding-btc",    "kind": "funding",  "strategy": "funding",    "symbol": "BTCUSDT"},
-    {"id": "video-ema-btc",  "kind": "single",   "strategy": "emacross",   "symbol": "BTCUSDT", "risk": "ohne", "compare": true}
-  ]
+ "start_cash": 1000,
+ "level": "Sicher 1 % / Vollgas 3 %",
+ "bots": [
+  {
+   "id": "sicher-gold",
+   "kind": "fx",
+   "strategy": "trend_dip",
+   "group": "Sicher",
+   "symbol": "GC=F",
+   "risk_per_trade": 0.01,
+   "max_leverage": 5,
+   "halt_drawdown": 0.2,
+   "sl_atr": 2.0,
+   "tp_atr": 1.0
+  },
+  {
+   "id": "sicher-silber",
+   "kind": "fx",
+   "strategy": "trend_dip",
+   "group": "Sicher",
+   "symbol": "SI=F",
+   "risk_per_trade": 0.01,
+   "max_leverage": 5,
+   "halt_drawdown": 0.2,
+   "sl_atr": 2.0,
+   "tp_atr": 1.0
+  },
+  {
+   "id": "sicher-platin",
+   "kind": "fx",
+   "strategy": "trend_dip",
+   "group": "Sicher",
+   "symbol": "PL=F",
+   "risk_per_trade": 0.01,
+   "max_leverage": 5,
+   "halt_drawdown": 0.2,
+   "sl_atr": 2.0,
+   "tp_atr": 1.0
+  },
+  {
+   "id": "sicher-yen",
+   "kind": "fx",
+   "strategy": "trend_dip",
+   "group": "Sicher",
+   "symbol": "JPY=X",
+   "risk_per_trade": 0.01,
+   "max_leverage": 5,
+   "halt_drawdown": 0.2,
+   "sl_atr": 2.0,
+   "tp_atr": 1.0
+  },
+  {
+   "id": "vollgas-gold",
+   "kind": "fx",
+   "strategy": "trend_dip",
+   "group": "Vollgas",
+   "symbol": "GC=F",
+   "risk_per_trade": 0.03,
+   "max_leverage": 10,
+   "halt_drawdown": 0.5,
+   "sl_atr": 1.5,
+   "tp_atr": 3.0
+  },
+  {
+   "id": "vollgas-silber",
+   "kind": "fx",
+   "strategy": "trend_dip",
+   "group": "Vollgas",
+   "symbol": "SI=F",
+   "risk_per_trade": 0.03,
+   "max_leverage": 10,
+   "halt_drawdown": 0.5,
+   "sl_atr": 1.5,
+   "tp_atr": 3.0
+  },
+  {
+   "id": "vollgas-platin",
+   "kind": "fx",
+   "strategy": "trend_dip",
+   "group": "Vollgas",
+   "symbol": "PL=F",
+   "risk_per_trade": 0.03,
+   "max_leverage": 10,
+   "halt_drawdown": 0.5,
+   "sl_atr": 1.5,
+   "tp_atr": 3.0
+  },
+  {
+   "id": "vollgas-yen",
+   "kind": "fx",
+   "strategy": "trend_dip",
+   "group": "Vollgas",
+   "symbol": "JPY=X",
+   "risk_per_trade": 0.03,
+   "max_leverage": 10,
+   "halt_drawdown": 0.5,
+   "sl_atr": 1.5,
+   "tp_atr": 3.0
+  }
+ ]
 }
