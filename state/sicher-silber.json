@@ -1,0 +1,11 @@
+{
+ "cash": 1000,
+ "peak": 1000,
+ "position": null,
+ "order": null,
+ "pending_exit": null,
+ "halted": false,
+ "last_ts": "2026-11-06T21:00:00+00:00",
+ "trades": [],
+ "equity": []
+}

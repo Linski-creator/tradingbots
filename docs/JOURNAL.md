@@ -1,19 +1,19 @@
 # 📒 Trading-Journal
 
-Stand: **07.11.2026 07:22 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
+Stand: **07.11.2026 11:20 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
 
 ## Kennzahlen je Bot
 
 | Bot | Trades | Treffer | Summe | Bester | Schlechtester | Ø R |
 |---|---:|---:|---:|---:|---:|---:|
-| donchian-btc | 0 | 0 % | 0,00 € | – | – | – |
-| donchian-bnb | 0 | 0 % | 0,00 € | – | – | – |
-| chandelier-btc | 1 | 0 % | -9,86 € | -9,86 € | -9,86 € | -0,54 R |
-| tsmom-btc | 0 | 0 % | 0,00 € | – | – | – |
-| sma200-gold | 0 | 0 % | 0,00 € | – | – | – |
-| dualmom | 1 | 0 % | -36,27 € | -36,27 € | -36,27 € | – |
-| funding-btc | 0 | 0 % | 0,00 € | – | – | – |
-| video-ema-btc (Vergleich) | 10 | 20 % | -97,93 € | 0,53 € | -36,98 € | – |
+| sicher-gold | 0 | 0 % | 0,00 € | – | – | – |
+| sicher-silber | 0 | 0 % | 0,00 € | – | – | – |
+| sicher-platin | 0 | 0 % | 0,00 € | – | – | – |
+| sicher-yen | 0 | 0 % | 0,00 € | – | – | – |
+| vollgas-gold | 0 | 0 % | 0,00 € | – | – | – |
+| vollgas-silber | 0 | 0 % | 0,00 € | – | – | – |
+| vollgas-platin | 0 | 0 % | 0,00 € | – | – | – |
+| vollgas-yen | 0 | 0 % | 0,00 € | – | – | – |
 
 R = Ergebnis im Verhältnis zum eingeplanten Risiko (1 R = Verlust bis zum Stop).
 
@@ -21,119 +21,13 @@ R = Ergebnis im Verhältnis zum eingeplanten Risiko (1 R = Verlust bis zum Stop)
 
 | Bot | Seit | Einstieg | Stop | Ziel | Grund |
 |---|---|---:|---:|---:|---|
-| tsmom-btc | 19.10.26 00:00 | 82.157,06 | – | – | 90-Tage-Rendite positiv: 25,8 % |
-| dualmom | 26.10.26 00:00 | BTCUSDT | – | – | Stärkster Markt (90 Tage): BTCUSDT 25,7 %, ETHUSDT 23,1 %, PAXGUSDT -1,4 % |
-| funding-btc | 18.10.26 08:00 | Absicherung | – | – | Ø Funding 0,0109 % pro 8 h (≈ 12,0 % p. a.) |
+| – | – | – | – | – | keine offenen Positionen |
 
 ## Alle Trades (neueste zuerst)
 
-### 🟢 video-ema-btc (Vergleich) · 0,53 € (+0,06 %)
-
-- **Einstieg:** 04.11.26 07:00 zu 78.046,91
-- **Grund:** EMA 9 (77.399,72) kreuzt EMA 21 (77.356,73) nach oben
-- **Ausstieg:** 05.11.26 15:00 zu 78.249,14 · EMA 9 kreuzt EMA 21 nach unten
-- **Dauer:** 32 h
-
-### 🔴 video-ema-btc (Vergleich) · -17,23 € (-1,88 %)
-
-- **Einstieg:** 03.11.26 15:00 zu 77.432,70
-- **Grund:** EMA 9 (77.174,56) kreuzt EMA 21 (77.166,41) nach oben
-- **Ausstieg:** 04.11.26 03:00 zu 76.132,77 · EMA 9 kreuzt EMA 21 nach unten
-- **Dauer:** 12 h
-
-### 🔴 video-ema-btc (Vergleich) · -0,56 € (-0,06 %)
-
-- **Einstieg:** 31.10.26 16:00 zu 77.660,82
-- **Grund:** EMA 9 (77.489,83) kreuzt EMA 21 (77.483,99) nach oben
-- **Ausstieg:** 02.11.26 13:00 zu 77.769,10 · EMA 9 kreuzt EMA 21 nach unten
-- **Dauer:** 45 h
-
-### 🔴 video-ema-btc (Vergleich) · -36,98 € (-3,87 %)
-
-- **Einstieg:** 29.10.26 16:00 zu 81.818,90
-- **Grund:** EMA 9 (80.678,86) kreuzt EMA 21 (80.584,47) nach oben
-- **Ausstieg:** 29.10.26 21:00 zu 78.812,55 · EMA 9 kreuzt EMA 21 nach unten
-- **Dauer:** 5 h
-
-### 🔴 video-ema-btc (Vergleich) · -14,77 € (-1,52 %)
-
-- **Einstieg:** 28.10.26 19:00 zu 81.052,19
-- **Grund:** EMA 9 (80.873,45) kreuzt EMA 21 (80.859,26) nach oben
-- **Ausstieg:** 29.10.26 02:00 zu 79.979,54 · EMA 9 kreuzt EMA 21 nach unten
-- **Dauer:** 7 h
-
-### 🟢 video-ema-btc (Vergleich) · 0,34 € (+0,04 %)
-
-- **Einstieg:** 27.10.26 15:00 zu 80.396,41
-- **Grund:** EMA 9 (80.067,81) kreuzt EMA 21 (80.040,22) nach oben
-- **Ausstieg:** 28.10.26 17:00 zu 80.585,70 · EMA 9 kreuzt EMA 21 nach unten
-- **Dauer:** 26 h
-
-### 🔴 dualmom · -36,27 € (-3,63 %)
-
-- **Einstieg:** 19.10.26 00:00 zu 2.413,93 · ETHUSDT
-- **Grund:** Stärkster Markt (90 Tage): ETHUSDT 26,5 %, BTCUSDT 25,8 %, PAXGUSDT 4,3 %
-- **Ausstieg:** 26.10.26 00:00 zu 2.328,70 · Wochenwechsel: anderer Markt stärker oder Cash
-- **Dauer:** 7,0 Tage
-
-### 🔴 video-ema-btc (Vergleich) · -6,58 € (-0,67 %)
-
-- **Einstieg:** 25.10.26 18:00 zu 80.836,40
-- **Grund:** EMA 9 (80.636,31) kreuzt EMA 21 (80.625,76) nach oben
-- **Ausstieg:** 25.10.26 21:00 zu 80.452,60 · EMA 9 kreuzt EMA 21 nach unten
-- **Dauer:** 3 h
-
-### 🔴 video-ema-btc (Vergleich) · -8,10 € (-0,82 %)
-
-- **Einstieg:** 25.10.26 03:00 zu 80.960,47
-- **Grund:** EMA 9 (80.727,13) kreuzt EMA 21 (80.712,53) nach oben
-- **Ausstieg:** 25.10.26 07:00 zu 80.455,76 · EMA 9 kreuzt EMA 21 nach unten
-- **Dauer:** 4 h
-
-### 🔴 chandelier-btc · -9,86 € (-1,52 %) · -0,54 R
-
-- **Einstieg:** 21.10.26 12:00 zu 83.541,76
-- **Grund:** EMA 20 (82.388,70) kreuzt EMA 50 (82.376,52) nach oben, Kurs über EMA 200 (82.056,43)
-- **Stop / Ziel:** 81.168,80 / –
-- **Ausstieg:** 22.10.26 04:00 zu 82.434,05 · Stop-Loss ausgelöst
-- **Dauer:** 16 h
-
-### 🔴 video-ema-btc (Vergleich) · -7,15 € (-0,72 %)
-
-- **Einstieg:** 20.10.26 15:00 zu 83.318,40
-- **Grund:** EMA 9 (82.053,12) kreuzt EMA 21 (81.963,36) nach oben
-- **Ausstieg:** 22.10.26 04:00 zu 82.883,68 · EMA 9 kreuzt EMA 21 nach unten
-- **Dauer:** 37 h
-
-### 🔴 video-ema-btc (Vergleich) · -7,43 € (-0,74 %)
-
-- **Einstieg:** 19.10.26 01:00 zu 82.343,59
-- **Grund:** EMA 9 (81.648,69) kreuzt EMA 21 (81.572,40) nach oben
-- **Ausstieg:** 19.10.26 18:00 zu 81.895,04 · EMA 9 kreuzt EMA 21 nach unten
-- **Dauer:** 17 h
+Noch keine abgeschlossenen Trades.
 
 ## Tagesprotokoll (Team)
 
 | Tag | Team Ø | Veränderung | Geöffnet | Geschlossen |
 |---|---:|---:|---:|---:|
-| 07.11.2026 | 974,56 € | +0,00 % | 0 | 0 |
-| 06.11.2026 | 974,55 € | -0,09 % | 0 | 0 |
-| 05.11.2026 | 975,38 € | -1,53 % | 0 | 1 |
-| 04.11.2026 | 990,56 € | +1,08 % | 1 | 1 |
-| 03.11.2026 | 980,02 € | +0,23 % | 1 | 0 |
-| 02.11.2026 | 977,79 € | -0,54 % | 0 | 1 |
-| 01.11.2026 | 983,08 € | +0,27 % | 0 | 0 |
-| 31.10.2026 | 980,40 € | +0,08 % | 1 | 0 |
-| 30.10.2026 | 979,63 € | -0,22 % | 0 | 0 |
-| 29.10.2026 | 981,76 € | -1,16 % | 1 | 2 |
-| 28.10.2026 | 993,30 € | +0,15 % | 1 | 1 |
-| 27.10.2026 | 991,79 € | +0,27 % | 1 | 0 |
-| 26.10.2026 | 989,15 € | -0,04 % | 0 | 1 |
-| 25.10.2026 | 989,54 € | -0,30 % | 2 | 2 |
-| 24.10.2026 | 992,51 € | -0,22 % | 0 | 0 |
-| 23.10.2026 | 994,71 € | -0,05 % | 0 | 0 |
-| 22.10.2026 | 995,16 € | -1,14 % | 0 | 2 |
-| 21.10.2026 | 1.006,62 € | +0,37 % | 1 | 0 |
-| 20.10.2026 | 1.002,88 € | +0,44 % | 1 | 0 |
-| 19.10.2026 | 998,52 € | -0,11 % | 2 | 1 |
-| 18.10.2026 | 999,65 € | -0,03 % | 0 | 0 |
