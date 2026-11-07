@@ -1,4 +1,4 @@
-name: Pyramide
+name: Pyramide (mit Positionsgrenze)
 
 on:
   workflow_dispatch: {}

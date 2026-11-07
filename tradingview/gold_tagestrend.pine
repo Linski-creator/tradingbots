@@ -14,12 +14,14 @@
 //  C  Stop auf Einstieg, sobald das Hoch einer Kerze +1 R erreicht.
 //  D  Stop folgt dem höchsten HOCH statt dem höchsten Schlusskurs.
 //  E  Engerer Start-Stop: "Start-Stop × ATR" kleiner als 3 (z. B. 2); der nachgezogene Stop bleibt 3 ATR.
+//  Crash-Schutz: Gesamtposition (inkl. Nachkäufe) höchstens posCap × Konto (Standard 1,0).
+//     Damit kostet selbst eine Lücke von −20 % höchstens ca. 20 % des Kontos.
 //  P  Gewinner ausbauen: Nachkauf nur, wenn die ganze Position schon risikofrei ist (Stop über dem
 //     Durchschnitts-Einstieg) und der Kurs 1 R über dem letzten Kauf schließt. Jeder Nachkauf riskiert
 //     bis zum gemeinsamen Stop wieder höchstens das eingestellte Risiko.
 // Ergebnis der Tests (Woche 2/3): B hilft überall -> standardmäßig AN, Start-Stop 2 ATR (E) als Standard.
 // C und D bringen nichts.
-strategy("Gold-Tagestrend v4", overlay = true, initial_capital = 100000, currency = currency.USD,
+strategy("Gold-Tagestrend v4.1", overlay = true, initial_capital = 100000, currency = currency.USD,
      pyramiding = 3, commission_type = strategy.commission.percent, commission_value = 0.01,
      slippage = 2, process_orders_on_close = false)
 
@@ -33,9 +35,10 @@ wkFlat = input.bool(false, "Vor dem Wochenende schließen (im Test schlechter)")
 atrK   = input.float(3.0, "Nachzieh-Abstand × ATR")
 atrS   = input.float(2.0, "E: Start-Stop × ATR (Standard 2, vorher 3)")
 maxAdd = input.int(0, "P: Gewinner ausbauen – max. Nachkäufe (0 = aus)", minval = 0, maxval = 3)
+posCap = input.float(1.0, "Crash-Schutz: Gesamtposition max. × Konto", minval = 0.1)
 
 riskPct = modus == "Sicher" ? 1.0 : 3.0
-maxLev  = modus == "Sicher" ? 5.0 : 10.0
+maxLev  = math.min(modus == "Sicher" ? 5.0 : 10.0, posCap)
 pv      = syminfo.pointvalue
 isFut   = syminfo.type == "futures"
 

@@ -53,16 +53,16 @@ def main():
     for sym in ("GC=F", "SI=F"):
         df = tidy(D.yahoo_daily(sym, start="2000-01-01"))
         for setup, (fast, slow, k, lag) in SETUPS.items():
-            for scale in (1.0, 2 / 3):
+            for scale, lev in ((1.0, 5), (2 / 3, 5), (2 / 3, 1)):
                 for adds in (0, 1, 2, 3):
                     strat = Pyramid(fast, slow, k, lag, scale, adds)
                     p = strat.prepare(df)
-                    risk = FxRisk(risk_per_trade=0.01, max_leverage=5, min_stop=0.002)
+                    risk = FxRisk(risk_per_trade=0.01, max_leverage=lev, min_stop=0.002)
                     st = FxSimulator(strat, COSTS[sym], risk).run(p)
                     st_s = FxSimulator(strat, stress(COSTS[sym]), risk).run(p)
                     m, ms = split(st, CUT), split(st_s, CUT)
                     rs = sorted((t["r_multiple"] or 0) for t in st.trades)
-                    row = {"symbol": sym, "setup": setup, "stop_anteil": round(scale, 2), "nachkaeufe_max": adds,
+                    row = {"symbol": sym, "setup": setup, "stop_anteil": round(scale, 2), "nachkaeufe_max": adds, "max_position": lev,
                            "suche": {x: m["selection"].get(x) for x in keep},
                            "pruefung": {x: m["validation"].get(x) for x in keep},
                            "suche_stress_cagr": ms["selection"].get("cagr_pct"),
