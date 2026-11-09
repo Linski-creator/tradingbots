@@ -1,6 +1,6 @@
 # 📈 Paper-Trading Dashboard
 
-Stand: **09.11.2026 06:03 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
+Stand: **09.11.2026 06:10 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
 
 **Sicher: 3.000,00 €** (+0,00 % auf 3 Bots)  
 **Krass: 3.000,00 €** (+0,00 % auf 3 Bots)  
@@ -20,8 +20,8 @@ Vergleichs-Bots zählen in keiner Gruppe mit.
 | sicher-silber | Tagestrend (Sicher) | SI=F | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | wartet auf Trend | ✅ läuft |
 | krass-gold | Tagestrend (Krass) | GC=F | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | wartet auf Trend | ✅ läuft |
 | krass-silber | Tagestrend (Krass) | SI=F | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | wartet auf Trend | ✅ läuft |
-| sicher-gold-4h | 4h-Trend (Sicher) | GC=F | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | wartet auf Trend | ✅ läuft |
-| krass-gold-4h | 4h-Trend (Krass) | GC=F | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | wartet auf Trend | ✅ läuft |
+| gold-4h-sicher | Gold 4h v4.3 (Sicher) | GC=F | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | wartet auf Trend | ✅ läuft |
+| gold-4h-krass | Gold 4h v4.3 + 2 Nachkäufe (Krass) | GC=F | 1.000,00 € | +0,00 % | 0.0 % | 0 | 0 % | wartet auf Trend | ✅ läuft |
 
 ## Letzte Trades
 
