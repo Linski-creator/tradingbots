@@ -184,8 +184,12 @@ def run_daily_bot(bot: dict, cfg: dict, ctx: dict) -> dict:
     from .hardcore.engine import FxRisk, FxSimulator, FxState
     from .metals.backtest import COSTS
     from .metals.daily import DailyTrend, tidy
-    strat = DailyTrend(bot.get("rule", "sma"), shorts=bot.get("shorts", False),
-                       flat_weekend=bot.get("flat_weekend", False))
+    if bot.get("rule") == "gold4h":
+        from .metals.gold4h import Gold4h
+        strat = Gold4h(max_adds=bot.get("max_adds", 0), flags=bot.get("flags", "H"))
+    else:
+        strat = DailyTrend(bot.get("rule", "sma"), shorts=bot.get("shorts", False),
+                           flat_weekend=bot.get("flat_weekend", False))
     if bot.get("timeframe") == "4h":
         from .metals.trend3 import load
         df = tidy(load(bot["symbol"], "4h"))   # Yahoo-1h zu 4h zusammengefasst
@@ -206,6 +210,8 @@ def run_daily_bot(bot: dict, cfg: dict, ctx: dict) -> dict:
     st = FxSimulator(strat, COSTS[bot["symbol"]], risk, state=st).run(prepared)
     _save(path, st.to_dict())
     tf = "4h-Trend" if bot.get("timeframe") == "4h" else "Tagestrend"
+    if bot.get("rule") == "gold4h":
+        tf = "Gold 4h v4.3" + (f" + {bot['max_adds']} Nachkäufe" if bot.get("max_adds") else "")
     return {"bot": bot, "label": f"{tf} ({bot['group']})", "state": st.to_dict(),
             "price": float(df["close"].iloc[-1])}
 
