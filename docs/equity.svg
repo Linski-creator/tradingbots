@@ -11,12 +11,12 @@
 <line x1="60" x2="880" y1="-310.0" y2="-310.0" stroke="#e5e7eb"/>
 <text x="54" y="-306.0" text-anchor="end" fill="#6b7280">1,001</text>
 <line x1="60" x2="880" y1="20.0" y2="20.0" stroke="#9ca3af" stroke-dasharray="4 3"/>
-<polyline fill="none" stroke="#2563eb" stroke-width="1.6" points="60.0,20.0 265.0,20.0 470.0,20.0 675.0,20.0 880.0,20.0 880.0,20.0"/>
+<polyline fill="none" stroke="#2563eb" stroke-width="1.6" points="60.0,20.0 128.3,20.0 196.7,20.0 265.0,20.0 333.3,20.0 401.7,20.0 470.0,20.0 538.3,20.0 606.7,20.0 675.0,20.0 743.3,20.0 811.7,20.0 880.0,20.0 880.0,20.0"/>
 <rect x="10" y="387" width="12" height="3" fill="#2563eb"/><text x="28" y="396" fill="#111827">TEAM (Durchschnitt)</text>
-<polyline fill="none" stroke="#dc2626" stroke-width="1.6" points="60.0,20.0 880.0,20.0 880.0,20.0"/>
+<polyline fill="none" stroke="#dc2626" stroke-width="1.6" points="60.0,20.0 333.3,20.0 606.7,20.0 880.0,20.0 880.0,20.0"/>
 <rect x="230" y="387" width="12" height="3" fill="#dc2626"/><text x="248" y="396" fill="#111827">gold-4h-sicher</text>
-<polyline fill="none" stroke="#16a34a" stroke-width="1.6" points="60.0,20.0 880.0,20.0 880.0,20.0"/>
+<polyline fill="none" stroke="#16a34a" stroke-width="1.6" points="60.0,20.0 333.3,20.0 606.7,20.0 880.0,20.0 880.0,20.0"/>
 <rect x="450" y="387" width="12" height="3" fill="#16a34a"/><text x="468" y="396" fill="#111827">gold-4h-krass</text>
 <text x="60" y="372" fill="#6b7280">09.11.2026</text>
-<text x="880" y="372" text-anchor="end" fill="#6b7280">09.11.2026 12:00 UTC</text>
+<text x="880" y="372" text-anchor="end" fill="#6b7280">09.11.2026 20:00 UTC</text>
 </svg>
