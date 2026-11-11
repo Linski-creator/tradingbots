@@ -1,0 +1,256 @@
+{
+ "daten": "QQQ 60m regul\u00e4re Handelszeit",
+ "zeitraum": [
+  "2023-12-14",
+  "2026-11-11"
+ ],
+ "tage": 730,
+ "ergebnisse": [
+  {
+   "variante": "ausbruch",
+   "kosten": "normal",
+   "gesamt": {
+    "trades": 703,
+    "treffer_pct": 45.5,
+    "schnitt_r": -0.025,
+    "profit_factor": 0.91,
+    "gewinn_pct": -18.0,
+    "pro_jahr_pct": -6.6,
+    "max_dd_pct": -29.6,
+    "volle_verluste": 153,
+    "groesster_gewinn_r": 8.7
+   },
+   "haelfte_1": {
+    "trades": 358,
+    "treffer_pct": 46.4,
+    "schnitt_r": -0.002,
+    "profit_factor": 0.98,
+    "gewinn_pct": -2.2,
+    "pro_jahr_pct": -1.5,
+    "max_dd_pct": -14.1,
+    "volle_verluste": 87,
+    "groesster_gewinn_r": 4.6
+   },
+   "haelfte_2": {
+    "trades": 345,
+    "treffer_pct": 44.6,
+    "schnitt_r": -0.048,
+    "profit_factor": 0.83,
+    "gewinn_pct": -16.2,
+    "pro_jahr_pct": -11.5,
+    "max_dd_pct": -22.1,
+    "volle_verluste": 66,
+    "groesster_gewinn_r": 8.7
+   },
+   "long_short_pnl": [
+    -163.1,
+    -17.2
+   ]
+  },
+  {
+   "variante": "ausbruch",
+   "kosten": "stress",
+   "gesamt": {
+    "trades": 703,
+    "treffer_pct": 39.4,
+    "schnitt_r": -0.124,
+    "profit_factor": 0.64,
+    "gewinn_pct": -59.1,
+    "pro_jahr_pct": -26.5,
+    "max_dd_pct": -60.8,
+    "volle_verluste": 153,
+    "groesster_gewinn_r": 7.1
+   },
+   "haelfte_1": {
+    "trades": 358,
+    "treffer_pct": 41.1,
+    "schnitt_r": -0.104,
+    "profit_factor": 0.69,
+    "gewinn_pct": -31.9,
+    "pro_jahr_pct": -23.2,
+    "max_dd_pct": -32.4,
+    "volle_verluste": 87,
+    "groesster_gewinn_r": 4.0
+   },
+   "haelfte_2": {
+    "trades": 345,
+    "treffer_pct": 37.7,
+    "schnitt_r": -0.145,
+    "profit_factor": 0.54,
+    "gewinn_pct": -39.9,
+    "pro_jahr_pct": -29.8,
+    "max_dd_pct": -42.6,
+    "volle_verluste": 66,
+    "groesster_gewinn_r": 7.1
+   },
+   "long_short_pnl": [
+    -364.7,
+    -226.3
+   ]
+  },
+  {
+   "variante": "ausbruch_long",
+   "kosten": "normal",
+   "gesamt": {
+    "trades": 460,
+    "treffer_pct": 47.0,
+    "schnitt_r": -0.06,
+    "profit_factor": 0.81,
+    "gewinn_pct": -25.0,
+    "pro_jahr_pct": -9.4,
+    "max_dd_pct": -27.2,
+    "volle_verluste": 101,
+    "groesster_gewinn_r": 4.1
+   },
+   "haelfte_1": {
+    "trades": 236,
+    "treffer_pct": 47.0,
+    "schnitt_r": -0.014,
+    "profit_factor": 0.95,
+    "gewinn_pct": -3.9,
+    "pro_jahr_pct": -2.7,
+    "max_dd_pct": -8.4,
+    "volle_verluste": 55,
+    "groesster_gewinn_r": 4.1
+   },
+   "haelfte_2": {
+    "trades": 224,
+    "treffer_pct": 46.9,
+    "schnitt_r": -0.109,
+    "profit_factor": 0.63,
+    "gewinn_pct": -22.0,
+    "pro_jahr_pct": -15.8,
+    "max_dd_pct": -23.2,
+    "volle_verluste": 46,
+    "groesster_gewinn_r": 2.1
+   },
+   "long_short_pnl": [
+    -250.0,
+    0
+   ]
+  },
+  {
+   "variante": "ausbruch_long",
+   "kosten": "stress",
+   "gesamt": {
+    "trades": 460,
+    "treffer_pct": 39.3,
+    "schnitt_r": -0.158,
+    "profit_factor": 0.54,
+    "gewinn_pct": -52.2,
+    "pro_jahr_pct": -22.4,
+    "max_dd_pct": -52.3,
+    "volle_verluste": 102,
+    "groesster_gewinn_r": 4.0
+   },
+   "haelfte_1": {
+    "trades": 236,
+    "treffer_pct": 41.1,
+    "schnitt_r": -0.12,
+    "profit_factor": 0.64,
+    "gewinn_pct": -25.2,
+    "pro_jahr_pct": -18.0,
+    "max_dd_pct": -25.2,
+    "volle_verluste": 55,
+    "groesster_gewinn_r": 4.0
+   },
+   "haelfte_2": {
+    "trades": 224,
+    "treffer_pct": 37.5,
+    "schnitt_r": -0.199,
+    "profit_factor": 0.39,
+    "gewinn_pct": -36.2,
+    "pro_jahr_pct": -26.7,
+    "max_dd_pct": -36.6,
+    "volle_verluste": 47,
+    "groesster_gewinn_r": 1.8
+   },
+   "long_short_pnl": [
+    -522.3,
+    0
+   ]
+  },
+  {
+   "variante": "kerze",
+   "kosten": "normal",
+   "gesamt": {
+    "trades": 727,
+    "treffer_pct": 44.4,
+    "schnitt_r": -0.014,
+    "profit_factor": 0.96,
+    "gewinn_pct": -13.7,
+    "pro_jahr_pct": -4.9,
+    "max_dd_pct": -31.6,
+    "volle_verluste": 251,
+    "groesster_gewinn_r": 7.2
+   },
+   "haelfte_1": {
+    "trades": 365,
+    "treffer_pct": 45.8,
+    "schnitt_r": 0.046,
+    "profit_factor": 1.1,
+    "gewinn_pct": 15.4,
+    "pro_jahr_pct": 10.3,
+    "max_dd_pct": -16.9,
+    "volle_verluste": 129,
+    "groesster_gewinn_r": 7.2
+   },
+   "haelfte_2": {
+    "trades": 362,
+    "treffer_pct": 43.1,
+    "schnitt_r": -0.076,
+    "profit_factor": 0.81,
+    "gewinn_pct": -25.2,
+    "pro_jahr_pct": -18.2,
+    "max_dd_pct": -28.0,
+    "volle_verluste": 122,
+    "groesster_gewinn_r": 6.6
+   },
+   "long_short_pnl": [
+    -73.6,
+    -63.3
+   ]
+  },
+  {
+   "variante": "kerze",
+   "kosten": "stress",
+   "gesamt": {
+    "trades": 727,
+    "treffer_pct": 38.7,
+    "schnitt_r": -0.147,
+    "profit_factor": 0.68,
+    "gewinn_pct": -66.9,
+    "pro_jahr_pct": -31.6,
+    "max_dd_pct": -66.9,
+    "volle_verluste": 275,
+    "groesster_gewinn_r": 6.8
+   },
+   "haelfte_1": {
+    "trades": 365,
+    "treffer_pct": 41.1,
+    "schnitt_r": -0.095,
+    "profit_factor": 0.76,
+    "gewinn_pct": -30.5,
+    "pro_jahr_pct": -22.1,
+    "max_dd_pct": -33.5,
+    "volle_verluste": 141,
+    "groesster_gewinn_r": 6.8
+   },
+   "haelfte_2": {
+    "trades": 362,
+    "treffer_pct": 36.2,
+    "schnitt_r": -0.201,
+    "profit_factor": 0.54,
+    "gewinn_pct": -52.3,
+    "pro_jahr_pct": -40.1,
+    "max_dd_pct": -52.9,
+    "volle_verluste": 134,
+    "groesster_gewinn_r": 6.3
+   },
+   "long_short_pnl": [
+    -341.3,
+    -327.3
+   ]
+  }
+ ]
+}
