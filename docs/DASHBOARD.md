@@ -1,6 +1,6 @@
 # 📈 Paper-Trading Dashboard
 
-Stand: **21.11.2026 16:59 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
+Stand: **21.11.2026 22:10 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
 
 **Sicher: 3.000,00 €** (+0,00 % auf 3 Bots)  
 **Krass: 3.000,00 €** (+0,00 % auf 3 Bots)  
