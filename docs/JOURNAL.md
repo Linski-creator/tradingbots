@@ -1,6 +1,6 @@
 # 📒 Trading-Journal
 
-Stand: **21.11.2026 09:38 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
+Stand: **21.11.2026 16:59 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
 
 ## Kennzahlen je Bot
 
