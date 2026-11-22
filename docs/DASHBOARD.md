@@ -1,6 +1,6 @@
 # 📈 Paper-Trading Dashboard
 
-Stand: **22.11.2026 02:24 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
+Stand: **22.11.2026 10:03 UTC** · Spielgeld, keine echten Trades · Start je Bot: 1.000,00 €
 
 **Sicher: 3.000,00 €** (+0,00 % auf 3 Bots)  
 **Krass: 3.000,00 €** (+0,00 % auf 3 Bots)  
@@ -8,7 +8,7 @@ größter Einbruch (Durchschnitt aller Gruppen-Bots): **0.0 %**
 
 Vergleichs-Bots zählen in keiner Gruppe mit.
 
-📅 **News-Filter** (keine neuen Einstiege 2 h vor bis 1 h nach): Mon 16.11. 17:00 UTC Fed Chairman Warsh Speaks · Tue 17.11. 13:30 UTC Core Retail Sales m/m · Tue 17.11. 13:30 UTC Retail Sales m/m · Wed 18.11. 19:00 UTC FOMC Meeting Minutes
+📅 **News-Filter** (keine neuen Einstiege 2 h vor bis 1 h nach): Wed 25.11. 13:30 UTC Core PCE Price Index m/m · Wed 25.11. 13:30 UTC Prelim GDP q/q
 
 📒 **[Trading-Journal](JOURNAL.md)** (Grund jedes Trades) · ✍️ **[Eigene Notizen](NOTIZEN.md)**
 
