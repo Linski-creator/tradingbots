@@ -1,6 +1,6 @@
 # 📒 Trading-Journal
 
-Stand: **22.11.2026 23:33 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
+Stand: **23.11.2026 04:02 UTC** · automatisch bei jedem Lauf erstellt · [Dashboard](DASHBOARD.md) · [Eigene Notizen](NOTIZEN.md)
 
 ## Kennzahlen je Bot
 
@@ -29,6 +29,9 @@ Noch keine abgeschlossenen Trades.
 
 | Tag | Team Ø | Veränderung | Geöffnet | Geschlossen |
 |---|---:|---:|---:|---:|
+| 23.11.2026 | 1.000,00 € | +0,00 % | 0 | 0 |
+| 22.11.2026 | 1.000,00 € | +0,00 % | 0 | 0 |
+| 21.11.2026 | 1.000,00 € | +0,00 % | 0 | 0 |
 | 20.11.2026 | 1.000,00 € | +0,00 % | 0 | 0 |
 | 19.11.2026 | 1.000,00 € | +0,00 % | 0 | 0 |
 | 18.11.2026 | 1.000,00 € | +0,00 % | 0 | 0 |
